@@ -1,0 +1,13 @@
+export { default as CartIcon } from './cart';
+export { default as ChevronRight } from './chevron.right'; 
+export { default as Truck } from './truck';
+export { default as ArrowPath } from './arrow.path';
+export { default as Shield } from './shield';
+export { default as Search } from './search';
+export { default as HandThumbUp } from './hand.thumb.up';
+export { default as Facebook } from './social/facebook';
+export { default as Instagram } from './social/instagram';
+export { default as Youtube } from './social/youtube';
+export { default as Users } from './users';
+export { default as Heart } from './heart';
+export { default as Star } from './star';
