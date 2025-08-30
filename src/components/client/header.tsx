@@ -1,9 +1,9 @@
+import { Bell, Laptop, ShoppingCart, User } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { CartIcon } from "../common/icons";
 import { toast } from "react-toastify";
-import { setLogoutAction } from "../../redux/slice/account.slice";
 import { apiLogout } from "../../config/api";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setLogoutAction } from "../../redux/slice/account.slice";
 import CustomToast from "../common/toast.message";
 
 const Header = () => {
@@ -40,11 +40,17 @@ const Header = () => {
           <div className="flex flex-row items-center gap-4">
             <div>
               <NavLink to="/">
-                <img
-                  src="/images/Group.svg"
-                  alt="Tân Xuân Food Logo"
-                  className="w-40 max-w-full h-auto mx-auto transition-transform duration-200 hover:scale-105"
-                />
+                <div className="flex items-center space-x-3">
+                  <div className="bg-gradient-to-br from-blue-500 to-cyan-400 p-3 rounded-xl shadow-lg">
+                    <Laptop className="h-8 w-8 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                      TechLap
+                    </h1>
+                    <p className="text-sm text-blue-200 font-medium">Thế giới LapTop dành cho bạn</p>
+                  </div>
+                </div>
               </NavLink>
             </div>
 
@@ -78,41 +84,28 @@ const Header = () => {
           <div className="hidden md:flex flex-row items-center gap-4">
             <button
               type="button"
-              className="size-9.5 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
+              className="hidden py-3 px-4 md:inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
             >
-              <svg
-                className="shrink-0 size-5"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-              </svg>
-              <span className="sr-only">Notifications</span>
+              <Bell className="h-5 w-5" />
             </button>
 
             <NavLink
               to="/cart"
-              className="size-9.5 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
+              className="hidden py-3 px-4 md:inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
             >
-              <CartIcon size={20} />
+              <ShoppingCart className="h-5 w-5" />
+              Giỏ hàng
             </NavLink>
 
             {!isAuthenticated ? (
               <NavLink
                 to="/login"
-                className="hidden py-3 px-4 md:inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-800 text-white hover:bg-green-900 focus:outline-hidden focus:bg-green-900 disabled:opacity-50 disabled:pointer-events-none"
+                className="hidden py-3 px-4 md:inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
+                <User className="h-5 w-5" />
                 Đăng nhập
               </NavLink>
-              
+
             ) : (
               <div className="hidden hs-dropdown relative md:inline-flex">
                 <button
@@ -131,83 +124,83 @@ const Header = () => {
                 </button>
 
                 <div
-                className="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg mt-2"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="hs-dropdown-with-header"
-              >
-                <div className="py-2 px-3 border-b border-gray-200 bg-green-50">
-                  <p className="text-xs text-gray-500">Đăng nhập với tư cách</p>
-                  <p className="text-xs font-medium text-gray-800">
-                    {userInfo?.name}
-                  </p>
-                </div>
-                <div className="p-1 space-y-0.5">
-                  <a
-                    className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
-                    href="#"
-                  >
-                    <svg
-                      className="shrink-0 size-3.5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                  className="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg mt-2"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="hs-dropdown-with-header"
+                >
+                  <div className="py-2 px-3 border-b border-gray-200 bg-green-50">
+                    <p className="text-xs text-gray-500">Đăng nhập với tư cách</p>
+                    <p className="text-xs font-medium text-gray-800">
+                      {userInfo?.name}
+                    </p>
+                  </div>
+                  <div className="p-1 space-y-0.5">
+                    <a
+                      className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
+                      href="#"
                     >
-                      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                    </svg>
-                    Thư mới
-                  </a>
-                  <a
-                    className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
-                    href="#"
-                  >
-                    <svg
-                      className="shrink-0 size-3.5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="8" cy="21" r="1" />
-                      <circle cx="19" cy="21" r="1" />
-                      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-                    </svg>
-                    Đơn hàng
-                  </a>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 w-full"
-                  >
-                    <svg
-                      className="shrink-0 size-3.5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                    >
-                      <path
+                      <svg
+                        className="shrink-0 size-3.5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                      />
-                    </svg>
-                    Đăng xuất
-                  </button>
+                      >
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                      </svg>
+                      Thư mới
+                    </a>
+                    <a
+                      className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
+                      href="#"
+                    >
+                      <svg
+                        className="shrink-0 size-3.5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="8" cy="21" r="1" />
+                        <circle cx="19" cy="21" r="1" />
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                      </svg>
+                      Đơn hàng
+                    </a>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 w-full"
+                    >
+                      <svg
+                        className="shrink-0 size-3.5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                        />
+                      </svg>
+                      Đăng xuất
+                    </button>
+                  </div>
                 </div>
-              </div>
               </div>
             )}
           </div>
