@@ -17,7 +17,7 @@ const ProductSection = ({ title, subtitle }: ProductSectionProps) => {
           </div>
           <NavLink
             to="/products"
-            className="text-green-700 hover:text-green-900 flex items-center font-medium"
+            className="text-red-600 hover:text-red-700 flex items-center font-medium"
           >
             Xem tất cả
             <svg
@@ -36,7 +36,7 @@ const ProductSection = ({ title, subtitle }: ProductSectionProps) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4 items-stretch">
           <ProductCard
-            image="/images/sample-product-section.jpg"
+            image="/images/sample-laptop.jpg"
             name="Sample Product"
             price={100000}
             description="Sample description"
@@ -44,7 +44,7 @@ const ProductSection = ({ title, subtitle }: ProductSectionProps) => {
             categoryName="Sample category"
           />
           <ProductCard
-            image="/images/sample-product-section.jpg"
+            image="/images/sample-laptop.jpg"
             name="Sample Product"
             price={100000}
             description="Sample description"
@@ -52,7 +52,7 @@ const ProductSection = ({ title, subtitle }: ProductSectionProps) => {
             categoryName="Sample category"
           />
           <ProductCard
-            image="/images/sample-product-section.jpg"
+            image="/images/sample-laptop.jpg"
             name="Sample Product"
             price={100000}
             description="Sample description"
@@ -60,7 +60,7 @@ const ProductSection = ({ title, subtitle }: ProductSectionProps) => {
             categoryName="Sample category"
           />
           <ProductCard
-            image="/images/sample-product-section.jpg"
+            image="/images/sample-laptop.jpg"
             name="Sample Product"
             price={100000}
             description="Sample description"
@@ -68,7 +68,7 @@ const ProductSection = ({ title, subtitle }: ProductSectionProps) => {
             categoryName="Sample category"
           />
           <ProductCard
-            image="/images/sample-product-section.jpg"
+            image="/images/sample-laptop.jpg"
             name="Sample Product"
             price={100000}
             description="Sample description"

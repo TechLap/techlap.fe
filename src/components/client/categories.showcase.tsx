@@ -3,18 +3,23 @@ import { ChevronRight } from "../common/icons";
 const categories = [
   {
     id: 1,
-    name: "Thịt đông lạnh",
-    image: "/images/CategoriesShowcase/frozen-beef.jpg",
+    name: "Laptop Gaming",
+    image: "/images/CategoriesShowcase/laptop-gaming.jpg",
   },
   {
     id: 2,
-    name: "Hải sản đông lạnh",
-    image: "/images/CategoriesShowcase/frozen-seafood.jpg",
+    name: "Laptop Văn Phòng",
+    image: "/images/CategoriesShowcase/laptop-van-phong.jpg",
   },
   {
     id: 3,
-    name: "Rau củ đông lạnh",
-    image: "/images/CategoriesShowcase/frozen-vegetable.jpg",
+    name: "Laptop Đồ Họa",
+    image: "/images/CategoriesShowcase/laptop-do-hoa.jpg",
+  },
+  {
+    id: 4,
+    name: "Laptop Mỏng Nhẹ",
+    image: "/images/CategoriesShowcase/laptop-mong-nhe.jpg",
   },
 ];
 
@@ -24,7 +29,7 @@ const CategoryShowcase = () => {
       <h2 className="text-2xl font-bold text-gray-800 mb-10 flex justify-center">
         Khám phá danh mục sản phẩm
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {categories.map((category) => (
           <div
             key={category.id}
@@ -38,7 +43,7 @@ const CategoryShowcase = () => {
             />
             <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
               <h3 className="text-white text-xl font-bold">{category.name}</h3>
-              <button className="bg-white/40 text-white font-semibold px-4 py-2 rounded-md mt-4 text-sm flex items-center gap-2 hover:bg-white/100 hover:text-green-700 transition-all duration-300">
+              <button className="bg-white/40 text-white font-semibold px-4 py-2 rounded-md mt-4 text-sm flex items-center gap-2 hover:bg-white/100 hover:text-red-600 transition-all duration-300">
                 Khám phá ngay
                 <ChevronRight size={14} className="font-bold" />
               </button>

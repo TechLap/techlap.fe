@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { Facebook, Instagram, Youtube } from "../common/icons";
-import { useCategories } from "../../hooks";
 
 type FooterAboutItem = {
   id: number;
@@ -15,60 +14,66 @@ const footerAboutItems: FooterAboutItem[] = [
   { id: 5, label: "Câu hỏi thường gặp", path: "/faq" },
 ];
 
-const Footer = () => {
-  const { categories, isPending, isError } = useCategories({
-    currentPage: 1,
-    size: 100,
-  });
+const categories = [
+  { id: 1, name: 'Laptop Gaming' },
+  { id: 2, name: 'Laptop Văn Phòng' },
+  { id: 3, name: 'Laptop Đồ Họa' },
+  { id: 4, name: 'Laptop Mỏng Nhẹ' },
+  { id: 5, name: 'Phụ Kiện Laptop' }
+]
 
+const Footer = () => {
   return (
-    <footer className="pt-12 pb-8 border-t border-gray-200 bg-gray-50">
+    <footer className="pt-12 pb-8 border-t border-gray-200 bg-gray-900 text-white">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">
-              Tân xuân food
-            </h1>
-            <p className="text-gray-600 mb-4">
-              Chuyên cung cấp thực phẩm đông lạnh chất lượng cao, đảm bảo vệ
-              sinh an toàn thực phẩm.
+            <div className="flex items-center space-x-2 mb-4">
+              <div className="bg-red-600 text-white p-2 rounded-lg font-bold text-xl">LT</div>
+              <div>
+                <h3 className="text-xl font-bold">LapTech</h3>
+                <p className="text-sm opacity-80">Thế giới LapTop dành cho bạn</p>
+              </div>
+            </div>
+            <p className="mb-4">
+              Chuyên cung cấp laptop gaming, văn phòng và phụ kiện chính hãng với giá tốt nhất thị trường.
             </p>
             <div className="flex gap-4">
               <NavLink
                 to="https://www.facebook.com/anh.quoc.617407?locale=vi_VN"
                 target="_blank"
-                className="text-green-700 hover:text-green-900"
+                className="h-5 w-5 opacity-80 hover:opacity-100 cursor-pointer"
               >
                 <Facebook size={20} color="currentColor" />
               </NavLink>
               <NavLink
                 to="https://www.instagram.com/aquoc.2110/"
                 target="_blank"
-                className="text-green-700 hover:text-green-900"
+                className="h-5 w-5 opacity-80 hover:opacity-100 cursor-pointer"
               >
                 <Instagram size={20} color="currentColor" />
               </NavLink>
               <NavLink
                 to="https://www.youtube.com/@quocbuianh8103"
                 target="_blank"
-                className="text-green-700 hover:text-green-900"
+                className="h-5 w-5 opacity-80 hover:opacity-100 cursor-pointer"
               >
                 <Youtube size={20} color="currentColor" />
               </NavLink>
             </div>
           </div>
           <div>
-            <h3 className="text-lg font-bold text-gray-800 mb-4">
+            <h3 className="text-lg font-bold mb-4">
               Danh mục sản phẩm
             </h3>
             <ul className="space-y-2">
-              {categories?.data?.data?.result?.map(
+              {categories.map(
                 (category) =>
-                  category.active === true && (
+                  category && (
                     <li key={category.id}>
                       <NavLink
                         to={`/products?category=${category.id}`}
-                        className="text-gray-600 hover:text-green-700 hover:underline"
+                        className="hover:text-gray-200 hover:underline"
                       >
                         {category.name}
                       </NavLink>
@@ -77,16 +82,16 @@ const Footer = () => {
               )}
             </ul>
           </div>
-          {isPending && (
+          {/* {isPending && (
             <div className="text-center text-gray-600">Đang tải...</div>
           )}
           {isError && (
             <div className="text-center text-red-600">
               Lỗi khi tải danh mục
             </div>
-          )}
+          )} */}
           <div>
-            <h3 className="text-lg font-bold text-gray-800 mb-4">
+            <h3 className="text-lg font-bold mb-4">
               Về chúng tôi
             </h3>
             <ul className="space-y-2">
@@ -94,7 +99,7 @@ const Footer = () => {
                 <li key={item.id}>
                   <NavLink
                     to={item.path}
-                    className="text-gray-600 hover:text-green-700 hover:underline"
+                    className="hover:text-green-700 hover:underline"
                   >
                     {item.label}
                   </NavLink>
@@ -103,25 +108,25 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Liên hệ</h3>
-            <ul className="space-y-2 text-gray-600">
+            <h3 className="text-lg font-bold  mb-4">Liên hệ</h3>
+            <ul className="space-y-2 ">
               <li>
-                <span className="text-gray-700 font-semibold">
-                  Địa chỉ: 
+                <span className="font-semibold">
+                  Địa chỉ:
                 </span> 179/58/16 Lê Đình Thám, phường Tân Quý, quận Tân Phú, TP. HCM
               </li>
               <li>
-                <span className="text-gray-700 font-semibold">
+                <span className="font-semibold">
                   Email:{' '}
-                </span>anhquoc2110@gmail.com
+                </span>bonanhemsieunhan@gmail.com
               </li>
               <li>
-                <span className="text-gray-700 font-semibold">
+                <span className="font-semibold">
                   Hotline:{' '}
-                </span>0394494821
+                </span>0999999999
               </li>
               <li>
-                <span className="text-gray-700 font-semibold">
+                <span className="font-semibold">
                   Giờ làm việc:{' '}
                 </span>08h00 - 17h00, T2 - CN
               </li>
@@ -129,8 +134,8 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t mt-10 border-gray-300 pt-4">
-          <p className="text-gray-600 text-sm text-center sm:text-left">
-          © Copyright 2025 Tân xuân food. All rights reserved.
+          <p className="text-white-600 text-sm text-center sm:text-left">
+            © Copyright 2025 LapTopShop. Tất cả quyền được bảo lưu.
           </p>
         </div>
       </div>

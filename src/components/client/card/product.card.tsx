@@ -68,7 +68,7 @@ const ProductCard = ({
             </p>
           </div>
           <div className="flex items-center justify-between mt-4">
-            <span className="text-green-700 font-medium">
+            <span className="text-red-600 font-medium">
               <NumericFormat
                 value={price}
                 displayType="text"
@@ -82,7 +82,7 @@ const ProductCard = ({
       </NavLink>
       <div className="px-4 pb-2 mt-auto">
         <button
-          className="w-full bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-900 flex justify-center items-center gap-2 whitespace-nowrap font-medium text-sm"
+          className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 flex justify-center items-center gap-2 whitespace-nowrap font-medium text-sm"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

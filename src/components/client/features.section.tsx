@@ -8,39 +8,39 @@ const FeaturesSection = () => {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="bg-white rounded-md shadow-md p-6 flex flex-col items-center justify-center">
-                        <Truck className="mb-4 text-green-700" size={36} />
+                        <Truck className="mb-4 text-red-600" size={36} />
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                            Giao hàng nhanh chóng
+                            Giao hàng an toàn
                         </h3>
                         <p className="text-gray-600 text-center">
-                        Giao hàng trong ngày với khu vực nội thành, đảm bảo nhiệt độ tối ưu
+                        Đóng gói cẩn thận, bảo đảm laptop nguyên vẹn khi đến tay bạn
                         </p>
                     </div>
                     <div className="bg-white rounded-md shadow-md p-6 flex flex-col items-center justify-center">
-                        <Shield className="mb-4 text-green-700" size={32} />
+                        <Shield className="mb-4 text-red-600" size={32} />
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                            Chất lượng đảm bảo
+                            Sản phẩm chính hãng
                         </h3>
                         <p className="text-gray-600 text-center">
-                        Thực phẩm tươi ngon, đông lạnh theo tiêu chuẩn HACCP
+                        Cam kết laptop 100% chính hãng, đầy đủ bảo hành từ nhà sản xuất
                         </p>
                     </div>
                     <div className="bg-white rounded-md shadow-md p-6 flex flex-col items-center justify-center">
-                        <ArrowPath className="mb-4 text-green-700" size={32} />
+                        <ArrowPath className="mb-4 text-red-600" size={32} />
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                            Đổi trả dễ dàng
+                            Bảo hành toàn diện
                         </h3>
                         <p className="text-gray-600 text-center">
-                        Hoàn tiền 100% nếu sản phẩm không đúng chất lượng cam kết
+                        Hỗ trợ bảo hành nhanh chóng, đổi trả theo chính sách hãng
                         </p>
                     </div>
                     <div className="bg-white rounded-md shadow-md p-6 flex flex-col items-center justify-center">
-                        <HandThumbUp className="mb-4 text-green-700" size={32} />
+                        <HandThumbUp className="mb-4 text-red-600" size={32} />
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                            Phục vụ tận tâm
+                            Hỗ trợ kỹ thuật 24/7
                         </h3>
                         <p className="text-gray-600 text-center">
-                        Đội ngũ tư vấn viên hỗ trợ khách hàng 24/7
+                        Tư vấn cấu hình, cài đặt phần mềm, hỗ trợ từ xa mọi lúc
                         </p>
                     </div>
                 </div>
