@@ -36,6 +36,22 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    
+    /* Login specific colors */
+    --login-green: #22c55e;
+    --login-green-hover: #16a34a;
+    --login-blue: #3b82f6;
+    --login-blue-hover: #2563eb;
+    --login-yellow: #ca8a04;
+    --login-white: #ffffff;
+    --login-gray-light: #f3f4f6;
+    --login-gray-border: #d1d5db;
+    
+    /* Internal login specific colors */
+    --internal-red: #dc2626;
+    --internal-red-hover: #b91c1c;
+    --internal-red-light: #fef2f2;
+    --internal-red-border: #fecaca;
 }
 
 @layer base {
@@ -45,6 +61,66 @@
 
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+@layer components {
+    /* Login form components */
+    .login-input {
+        @apply pl-10 h-12 border border-input focus:border-ring focus:ring-ring rounded-lg w-full px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
+    }
+    
+    .login-button-primary {
+        @apply w-full h-12 bg-green-500 hover:bg-green-600 text-white font-medium text-base shadow-lg hover:shadow-xl transition-all duration-200 rounded-lg;
+    }
+    
+    .login-button-secondary {
+        @apply w-full h-12 border border-border hover:bg-accent bg-transparent rounded-lg flex items-center justify-center gap-x-3 text-sm font-medium text-foreground transition-colors;
+    }
+    
+    .login-card {
+        @apply bg-white/95 backdrop-blur-sm border-0 shadow-2xl rounded-xl;
+    }
+    
+    .login-link {
+        @apply text-blue-600 hover:text-blue-500 font-medium;
+    }
+    
+    .login-link-green {
+        @apply text-green-600 hover:text-green-500 font-medium;
+    }
+    
+    .login-checkbox {
+        @apply w-4 h-4 rounded border-input text-green-600 focus:ring-green-500;
+    }
+    
+    /* Internal login components */
+    .internal-input {
+        @apply pl-10 h-12 border border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-lg w-full px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent;
+    }
+    
+    .internal-button-primary {
+        @apply w-full h-12 bg-red-600 hover:bg-red-700 text-white font-medium text-base shadow-lg hover:shadow-xl transition-all duration-200 rounded-lg;
+    }
+    
+    .internal-button-secondary {
+        @apply w-full h-12 border border-gray-300 hover:bg-gray-50 bg-transparent rounded-lg flex items-center justify-center gap-x-3 text-sm font-medium text-gray-700 transition-colors;
+    }
+    
+    .internal-card {
+        @apply bg-white/95 backdrop-blur-sm border-0 shadow-2xl;
+    }
+    
+    .internal-link {
+        @apply text-red-500 hover:text-red-600 font-medium;
+    }
+    
+    .internal-checkbox {
+        @apply w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500;
+    }
+    
+    .internal-bg {
+        @apply min-h-screen relative overflow-hidden bg-gradient-to-br from-red-500 via-red-600 to-red-800;
     }
 }
 
@@ -63,4 +139,53 @@ select:-webkit-autofill:focus {
     box-shadow: 0 0 0px 1000px #F0FDF4 inset;
     transition: background-color 5000s ease-in-out 0s;
     color: white;
+}
+
+/* Custom validation tooltip styles - only for browser validation popup */
+input[type="email"]:invalid:not(:placeholder-shown) {
+    background-image: none;
+}
+
+/* Override browser validation tooltip color */
+input[type="email"]:invalid:not(:placeholder-shown)::before {
+    content: "Vui lòng bao gồm '@' trong địa chỉ email";
+    color: #ca8a04 !important; /* yellow-600 */
+    font-size: 12px;
+    position: absolute;
+    top: -25px;
+    left: 0;
+    background: white;
+    padding: 4px 8px;
+    border: 1px solid #ca8a04;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+/* Override browser's default validation tooltip */
+input[type="email"]:invalid:not(:placeholder-shown)::-webkit-validation-bubble-message {
+    color: #ca8a04 !important;
+    background-color: white !important;
+    border: 1px solid #ca8a04 !important;
+}
+
+/* Internal login animations */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    33% {
+        transform: translateY(-20px) rotate(120deg);
+    }
+    66% {
+        transform: translateY(-10px) rotate(240deg);
+    }
+}
+
+@keyframes pulse-slow {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.8;
+    }
 }

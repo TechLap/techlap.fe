@@ -10,6 +10,8 @@ const LoginInternalUserPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const navigate = useNavigate();
   const dispacth = useAppDispatch();
   const isAuthenticated = useAppSelector(
@@ -18,7 +20,7 @@ const LoginInternalUserPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/admin/dashboard");
     }
   }, []);
 
@@ -43,241 +45,261 @@ const LoginInternalUserPage = () => {
     setIsVisiblePassword(!isVisiblePassword);
   };
 
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPassword(value);
+    
+    // Validation
+    if (value.length > 0 && value.length < 8) {
+      setPasswordError("Mật khẩu phải có ít nhất 8 ký tự");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setUsername(value);
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailErrorElement = document.getElementById("internal-email-error");
+    
+    if (value.length > 0 && !emailRegex.test(value)) {
+      setEmailError("Vui lòng nhập địa chỉ email hợp lệ");
+      if (emailErrorElement) {
+        emailErrorElement.classList.remove("hidden");
+      }
+    } else {
+      setEmailError("");
+      if (emailErrorElement) {
+        emailErrorElement.classList.add("hidden");
+      }
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="max-w-xl w-full bg-white border border-gray-200 rounded-xl shadow-2xs">
-        <div className="p-4 sm:p-7">
-          <div className="text-center">
-            <h1 className="block text-2xl font-bold text-gray-800">
-              Đăng nhập nội bộ
-            </h1>
-            <p className="mt-2 text-base text-gray-600">
-              Bạn chưa có tài khoản?
-              <NavLink
-                className="text-green-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
-                to={"/register"}
-              >
-                Đăng ký tại đây
-              </NavLink>
-            </p>
-          </div>
+  <div className="relative min-h-screen bg-red-500 flex items-center justify-center p-4">
+  {/* Animated background elements */}
+  <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute top-20 left-20 w-32 h-32 bg-red-400/30 rounded-full animate-[float_6s_ease-in-out_infinite] shadow-[0_0_50px_rgba(220,38,38,0.4)]"></div>
+    <div className="absolute top-40 right-32 w-24 h-24 bg-red-300/25 rounded-lg rotate-45 animate-[float_8s_ease-in-out_infinite_reverse] shadow-[0_0_40px_rgba(220,38,38,0.4)]"></div>
+    <div className="absolute bottom-32 left-40 w-20 h-20 bg-red-500/30 rounded-full animate-[float_7s_ease-in-out_infinite] shadow-[0_0_35px_rgba(220,38,38,0.4)]"></div>
+    <div className="absolute bottom-20 right-20 w-28 h-28 bg-red-400/20 rounded-lg rotate-12 animate-[float_9s_ease-in-out_infinite_reverse] shadow-[0_0_45px_rgba(220,38,38,0.3)]"></div>
 
-          <div className="mt-5">
-            <button
-              type="button"
-              className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              <svg
-                className="w-4 h-auto"
-                width="46"
-                height="47"
-                viewBox="0 0 46 47"
-                fill="none"
-              >
-                <path
-                  d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z"
-                  fill="#4285F4"
-                />
-                <path
-                  d="M23.4694 47C29.8061 47 35.1161 44.9144 39.0179 41.3012L31.625 35.5437C29.6301 36.9244 26.9898 37.8937 23.4987 37.8937C17.2793 37.8937 12.0281 33.7812 10.1505 28.1412L9.88649 28.1706L2.61097 33.7812L2.52296 34.0456C6.36608 41.7125 14.287 47 23.4694 47Z"
-                  fill="#34A853"
-                />
-                <path
-                  d="M10.1212 28.1413C9.62245 26.6725 9.32908 25.1156 9.32908 23.5C9.32908 21.8844 9.62245 20.3275 10.0918 18.8588V18.5356L2.75765 12.8369L2.52296 12.9544C0.909439 16.1269 0 19.7106 0 23.5C0 27.2894 0.909439 30.8731 2.49362 34.0456L10.1212 28.1413Z"
-                  fill="#FBBC05"
-                />
-                <path
-                  d="M23.4694 9.07688C27.8699 9.07688 30.8622 10.9863 32.5344 12.5725L39.1645 6.11C35.0867 2.32063 29.8061 0 23.4694 0C14.287 0 6.36607 5.2875 2.49362 12.9544L10.0918 18.8588C11.9987 13.1894 17.25 9.07688 23.4694 9.07688Z"
-                  fill="#EB4335"
-                />
-              </svg>
-              Đăng nhập với Google
-            </button>
+    {/* Grid pattern */}
+    <div className="absolute inset-0 bg-[linear-gradient(rgba(239,68,68,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(239,68,68,0.1)_1px,transparent_1px)] bg-[size:100px_100px] opacity-10"></div>
+    
+    {/* Radial pattern */}
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:50px_50px] opacity-10"></div>
 
-            <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
-              Hoặc
+    {/* Gradient overlays  */}
+    <div className="absolute top-0 left-0 w-96 h-96 
+      bg-[radial-gradient(circle_at_center,_rgba(248,113,113,0.2),_rgba(239,68,68,0.15),_rgb(239,68,68))] 
+      rounded-full blur-3xl"></div>
+
+    <div className="absolute bottom-0 right-0 w-96 h-96 
+      bg-[radial-gradient(circle_at_center,_rgba(220,38,38,0.2),_rgba(185,28,28,0.15),_rgb(239,68,68))] 
+      rounded-full blur-3xl"></div>
+  </div>
+
+      <div className="w-full max-w-md relative z-10">
+        <div className="internal-card rounded-xl">
+          <div className="p-6 space-y-1 pb-6">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-red-600 mb-2">Đăng nhập nội bộ</h2>
+              <p className="text-gray-600 text-sm mb-6">
+                Bạn chưa có tài khoản?{" "}
+                <NavLink to="/register" className="internal-link">
+                  Đăng ký tại đây
+                </NavLink>
+              </p>
             </div>
-
-            {/* Form */}
+          </div>
+          <div className="px-6 pb-6">
             <form
               onSubmit={(event) => {
-                event.preventDefault(); // Ngăn form gửi dữ liệu lên URL
+                event.preventDefault();
                 handleLoginInternalUser({ username, password });
               }}
+              className="space-y-5"
             >
-              <div className="grid gap-y-4">
-                {/* Form Group */}
-                <div>
-                  <label htmlFor="email" className="block text-base mb-2">
-                    Email
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-green-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                      required
-                      placeholder="Nhập email"
-                      aria-describedby="email-error"
-                    />
-                    <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                      <svg
-                        className="shrink-0 size-4 text-gray-500"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                      </svg>
-                    </div>
-                  </div>
-                  <p
-                    className="hidden text-xs text-red-600 mt-2"
-                    id="email-error"
-                  >
-                    Vui lòng nhập địa chỉ email hợp lệ
-                  </p>
-                </div>
-                {/* End Form Group */}
+              <button type="button" className="internal-button-secondary">
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path
+                    fill="#4285F4"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  />
+                </svg>
+                Đăng nhập với Google
+              </button>
 
-                {/* Form Group */}
-                <div>
-                  <div className="flex flex-wrap justify-between items-center gap-2">
-                    <label htmlFor="password" className="block text-base mb-2">
-                      Mật khẩu
-                    </label>
-                    <a
-                      className="inline-flex items-center gap-x-1 text-base text-green-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
-                      href="../examples/html/recover-account.html"
-                    >
-                      Quên mật khẩu?
-                    </a>
-                  </div>
-                  <div className="relative">
-                    <input
-                      type={isVisiblePassword ? "text" : "password"}
-                      id="password"
-                      name="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-green-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                      required
-                      aria-describedby="password-error"
-                      placeholder="Nhập mật khẩu"
-                    />
-                    <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                      <svg
-                        className="shrink-0 size-4 text-gray-500"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"></path>
-                        <circle cx="16.5" cy="7.5" r=".5"></circle>
-                      </svg>
-                    </div>
-                    <div className="absolute inset-y-0 end-0 flex items-center pe-2 peer-disabled:opacity-50">
-                      <button
-                        onClick={handleShowPassword}
-                        className="cursor-pointer"
-                        type="button"
-                        tabIndex={0}
-                      >
-                        {isVisiblePassword ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2"
-                            stroke="currentColor"
-                            className="size-4 shrink-0 text-gray-500"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                            />
-                          </svg>
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2"
-                            stroke="currentColor"
-                            className="size-4 shrink-0 text-gray-500"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
-                            />
-                          </svg>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                  <p
-                    className="hidden text-xs text-red-600 mt-2"
-                    id="password-error"
-                  >
-                    Mật khẩu phải có ít nhất 8 ký tự
-                  </p>
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
                 </div>
-                {/* End Form Group */}
-
-                {/* Checkbox */}
-                <div className="flex items-center">
-                  <div className="flex">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="shrink-0 mt-0.5 border-gray-200 rounded-sm text-blue-600 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div className="ms-3">
-                    <label htmlFor="remember-me" className="text-base">
-                      Ghi nhớ tôi
-                    </label>
-                  </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white text-gray-500 font-medium">
+                    HOẶC
+                  </span>
                 </div>
-                {/* End Checkbox */}
-
-                <button
-                  type="submit"
-                  className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-base font-medium rounded-lg border border-transparent bg-green-500 text-white hover:bg-green-600 focus:outline-hidden focus:bg-green-600 disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  Đăng nhập
-                </button>
               </div>
+
+              <div className="space-y-2">
+                <label htmlFor="internal-email" className="text-gray-700 font-medium block">
+                  Email
+                </label>
+                <div className="relative">
+                  <svg
+                    className="absolute left-3 top-3 h-4 w-4 text-gray-400"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <input
+                    type="email"
+                    id="internal-email"
+                    name="email"
+                    value={username}
+                    onChange={handleEmailChange}
+                    className="internal-input"
+                    required
+                    placeholder="Nhập email"
+                  />
+                </div>
+                <p
+                  className="hidden text-xs text-red-600 mt-2"
+                  id="internal-email-error"
+                >
+                  Vui lòng nhập địa chỉ email hợp lệ
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="internal-password" className="text-gray-700 font-medium block">
+                    Mật khẩu
+                  </label>
+                  <a href="#" className="text-sm internal-link">
+                    Quên mật khẩu?
+                  </a>
+                </div>
+                <div className="relative">
+                  <svg
+                    className="absolute left-3 top-3 h-4 w-4 text-gray-400"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                  <input
+                    type={isVisiblePassword ? "text" : "password"}
+                    id="internal-password"
+                    name="password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    className="internal-input pr-10"
+                    required
+                    placeholder="Nhập mật khẩu"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleShowPassword}
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                  >
+                    {isVisiblePassword ? (
+                      <svg
+                        className="h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        className="h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+                {passwordError && (
+                  <p className="text-xs text-red-600 mt-2">
+                    {passwordError}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="internal-remember"
+                  className="internal-checkbox"
+                />
+                <label htmlFor="internal-remember" className="text-sm text-gray-600">
+                  Ghi nhớ tôi
+                </label>
+              </div>
+
+              <button type="submit" className="internal-button-primary">
+                Đăng nhập nội bộ
+              </button>
             </form>
-            {/* End Form */}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 export default LoginInternalUserPage;
