@@ -22,7 +22,7 @@ const LoginPage = () => {
     if (isAuthenticated) {
       navigate("/");
     }
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = async (values: any) => {
     const { username, password } = values;
@@ -140,7 +140,7 @@ const LoginPage = () => {
                 </label>
                 <div className="relative">
                   <svg
-                    className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -159,7 +159,7 @@ const LoginPage = () => {
                     name="email"
                     value={username}
                     onChange={handleEmailChange}
-                    className="login-input"
+                    className="login-input pl-10"
                     required
                     placeholder="Nhập email"
                   />
@@ -177,13 +177,13 @@ const LoginPage = () => {
                   <label htmlFor="password" className="text-foreground font-medium block">
                     Mật khẩu
                   </label>
-                  <a href="#" className="text-sm login-link-green">
+                  <a href="/forgot-password" className="text-sm login-link">
                     Quên mật khẩu?
                   </a>
                 </div>
                 <div className="relative">
                   <svg
-                    className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -202,14 +202,14 @@ const LoginPage = () => {
                     name="password"
                     value={password}
                     onChange={handlePasswordChange}
-                    className="login-input pr-10"
+                    className="login-input pr-10 pl-10"
                     required
                     placeholder="Nhập mật khẩu"
                   />
                   <button
                     type="button"
                     onClick={handleShowPassword}
-                    className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {isVisiblePassword ? (
                       <svg
@@ -268,7 +268,7 @@ const LoginPage = () => {
                 </label>
               </div>
 
-              <button type="submit" className="login-button-primary">
+              <button type="submit" className="login-button-primary bg-blue-600 hover:bg-blue-700">
                 Đăng nhập
               </button>
             </form>
