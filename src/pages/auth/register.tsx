@@ -4,24 +4,44 @@ import { toast } from "react-toastify";
 import CustomToast from "../../components/common/toast.message";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
-
-interface RegisterFormInputs {
-  name: string;
-  email: string;
-  password: string;
-  phone: string;
-}
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const RegisterPage = () => {
+  const createUserSchema = yup
+    .object({
+      name: yup.string().required("Tên không được để trống"),
+      email: yup
+        .string()
+        .email("Email không hợp lệ")
+        .required("Email không được để trống"),
+
+      password: yup
+        .string()
+        .required("Mật khẩu không được để trống")
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{12,})/,
+          "Mật khẩu phải chứa ít nhất 12 kí tự: bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt"
+        ),
+
+      phone: yup
+        .string()
+        .required("Số địện thoai không được để trống")
+        .matches(/(0[3|5|7|8|9])+(\d{8})\b/g, "Số địện thoai không hợp lệ"),
+    })
+    .required();
+
+  type FormValues = yup.InferType<typeof createUserSchema>;
+
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<RegisterFormInputs>();
+  } = useForm<FormValues>({ resolver: yupResolver(createUserSchema) as any });
   const navigate = useNavigate();
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
 
-  const handleRegister: SubmitHandler<RegisterFormInputs> = async (values) => {
+  const handleRegister: SubmitHandler<FormValues> = async (values) => {
 
     const response = await apiRegisterForCustomer(values.name, values.email, values.password, values.phone);
     if (response.data?.data?.id) {
@@ -48,7 +68,7 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-700">
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute pointer-events-none inset-0 overflow-hidden">
         <div className="absolute top-20 left-20 w-32 h-32 bg-blue-400/30 rounded-full animate-[float_6s_ease-in-out_infinite] shadow-[0_0_50px_rgba(220,38,38,0.4)]"></div>
         <div className="absolute top-40 right-32 w-24 h-24 bg-blue-300/25 rounded-lg rotate-45 animate-[float_8s_ease-in-out_infinite_reverse] shadow-[0_0_40px_rgba(220,38,38,0.4)]"></div>
         <div className="absolute bottom-32 left-40 w-20 h-20 bg-blue-500/30 rounded-full animate-[float_7s_ease-in-out_infinite] shadow-[0_0_35px_rgba(220,38,38,0.4)]"></div>
@@ -101,13 +121,13 @@ const RegisterPage = () => {
                     <input
                       type="email"
                       id="email"
-                      {...register("email", { required: true })}
-                      aria-invalid={errors.email ? "true" : "false"}
+                      {...register("email")}
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                      required
                       placeholder="Nhập email"
-                      aria-describedby="email-error"
                     />
+                    {errors.email && (
+                      <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>
+                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -146,13 +166,13 @@ const RegisterPage = () => {
                     <input
                       type={isVisiblePassword ? "text" : "password"}
                       id="password"
-                      {...register("password", { required: true })}
-                      aria-invalid={errors.password ? "true" : "false"}
+                      {...register("password")}
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                      required
-                      aria-describedby="password-error"
                       placeholder="Nhập mật khẩu"
                     />
+                    {errors.password && (
+                      <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>
+                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -170,6 +190,7 @@ const RegisterPage = () => {
                         <circle cx="16.5" cy="7.5" r=".5"></circle>
                       </svg>
                     </div>
+
                     <div className="absolute inset-y-0 end-0 flex items-center pe-2 peer-disabled:opacity-50">
                       <button
                         onClick={handleShowPassword}
@@ -216,12 +237,6 @@ const RegisterPage = () => {
                       </button>
                     </div>
                   </div>
-                  <p
-                    className="hidden text-xs text-red-600 mt-2"
-                    id="password-error"
-                  >
-                    Mật khẩu phải có ít nhất 8 ký tự
-                  </p>
                 </div>
                 {/* End Form Password */}
 
@@ -234,13 +249,13 @@ const RegisterPage = () => {
                     <input
                       type="text"
                       id="name"
-                      {...register("name", { required: true })}
-                      aria-invalid={errors.name ? "true" : "false"}
+                      {...register("name")}
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                      required
                       placeholder="Nhập họ và tên"
-                      aria-describedby="email-error"
                     />
+                    {errors.name && (
+                      <p className="text-xs text-red-600 mt-1">{errors.name.message}</p>
+                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -280,13 +295,13 @@ const RegisterPage = () => {
                     <input
                       type="text"
                       id="phone"
-                      {...register("phone", { required: true })}
-                      aria-invalid={errors.phone ? "true" : "false"}
+                      {...register("phone")}
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                      required
                       placeholder="Nhập số điện thoại"
-                      aria-describedby="email-error"
                     />
+                    {errors.phone && (
+                    <p className="text-xs text-red-600 mt-1">{errors.phone.message}</p>
+                  )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
