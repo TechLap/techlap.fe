@@ -47,7 +47,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-700">
       <div className="max-w-xl w-full bg-white border border-gray-200 rounded-xl shadow-2xs">
         <div className="p-4 sm:p-7">
           <div className="text-center">
@@ -57,10 +57,10 @@ const RegisterPage = () => {
             <p className="mt-2 text-base text-gray-600">
               Nếu bạn đã có tài khoản?
               <NavLink
-                className="text-green-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
+                className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
                 to={"/login"}
               >
-                Đăng nhập tại đây
+                {" "} Đăng nhập tại đây
               </NavLink>
             </p>
           </div>
@@ -82,7 +82,7 @@ const RegisterPage = () => {
                       id="email"
                       {...register("email", { required: true })}
                       aria-invalid={errors.email ? "true" : "false"}
-                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-green-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       required
                       placeholder="Nhập email"
                       aria-describedby="email-error"
@@ -127,7 +127,7 @@ const RegisterPage = () => {
                       id="password"
                       {...register("password", { required: true })}
                       aria-invalid={errors.password ? "true" : "false"}
-                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-green-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       required
                       aria-describedby="password-error"
                       placeholder="Nhập mật khẩu"
@@ -215,7 +215,7 @@ const RegisterPage = () => {
                       id="name"
                       {...register("name", { required: true })}
                       aria-invalid={errors.name ? "true" : "false"}
-                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-green-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       required
                       placeholder="Nhập họ và tên"
                       aria-describedby="email-error"
@@ -261,7 +261,7 @@ const RegisterPage = () => {
                       id="phone"
                       {...register("phone", { required: true })}
                       aria-invalid={errors.phone ? "true" : "false"}
-                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-green-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       required
                       placeholder="Nhập số điện thoại"
                       aria-describedby="email-error"
@@ -303,7 +303,7 @@ const RegisterPage = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-base font-medium rounded-lg border border-transparent bg-green-500 text-white hover:bg-green-600 focus:outline-hidden focus:bg-green-600 disabled:opacity-50 disabled:pointer-events-none"
+                  className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-base font-medium rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 focus:outline-hidden focus:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
                 >
                   Đăng ký
                 </button>
