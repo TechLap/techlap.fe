@@ -73,7 +73,7 @@ const Footer = () => {
                     <li key={category.id}>
                       <NavLink
                         to={`/products?category=${category.id}`}
-                        className="hover:text-gray-200 hover:underline"
+                        className="hover:text-blue-400 hover:underline"
                       >
                         {category.name}
                       </NavLink>
@@ -99,7 +99,7 @@ const Footer = () => {
                 <li key={item.id}>
                   <NavLink
                     to={item.path}
-                    className="hover:text-green-700 hover:underline"
+                    className="hover:text-blue-400 hover:underline"
                   >
                     {item.label}
                   </NavLink>
