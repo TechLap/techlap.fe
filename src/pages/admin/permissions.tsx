@@ -3,16 +3,20 @@ import { useEffect, useState } from "react";
 import LoadingSpinner from "../../components/common/loading.spinner";
 import Pagination from "../../components/common/pagination";
 
-import { Plus } from "lucide-react";
+import { toast } from "react-toastify";
 import { useDebounce } from "use-debounce";
 import PermissionModal from "../../components/admin/permissions/permission.modal";
 import PermissionTable from "../../components/admin/permissions/permission.table";
-import { apiDeletePermission, apiFetchAllPermission, apiSearchPermission } from "../../config/api";
+import CreateModalButton from "../../components/common/create.modal.button";
+import ModalDelete from "../../components/common/modal.delete";
+import CustomToast from "../../components/common/toast.message";
+import {
+  apiDeletePermission,
+  apiFetchAllPermission,
+  apiSearchPermission,
+} from "../../config/api";
 import { IPermission, IPermissionFilter } from "../../types/backend";
 import Access from "../auth/route/access";
-import CustomToast from "../../components/common/toast.message";
-import { toast } from "react-toastify";
-import ModalDelete from "../../components/common/modal.delete";
 
 const PermissionPage = () => {
   const MAX_PERMISSIONS_PAGE = 5;
@@ -118,9 +122,19 @@ const PermissionPage = () => {
     const res = await apiDeletePermission(selectedPermission?.id ?? "");
     if (res?.data?.statusCode === 200) {
       reloadTable();
-      toast.success(<CustomToast message="Xóa quyền hạn thành công!" className="text-green-600" />);
+      toast.success(
+        <CustomToast
+          message="Xóa quyền hạn thành công!"
+          className="text-green-600"
+        />
+      );
     } else {
-      toast.error(<CustomToast message="Xóa quyền hạn thất bại!" className="text-red-600" />);
+      toast.error(
+        <CustomToast
+          message="Xóa quyền hạn thất bại!"
+          className="text-red-600"
+        />
+      );
     }
     setSelectedPermission(null);
     setIsOpenDeleteModal(false);
@@ -139,14 +153,10 @@ const PermissionPage = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-lg font-semibold">Quản lý quyền hạn</h1>
         <Access permission={{ name: "Create a permission" }} hideChildren>
-          <button
-            type="button"
-            className="py-2.5 px-2.5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-800 text-white hover:bg-green-900 focus:outline-hidden focus:bg-green-900 disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap"
+          <CreateModalButton
             onClick={handleOpenCreateModal}
-          >
-            <Plus className="w-4 h-4 text-white mr-2" />
-            Thêm quyền hạn
-          </button>
+            title="Thêm quyền hạn"
+          />
         </Access>
       </div>
 

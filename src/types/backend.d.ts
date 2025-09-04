@@ -42,7 +42,7 @@ export interface IUser {
     id?: string;
     email: string;
     password?: string;
-    name: string;
+    fullName: string;
     address: string;
     phone?: string;
     createdAt?: string;
@@ -58,7 +58,7 @@ export interface IUser {
 
 export interface IUserFilter {
     email?: string;
-    name?: string;
+    fullName?: string;
     address?: string;
     phone?: string;
     createdAt?: string | null;

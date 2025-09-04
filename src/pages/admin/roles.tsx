@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import LoadingSpinner from "../../components/common/loading.spinner";
 import Pagination from "../../components/common/pagination";
 
-import { Plus } from "lucide-react";
 import RoleTable from "../../components/admin/roles/role.table";
 import { apiDeleteRole, apiFetchAllRole, apiSearchRole } from "../../config/api";
 import { IRole, IRoleFilter } from "../../types/backend";
@@ -13,6 +12,7 @@ import Access from "../auth/route/access";
 import ModalDelete from "../../components/common/modal.delete";
 import CustomToast from "../../components/common/toast.message";
 import { toast } from "react-toastify";
+import CreateModalButton from "../../components/common/create.modal.button";
 
 const RolePage = () => {
   const MAX_ROLES_PAGE = 5;
@@ -132,14 +132,10 @@ const RolePage = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-lg font-semibold">Quản lý vai trò</h1>
         <Access permission={{ name: "Create a role" }} hideChildren>
-          <button
-            type="button"
-            className="py-2.5 px-2.5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-800 text-white hover:bg-green-900 focus:outline-hidden focus:bg-green-900 disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap"
-            onClick={handleOpenCreateModal}
-          >
-            <Plus className="w-4 h-4 text-white mr-2" />
-            Thêm vai trò
-          </button>
+          <CreateModalButton
+            onClick={handleOpenCreateModal} 
+            title="Thêm vai trò"
+          />
         </Access>
       </div>
 

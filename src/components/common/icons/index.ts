@@ -11,3 +11,6 @@ export { default as Youtube } from './social/youtube';
 export { default as Users } from './users';
 export { default as Heart } from './heart';
 export { default as Star } from './star';
+export { default as Filter } from './filter';
+export { default as Edit } from './edit';
+export { default as Delete } from './delete';

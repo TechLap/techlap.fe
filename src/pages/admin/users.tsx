@@ -6,7 +6,6 @@ import UserTable from "../../components/admin/users/user.table";
 import LoadingSpinner from "../../components/common/loading.spinner";
 import Pagination from "../../components/common/pagination";
 
-import { Plus } from "lucide-react";
 import {
   apiDeleteUser,
   apiFetchAllRole,
@@ -18,6 +17,7 @@ import CustomToast from "../../components/common/toast.message";
 import Access from "../auth/route/access";
 import { toast } from "react-toastify";
 import ModalDelete from "../../components/common/modal.delete";
+import CreateModalButton from "../../components/common/create.modal.button";
 
 const UserPage = () => {
   const MAX_USERS_PAGE = 5;
@@ -30,7 +30,7 @@ const UserPage = () => {
   const [isOpenActionModal, setIsOpenActionModal] = useState(false);
   const [filters, setFilters] = useState<IUserFilter>({
     email: "",
-    name: "",
+    fullName: "",
     address: "",
     phone: "",
     role: {
@@ -39,6 +39,64 @@ const UserPage = () => {
     createdAt: null,
   });
   const [debouncedFilters] = useDebounce(filters, 500);
+
+  const mockUsers = [
+    {
+      fullName: "Nguyễn Văn An",
+      email: "an.nguyen@example.com",
+      phone: "0901 234 567",
+      address: "12 Trần Hưng Đạo, Q1, TP.HCM",
+      role: {
+        id: "1",
+        name: "Admin",
+      },
+      createdAt: "2024-06-12T09:15:23Z",
+    },
+    {
+      fullName: "Trần Thị Bích",
+      email: "bich.tran@example.com",
+      phone: "0912 345 678",
+      address: "45 Lý Thường Kiệt, Q10, TP.HCM",
+      role: {
+        id: "2",
+        name: "Admin",
+      },
+      createdAt: "2024-07-03T14:22:10Z",
+    },
+    {
+      fullName: "Lê Hoàng Long",
+      email: "long.le@example.com",
+      phone: "0987 654 321",
+      address: "89 Kim Mã, Ba Đình, Hà Nội",
+      role: {
+        id: "3",
+        name: "Admin",
+      },
+      createdAt: "2024-07-28T08:05:47Z",
+    },
+    {
+      fullName: "Phạm Thu Trang",
+      email: "trang.pham@example.com",
+      phone: "0933 888 999",
+      address: "23 Võ Văn Tần, Q3, TP.HCM",
+      role: {
+        id: "4",
+        name: "Admin",
+      },
+      createdAt: "2024-08-15T11:40:00Z",
+    },
+    {
+      fullName: "Đỗ Minh Khang",
+      email: "khang.do@example.com",
+      phone: "0971 222 333",
+      address: "150 Điện Biên Phủ, Thanh Khê, Đà Nẵng",
+      role: {
+        id: "5",
+        name: "Admin",
+      },
+      createdAt: "2024-08-28T16:12:35Z",
+    },
+  ];
 
   const {
     isPending,
@@ -70,7 +128,7 @@ const UserPage = () => {
     queryFn: () =>
       apiSearchUser(`page=${searchCurrentPage}&size=${MAX_USERS_PAGE}`, {
         email: debouncedFilters.email,
-        name: debouncedFilters.name,
+        fullName: debouncedFilters.fullName,
         address: debouncedFilters.address,
         phone: debouncedFilters.phone,
         createdAt: debouncedFilters.createdAt,
@@ -105,8 +163,6 @@ const UserPage = () => {
     setIsSearching(!!value);
   };
 
-  
-
   const handleOpenCreateModal = () => {
     setIsOpenActionModal(true);
     setSelectedUser(null);
@@ -121,7 +177,7 @@ const UserPage = () => {
     setIsOpenDeleteModal(true);
     setSelectedUser(user);
   };
-  
+
   const queryClient = useQueryClient();
   const reloadTable = () => {
     queryClient.invalidateQueries({ queryKey: [["fetchAllUsers"]] });
@@ -131,9 +187,19 @@ const UserPage = () => {
     const res = await apiDeleteUser(selectedUser?.id ?? "");
     if (res?.data?.statusCode === 200) {
       reloadTable();
-      toast.success(<CustomToast message="Xóa người dùng thành công!" className="text-green-600" />);
+      toast.success(
+        <CustomToast
+          message="Xóa người dùng thành công!"
+          className="text-green-600"
+        />
+      );
     } else {
-      toast.error(<CustomToast message="Xóa người dùng thất bại!" className="text-red-600" />);
+      toast.error(
+        <CustomToast
+          message="Xóa người dùng thất bại!"
+          className="text-red-600"
+        />
+      );
     }
     setSelectedUser(null);
     setIsOpenDeleteModal(false);
@@ -152,17 +218,14 @@ const UserPage = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-lg font-semibold">Quản lý người dùng</h1>
         <Access permission={{ name: "Create a user" }} hideChildren>
-          <button
-            type="button"
-            className="py-2.5 px-2.5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-800 text-white hover:bg-green-900 focus:outline-hidden focus:bg-green-900 disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap"
+          <CreateModalButton
             onClick={handleOpenCreateModal}
-          >
-            <Plus className="w-4 h-4 text-white mr-2" />
-            Thêm người dùng
-          </button>
+            title="Thêm người dùng"
+          />
         </Access>
       </div>
 
+      {/* need improve Loading spinner*/}
       {isPending ? (
         <LoadingSpinner />
       ) : (
@@ -211,7 +274,7 @@ const UserPage = () => {
           setSelectedUser(null);
           setIsOpenDeleteModal(false);
         }}
-        title={`người dùng: ${selectedUser?.name}`}
+        title={`người dùng: ${selectedUser?.fullName}`}
         modalName={`Người dùng`}
       />
     </div>
