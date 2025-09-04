@@ -3,21 +3,20 @@ interface Column<T> {
   key: string;
   header?: React.ReactNode;
   render: (row: T) => React.ReactNode;
-  className?: string;
+  headerRowclassName?: string;
+  rowClassName?: string;
 }
 
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
-  className?: string;
   loading?: boolean;
-  rowKey: (row: T) => string;
+  rowKey: (row: T, index: number) => string;
 }
 
 const DataTable = <T,>({
   data,
   columns,
-  className,
   loading,
   rowKey,
 }: DataTableProps<T>) => {
@@ -30,7 +29,7 @@ const DataTable = <T,>({
               <thead>
                 <tr>
                   {columns.map((column) => (
-                    <th key={column.key} className={cn("px-4 py-3 text-start text-xs font-medium text-gray-500 bg-gray-100 uppercase", column.className)}>
+                    <th key={column.key} className={cn("px-4 py-3 text-start text-xs font-medium text-gray-500 bg-gray-100 uppercase", column.headerRowclassName)}>
                       {column.header}
                     </th>
                   ))}
@@ -47,12 +46,12 @@ const DataTable = <T,>({
                     </td>
                   </tr>
                 ) : (
-                  data.map((row) => (
-                    <tr key={rowKey(row)}>
+                  data.map((row, index) => (
+                    <tr key={rowKey(row, index)}>
                       {columns.map((col) => (
                         <td
                           key={col.key}
-                          className={cn("px-4 py-3 whitespace-nowrap text-xs text-gray-600", col.className)}
+                          className={cn("px-4 py-3 whitespace-nowrap text-xs text-gray-600", col.rowClassName)}
                         >
                           {col.render(row)}
                         </td>

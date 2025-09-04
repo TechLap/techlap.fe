@@ -7,7 +7,7 @@ export const apiLoginForCustomer = (username: string, password: string) => {
 }
 
 export const apiLoginForInternalUser = (username: string, password: string) => {
-    return axiosClient.post<IBackendResponse<IAccount>>('/auth/login', {username, password})
+    return axiosClient.post<IBackendResponse<IAccount>>('/admin/login', {username, password})
 }
 
 export const apiRegisterForCustomer = (name: string, email: string, password: string, phone: string, address: string ) => {
@@ -19,11 +19,11 @@ export const apiRegisterForInternalUser = (name: string, email: string, password
 }
 
 export const apiGetAccount = () => {
-    return axiosClient.get<IBackendResponse<GetAccount>>('/account')
+    return axiosClient.get<IBackendResponse<GetAccount>>('/auth/account')
 }
 
 export const apiLogout = () => {
-    return axiosClient.post<IBackendResponse<string>>('/logout')
+    return axiosClient.post<IBackendResponse<string>>('/auth/logout')
 }
 
 
@@ -37,15 +37,15 @@ export const apiFetchUserById = ( id: string ) => {
 }
 
 export const apiCreateUser = ( user: IUser ) => {
-    return axiosClient.post<IBackendResponse<IUser>>('/users/create', {...user})
+    return axiosClient.post<IBackendResponse<IUser>>('/users', {...user})
 }
 
 export const apiUpdateUser = ( user: IUser ) => {
-    return axiosClient.post<IBackendResponse<IUser>>(`/users/update`, {...user})
+    return axiosClient.put<IBackendResponse<IUser>>(`/users`, {...user})
 }
 
 export const apiDeleteUser = ( id: string ) => {
-    return axiosClient.delete<IBackendResponse<IUser>>(`/users/delete/${id}`)
+    return axiosClient.delete<IBackendResponse<IUser>>(`/users/${id}`)
 }
 
 /* Module Customer */
@@ -58,15 +58,15 @@ export const apiFetchCustomerById = ( id: string ) => {
 }
 
 export const apiCreateCustomer = ( customer: ICustomer ) => {
-    return axiosClient.post<IBackendResponse<ICustomer>>(`/customers/create`, {...customer})
+    return axiosClient.post<IBackendResponse<ICustomer>>(`/customers`, {...customer})
 }
 
 export const apiUpdateCustomer = ( customer: ICustomer ) => {
-    return axiosClient.post<IBackendResponse<ICustomer>>(`/customers/update`, {...customer})
+    return axiosClient.put<IBackendResponse<ICustomer>>(`/customers`, {...customer})
 }
 
 export const apiDeleteCustomer = ( id: string ) => {
-    return axiosClient.delete<IBackendResponse<ICustomer>>(`/customers/delete/${id}`)
+    return axiosClient.delete<IBackendResponse<ICustomer>>(`/customers/${id}`)
 }
 
 
@@ -76,15 +76,15 @@ export const apiFetchAllRole = ( query: string ) => {
 }
 
 export const apiUpdateRole = ( role: IRole ) => {
-    return axiosClient.post<IBackendResponse<IRole>>(`/roles/update`, {...role})
+    return axiosClient.put<IBackendResponse<IRole>>(`/roles`, {...role})
 }
 
 export const apiCreateRole = ( role: IRole ) => {
-    return axiosClient.post<IBackendResponse<IRole>>(`/roles/create`, {...role})
+    return axiosClient.post<IBackendResponse<IRole>>(`/roles`, {...role})
 }
 
 export const apiDeleteRole = ( id: string ) => {
-    return axiosClient.delete<IBackendResponse<IRole>>(`/roles/delete/${id}`)
+    return axiosClient.delete<IBackendResponse<IRole>>(`/roles/${id}`)
 }
 
 
@@ -94,15 +94,15 @@ export const apiFetchAllProduct = ( query: string ) => {
 }
 
 export const apiCreateProduct = ( product: IProduct ) => {
-    return axiosClient.post<IBackendResponse<IProduct>>('/products/create', {...product})
+    return axiosClient.post<IBackendResponse<IProduct>>('/products', {...product})
 }
 
 export const apiUpdateProduct = ( product: IProduct ) => {
-    return axiosClient.post<IBackendResponse<IProduct>>(`/products/update`, {...product})
+    return axiosClient.put<IBackendResponse<IProduct>>(`/products`, {...product})
 }
 
 export const apiDeleteProduct = ( id: string ) => {
-    return axiosClient.delete<IBackendResponse<IProduct>>(`/products/delete/${id}`)
+    return axiosClient.delete<IBackendResponse<IProduct>>(`/products/${id}`)
 }
 
 export const apiFetchProductById = ( id: string ) => {
@@ -144,15 +144,15 @@ export const apiFetchAllCategory = ( query: string ) => {
 }
 
 export const apiUpdateCategory = ( category: ICategory ) => {
-    return axiosClient.post<IBackendResponse<ICategory>>(`/categories/update`, {...category})
+    return axiosClient.put<IBackendResponse<ICategory>>(`/categories`, {...category})
 }
 
 export const apiCreateCategory = ( category: ICategory ) => {
-    return axiosClient.post<IBackendResponse<ICategory>>(`/categories/create`, {...category})
+    return axiosClient.post<IBackendResponse<ICategory>>(`/categories`, {...category})
 }
 
 export const apiDeleteCategory = ( id: string ) => {
-    return axiosClient.delete<IBackendResponse<ICategory>>(`/categories/delete/${id}`)
+    return axiosClient.delete<IBackendResponse<ICategory>>(`/categories/${id}`)
 }
 
 /* Module Supplier */
@@ -161,15 +161,15 @@ export const apiFetchAllSupplier = ( query: string ) => {
 }
 
 export const apiUpdateSupplier = ( supplier: ISupplier ) => {
-    return axiosClient.post<IBackendResponse<ISupplier>>(`/suppliers/update`, {...supplier})
+    return axiosClient.put<IBackendResponse<ISupplier>>(`/suppliers`, {...supplier})
 }
 
 export const apiCreateSupplier = ( supplier: ISupplier ) => {
-    return axiosClient.post<IBackendResponse<ISupplier>>(`/suppliers/create`, {...supplier})
+    return axiosClient.post<IBackendResponse<ISupplier>>(`/suppliers`, {...supplier})
 }
 
 export const apiDeleteSupplier = ( id: string ) => {
-    return axiosClient.delete<IBackendResponse<ISupplier>>(`/suppliers/delete/${id}`)
+    return axiosClient.delete<IBackendResponse<ISupplier>>(`/suppliers/${id}`)
 }
 
 
@@ -179,15 +179,15 @@ export const apiFetchAllPermission = ( query: string ) => {
 }
 
 export const apiUpdatePermission = ( permission: IPermission ) => {
-    return axiosClient.post<IBackendResponse<IPermission>>(`/permissions/update`, {...permission})
+    return axiosClient.put<IBackendResponse<IPermission>>(`/permissions`, {...permission})
 }
 
 export const apiCreatePermission = ( permission: IPermission ) => {
-    return axiosClient.post<IBackendResponse<IPermission>>(`/permissions/create`, {...permission})
+    return axiosClient.post<IBackendResponse<IPermission>>(`/permissions`, {...permission})
 }
 
 export const apiDeletePermission = ( id: string ) => {
-    return axiosClient.delete<IBackendResponse<IPermission>>(`/permissions/delete/${id}`)
+    return axiosClient.delete<IBackendResponse<IPermission>>(`/permissions/${id}`)
 }
 
 /* Module Upload */

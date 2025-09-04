@@ -46,6 +46,10 @@ const UserPage = () => {
       email: "an.nguyen@example.com",
       phone: "0901 234 567",
       address: "12 Trần Hưng Đạo, Q1, TP.HCM",
+      role: {
+        id: "1",
+        name: "Admin",
+      },
       createdAt: "2024-06-12T09:15:23Z",
     },
     {
@@ -53,6 +57,10 @@ const UserPage = () => {
       email: "bich.tran@example.com",
       phone: "0912 345 678",
       address: "45 Lý Thường Kiệt, Q10, TP.HCM",
+      role: {
+        id: "2",
+        name: "Admin",
+      },
       createdAt: "2024-07-03T14:22:10Z",
     },
     {
@@ -60,6 +68,10 @@ const UserPage = () => {
       email: "long.le@example.com",
       phone: "0987 654 321",
       address: "89 Kim Mã, Ba Đình, Hà Nội",
+      role: {
+        id: "3",
+        name: "Admin",
+      },
       createdAt: "2024-07-28T08:05:47Z",
     },
     {
@@ -67,6 +79,10 @@ const UserPage = () => {
       email: "trang.pham@example.com",
       phone: "0933 888 999",
       address: "23 Võ Văn Tần, Q3, TP.HCM",
+      role: {
+        id: "4",
+        name: "Admin",
+      },
       createdAt: "2024-08-15T11:40:00Z",
     },
     {
@@ -74,6 +90,10 @@ const UserPage = () => {
       email: "khang.do@example.com",
       phone: "0971 222 333",
       address: "150 Điện Biên Phủ, Thanh Khê, Đà Nẵng",
+      role: {
+        id: "5",
+        name: "Admin",
+      },
       createdAt: "2024-08-28T16:12:35Z",
     },
   ];
@@ -212,7 +232,7 @@ const UserPage = () => {
         <>
           <div className="mb-6">
             <UserTable
-              userData={mockUsers}
+              userData={displayData}
               onEditClick={handleOpenEditModal}
               onDeleteClick={handleOpenDeleteModal}
               filters={filters}
