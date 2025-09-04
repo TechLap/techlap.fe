@@ -42,7 +42,6 @@ const RegisterPage = () => {
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
 
   const handleRegister: SubmitHandler<FormValues> = async (values) => {
-
     const response = await apiRegisterForCustomer(values.name, values.email, values.password, values.phone);
     if (response.data?.data?.id) {
       toast.success(
