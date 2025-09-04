@@ -1,4 +1,12 @@
+import { useEffect } from "react";
+
 const HeroBanner = () => {
+  useEffect(() => {
+    // Gọi lại Preline để init lại carousel
+    if (window.HSStaticMethods) {
+      window.HSStaticMethods.autoInit();
+    }
+  }, []);
   return (
     <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white">
       <div className="container mx-auto px-4 h-full grid grid-cols-1 md:grid-cols-2 md:py-20 py-12 gap-8 items-center">

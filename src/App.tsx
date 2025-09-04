@@ -1,36 +1,36 @@
-import { IStaticMethods } from "preline/preline";
 import "preline/preline";
+import { IStaticMethods } from "preline/preline";
 import { useEffect } from "react";
+import "react-datepicker/dist/react-datepicker.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Slide, ToastContainer } from "react-toastify";
 import "./App.css";
 import AdminLayout from "./layouts/AdminLayout";
 import AppLayout from "./layouts/AppLayout";
 import ClientLayout from "./layouts/ClientLayout";
+import CategoryPage from "./pages/admin/category";
+import CustomerPage from "./pages/admin/customer";
 import DashboardPage from "./pages/admin/dashboard";
-import HomePage from "./pages/client/home";
 import OrderPage from "./pages/admin/orders";
+import PermissionPage from "./pages/admin/permissions";
 import ProductPage from "./pages/admin/products";
+import RolePage from "./pages/admin/roles";
 import SupplierPage from "./pages/admin/supplier";
 import UserPage from "./pages/admin/users";
 import LoginPage from "./pages/auth/login";
+import LoginInternalUserPage from "./pages/auth/login.internal.user";
 import RegisterPage from "./pages/auth/register";
 import ProtectedRoute from "./pages/auth/route/protected.route";
+import AboutPage from "./pages/client/about";
+import CartPage from "./pages/client/cart";
+import ContactPage from "./pages/client/contact";
+import HomePage from "./pages/client/home";
+import ProductDetailPage from "./pages/client/product/detail/product.detail";
+import ProductShowPage from "./pages/client/product/show";
 import ErrorPage from "./pages/error-page";
 import { useAppDispatch } from "./redux/hooks";
 import { fetchUserInfo } from "./redux/slice/account.slice";
 import "./styles/datepicker-xs.css";
-import "react-datepicker/dist/react-datepicker.css";
-import CategoryPage from "./pages/admin/category";
-import PermissionPage from "./pages/admin/permissions";
-import RolePage from "./pages/admin/roles";
-import LoginInternalUserPage from "./pages/auth/login.internal.user";
-import CustomerPage from "./pages/admin/customer";
-import AboutPage from "./pages/client/about";
-import ContactPage from "./pages/client/contact";
-import ProductShowPage from "./pages/client/product/show";
-import ProductDetailPage from "./pages/client/product/detail/product.detail";
-import CartPage from "./pages/client/cart";
 
 declare global {
   interface Window {
@@ -189,3 +189,4 @@ function App() {
 }
 
 export default App;
+

@@ -5,10 +5,36 @@ import CustomToast from "../../components/common/toast.message";
 import { apiLoginForInternalUser } from "../../config/api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setUserLoginInfo } from "../../redux/slice/account.slice";
+import * as yup from "yup";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const LoginInternalUserPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const createUserSchema = yup
+    .object({
+      email: yup
+        .string()
+        .email("Email không hợp lệ")
+        .required("Email không được để trống"),
+
+      password: yup
+        .string()
+        .required("Mật khẩu không được để trống")
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{12,})/,
+          "Mật khẩu phải chứa ít nhất 12 kí tự: bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt"
+        ),
+    })
+    .required();
+
+  type FormValues = yup.InferType<typeof createUserSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<FormValues>({ resolver: yupResolver(createUserSchema) as any });
+
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   const navigate = useNavigate();
   const dispacth = useAppDispatch();
@@ -22,7 +48,7 @@ const LoginInternalUserPage = () => {
     }
   }, []);
 
-  const handleLoginInternalUser = async (values: any) => {
+  const handleLoginInternalUser: SubmitHandler<FormValues> = async (values: any) => {
     const { username, password } = values;
     const response = await apiLoginForInternalUser(username, password);
     if (response.data?.data) {
@@ -44,7 +70,28 @@ const LoginInternalUserPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center bg-red-400">
+      <div className="absolute pointer-events-none inset-0 overflow-hidden">
+        <div className="absolute top-20 left-20 w-32 h-32 bg-blue-400/30 rounded-full animate-[float_6s_ease-in-out_infinite] shadow-[0_0_50px_rgba(220,38,38,0.4)]"></div>
+        <div className="absolute top-40 right-32 w-24 h-24 bg-blue-300/25 rounded-lg rotate-45 animate-[float_8s_ease-in-out_infinite_reverse] shadow-[0_0_40px_rgba(220,38,38,0.4)]"></div>
+        <div className="absolute bottom-32 left-40 w-20 h-20 bg-blue-500/30 rounded-full animate-[float_7s_ease-in-out_infinite] shadow-[0_0_35px_rgba(220,38,38,0.4)]"></div>
+        <div className="absolute bottom-20 right-20 w-28 h-28 bg-blue-400/20 rounded-lg rotate-12 animate-[float_9s_ease-in-out_infinite_reverse] shadow-[0_0_45px_rgba(220,38,38,0.3)]"></div>
+
+        {/* Grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(239,68,68,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(239,68,68,0.1)_1px,transparent_1px)] bg-[size:100px_100px] opacity-10"></div>
+
+        {/* Radial pattern */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:50px_50px] opacity-10"></div>
+
+        {/* Gradient overlays  */}
+        <div className="absolute top-0 left-0 w-96 h-96 
+      bg-[radial-gradient(circle_at_center,_rgba(248,113,113,0.2),_rgba(239,68,68,0.15),_rgb(239,68,68))] 
+      rounded-full blur-3xl"></div>
+
+        <div className="absolute bottom-0 right-0 w-96 h-96 
+      bg-[radial-gradient(circle_at_center,_rgba(220,38,38,0.2),_rgba(185,28,28,0.15),_rgb(239,68,68))] 
+      rounded-full blur-3xl"></div>
+      </div>
       <div className="max-w-xl w-full bg-white border border-gray-200 rounded-xl shadow-2xs">
         <div className="p-4 sm:p-7">
           <div className="text-center">
@@ -54,10 +101,10 @@ const LoginInternalUserPage = () => {
             <p className="mt-2 text-base text-gray-600">
               Bạn chưa có tài khoản?
               <NavLink
-                className="text-green-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
+                className="text-red-500 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
                 to={"/register"}
               >
-                Đăng ký tại đây
+                {" "} Đăng ký tại đây
               </NavLink>
             </p>
           </div>
@@ -100,10 +147,7 @@ const LoginInternalUserPage = () => {
 
             {/* Form */}
             <form
-              onSubmit={(event) => {
-                event.preventDefault(); // Ngăn form gửi dữ liệu lên URL
-                handleLoginInternalUser({ username, password });
-              }}
+              onSubmit={handleSubmit(handleLoginInternalUser)}
             >
               <div className="grid gap-y-4">
                 {/* Form Group */}
@@ -115,14 +159,13 @@ const LoginInternalUserPage = () => {
                     <input
                       type="email"
                       id="email"
-                      name="email"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-green-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                      required
+                      {...register("email")}
+                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-red-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="Nhập email"
-                      aria-describedby="email-error"
                     />
+                    {errors.email && (
+                      <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>
+                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -157,7 +200,7 @@ const LoginInternalUserPage = () => {
                       Mật khẩu
                     </label>
                     <a
-                      className="inline-flex items-center gap-x-1 text-base text-green-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
+                      className="inline-flex items-center gap-x-1 text-base text-red-500 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
                       href="../examples/html/recover-account.html"
                     >
                       Quên mật khẩu?
@@ -167,14 +210,13 @@ const LoginInternalUserPage = () => {
                     <input
                       type={isVisiblePassword ? "text" : "password"}
                       id="password"
-                      name="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-green-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                      required
-                      aria-describedby="password-error"
+                      {...register("password")}
+                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-red-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="Nhập mật khẩu"
                     />
+                    {errors.password && (
+                      <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>
+                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -192,6 +234,7 @@ const LoginInternalUserPage = () => {
                         <circle cx="16.5" cy="7.5" r=".5"></circle>
                       </svg>
                     </div>
+
                     <div className="absolute inset-y-0 end-0 flex items-center pe-2 peer-disabled:opacity-50">
                       <button
                         onClick={handleShowPassword}
@@ -238,12 +281,6 @@ const LoginInternalUserPage = () => {
                       </button>
                     </div>
                   </div>
-                  <p
-                    className="hidden text-xs text-red-600 mt-2"
-                    id="password-error"
-                  >
-                    Mật khẩu phải có ít nhất 8 ký tự
-                  </p>
                 </div>
                 {/* End Form Group */}
 
@@ -267,7 +304,7 @@ const LoginInternalUserPage = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-base font-medium rounded-lg border border-transparent bg-green-500 text-white hover:bg-green-600 focus:outline-hidden focus:bg-green-600 disabled:opacity-50 disabled:pointer-events-none"
+                  className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-base font-medium rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 focus:outline-hidden focus:bg-red-500 disabled:opacity-50 disabled:pointer-events-none"
                 >
                   Đăng nhập
                 </button>
