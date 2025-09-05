@@ -76,7 +76,7 @@ const Header = () => {
                 className="py-2 sm:py-2.5 ps-10 pe-4 block w-full border-gray-200 border rounded-full sm:text-sm focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                 type="text"
                 id="search"
-                placeholder="Tìm kiếm thực phẩm đông lạnh..."
+                placeholder="Tìm kiếm sản phẩm..."
               />
             </div>
           </div>

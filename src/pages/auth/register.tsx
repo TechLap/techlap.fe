@@ -43,6 +43,7 @@ const RegisterPage = () => {
 
   const handleRegister: SubmitHandler<FormValues> = async (values) => {
     const response = await apiRegisterForCustomer(values.name, values.email, values.password, values.phone);
+    console.log(values)
     if (response.data?.data?.id) {
       toast.success(
         <CustomToast
@@ -124,9 +125,6 @@ const RegisterPage = () => {
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="Nhập email"
                     />
-                    {errors.email && (
-                      <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>
-                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -145,12 +143,11 @@ const RegisterPage = () => {
                       </svg>
                     </div>
                   </div>
-                  <p
-                    className="hidden text-xs text-red-600 mt-2"
-                    id="email-error"
-                  >
-                    Vui lòng nhập địa chỉ email hợp lệ
-                  </p>
+                  <div>
+                    {errors.email && (
+                      <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>
+                    )}
+                  </div>
                 </div>
                 {/* End Form Eamil */}
 
@@ -169,9 +166,6 @@ const RegisterPage = () => {
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="Nhập mật khẩu"
                     />
-                    {errors.password && (
-                      <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>
-                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -236,6 +230,10 @@ const RegisterPage = () => {
                       </button>
                     </div>
                   </div>
+                  <div>
+                    {errors.password && (
+                      <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>
+                    )}</div>
                 </div>
                 {/* End Form Password */}
 
@@ -252,9 +250,6 @@ const RegisterPage = () => {
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="Nhập họ và tên"
                     />
-                    {errors.name && (
-                      <p className="text-xs text-red-600 mt-1">{errors.name.message}</p>
-                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -276,12 +271,11 @@ const RegisterPage = () => {
                     </div>
 
                   </div>
-                  <p
-                    className="hidden text-xs text-red-600 mt-2"
-                    id="email-error"
-                  >
-                    Vui lòng nhập họ và tên hợp lệ
-                  </p>
+                  <div>
+                    {errors.name && (
+                      <p className="text-xs text-red-600 mt-1">{errors.name.message}</p>
+                    )}
+                  </div>
                 </div>
                 {/* End Form FullName */}
 
@@ -298,9 +292,6 @@ const RegisterPage = () => {
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="Nhập số điện thoại"
                     />
-                    {errors.phone && (
-                    <p className="text-xs text-red-600 mt-1">{errors.phone.message}</p>
-                  )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -327,12 +318,11 @@ const RegisterPage = () => {
                       </svg>
                     </div>
                   </div>
-                  <p
-                    className="hidden text-xs text-red-600 mt-2"
-                    id="email-error"
-                  >
-                    Vui lòng nhập số điện thoại hợp lệ
-                  </p>
+                  <div>
+                    {errors.phone && (
+                      <p className="text-xs text-red-600 mt-1">{errors.phone.message}</p>
+                    )}
+                  </div>
                 </div>
                 {/* End Form Phone */}
 
