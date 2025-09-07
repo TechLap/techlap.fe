@@ -98,10 +98,12 @@ export interface IProduct {
     name: string;
     quantity: number;
     description: string;
-    unit: string;
-    productImage?: string | null;
+    status: string;
+    stock: number;
+    discount?: number;
+    image?: string | null;
     price: number;
-    supplier?: {
+    brand?: {
         id: string;
         name?: string;
     };
@@ -124,12 +126,12 @@ export interface ICategory {
 export interface IProductFilter {
     name?: string;
     quantity?: number;
-    unit?: string;
+    status?: string;
     price?: number;
     category?: {
         id: string;
     };
-    supplier?: {
+    brand?: {
         id: string;
     };
     priceRange?: {
@@ -145,6 +147,15 @@ export interface ICategoryFilter {
     createdAt?: string | null;
 }
 
+
+export interface IBrand {
+    id?: string;
+    name: string;
+    products?: {
+        id: string;
+        name?: string;
+    }[];
+}
 export interface ISupplier {
     id?: string;
     name: string;
@@ -177,7 +188,7 @@ export interface IRoleFilter {
 
 export interface ICustomer {
     id?: string;
-    name: string;
+    fullName: string;
     email: string;
     phone: string;
     address: string;
@@ -199,7 +210,7 @@ export interface ICustomer {
 }
 
 export interface ICustomerFilter {
-    name?: string;
+    fullName?: string;
     email?: string;
     phone?: string;
     createdAt?: string | null;

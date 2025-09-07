@@ -28,11 +28,7 @@ const ProductPage = () => {
   const [filters, setFilters] = useState<IProductFilter>({
     name: "",
     quantity: 0,
-    unit: "",
     price: 0,
-    supplier: {
-      id: "",
-    },
     category: {
       id: "",
     },  
@@ -66,13 +62,9 @@ const ProductPage = () => {
       apiSearchProduct(`page=${searchCurrentPage}&size=${MAX_PRODUCTS_PAGE}`, {
         name: debouncedFilters.name,
         quantity: debouncedFilters.quantity,
-        unit: debouncedFilters.unit,
         price: debouncedFilters.price,
         ...(debouncedFilters.category?.id
           ? { category: { id: debouncedFilters.category.id } }
-          : {}),
-        ...(debouncedFilters.supplier?.id
-          ? { supplier: { id: debouncedFilters.supplier.id } }
           : {}),
       }),
     enabled: Object.values(debouncedFilters).some(
@@ -98,9 +90,7 @@ const ProductPage = () => {
   const handleFilterChange = (key: string, value: string | number) => {
     setFilters((prev) => {
       let newValue;
-      if (key === "supplier") {
-        newValue = { supplier: { id: value as string } };
-      } else if (key === "category") {
+      if (key === "category") {
         newValue = { category: { id: value as string } };
       } else {
         newValue = { [key]: value };
