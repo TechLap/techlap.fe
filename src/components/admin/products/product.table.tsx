@@ -1,11 +1,10 @@
 import "react-datepicker/dist/react-datepicker.css";
 import { IProduct, IProductFilter } from "../../../types/backend";
 import { useQuery } from "@tanstack/react-query";
-import { apiFetchAllBrand, apiFetchAllCategory } from "../../../config/api";
+import { apiFetchAllBrand } from "../../../config/api";
 import DataTable from "../../common/data.table";
 import ButtonFilter from "../../common/button.filter";
 import { NumericFormat } from "react-number-format";
-import DateFilter from "../../common/date.picker";
 import Access from "../../../pages/auth/route/access";
 import { Delete, Edit } from "../../common/icons";
 import SelectFilter from "../../common/select.filter";
@@ -28,10 +27,6 @@ const ProductTable = (props: IProps) => {
     onFilterChange,
   } = props;
 
-  const { data: categories } = useQuery({
-    queryKey: ["fetchAllCategories"],
-    queryFn: () => apiFetchAllCategory(`page=1&size=20`),
-  });
 
   const { data: brands } = useQuery({
     queryKey: ["fetchAllBrands"],

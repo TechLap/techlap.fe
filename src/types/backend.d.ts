@@ -96,7 +96,6 @@ export interface IRole {
 export interface IProduct {
     id?: string;
     name: string;
-    quantity: number;
     description: string;
     status: string;
     stock: number;
