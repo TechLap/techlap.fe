@@ -1,5 +1,5 @@
 import axiosClient from "./axios-customize"
-import { GetAccount, IAccount, IBackendResponse, ICategory, ICategoryFilter, ICustomer, ICustomerFilter, IModelPagination, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, ISupplier, ISupplierFilter, IUser, IUserFilter } from "../types/backend"
+import { GetAccount, IAccount, IBackendResponse, IBrand, ICategory, ICategoryFilter, ICustomer, ICustomerFilter, IModelPagination, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, ISupplier, ISupplierFilter, IUser, IUserFilter } from "../types/backend"
 
 /* Module Auth */
 export const apiLoginForCustomer = (username: string, password: string) => {
@@ -107,6 +107,11 @@ export const apiDeleteProduct = ( id: string ) => {
 
 export const apiFetchProductById = ( id: string ) => {
     return axiosClient.get<IBackendResponse<IProduct>>(`/products/${id}`)
+}
+
+/* Module Brand */
+export const apiFetchAllBrand = ( query: string ) => {
+    return axiosClient.get<IBackendResponse<IModelPagination<IBrand>>>(`/brands?${query}`)
 }
 
 /* Search */
