@@ -22,7 +22,7 @@ interface IProps {
 const createCustomerSchema = yup
   .object({
     id: yup.string().optional(),
-    name: yup.string().required("Tên không được để trống"),
+    fullName: yup.string().required("Tên không được để trống"),
     email: yup
       .string()
       .email("Email không hợp lệ")
@@ -63,7 +63,7 @@ const CustomerModal = (props: IProps) => {
     context: { isEdit: !!dataInit },
     defaultValues: {
       id: dataInit?.id ?? "",
-      name: dataInit?.name ?? "",
+      fullName: dataInit?.fullName ?? "",
       email: dataInit?.email ?? "",
       phone: dataInit?.phone ?? "",
       address: dataInit?.address ?? "",
@@ -73,7 +73,7 @@ const CustomerModal = (props: IProps) => {
   // Reset form when dataInit change
   useEffect(() => {
     reset({
-      name: dataInit?.name ?? "",
+      fullName: dataInit?.fullName ?? "",
       email: dataInit?.email ?? "",
       phone: dataInit?.phone ?? "",
       address: dataInit?.address ?? "",
@@ -168,20 +168,20 @@ const CustomerModal = (props: IProps) => {
                 <div>
                   <label
                     className="block text-sm font-medium text-gray-700 mb-2"
-                    htmlFor="name"
+                    htmlFor="fullName"
                   >
                     Tên khách hàng
                   </label>
                   <input
-                    id="name"
+                    id="fullName"
                     type="text"
                     className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    {...register("name")}
+                    {...register("fullName")}
                     placeholder="Nhập tên khách hàng"
-                    defaultValue={dataInit?.name}
+                    defaultValue={dataInit?.fullName}
                   />
-                  {errors.name && (
-                    <p className="text-red-500">{errors.name.message}</p>
+                  {errors.fullName && (
+                    <p className="text-red-500">{errors.fullName.message}</p>
                   )}
                 </div>
 
@@ -288,7 +288,7 @@ const CustomerModal = (props: IProps) => {
               </button>
               <button
                 type="submit"
-                className="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-green-800 text-white hover:bg-green-900 focus:outline-hidden focus:bg-green-900 disabled:opacity-50 disabled:pointer-events-none"
+                className="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
                 {dataInit ? "Cập nhật" : "Thêm mới"}
               </button>

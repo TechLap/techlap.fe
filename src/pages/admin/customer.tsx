@@ -31,7 +31,7 @@ const CustomerPage = () => {
   const [isOpenActionModal, setIsOpenActionModal] = useState(false);
   const [filters, setFilters] = useState<ICustomerFilter>({
     email: "",
-    name: "",
+    fullName: "",
     phone: "",
     createdAt: null,
   });
@@ -64,7 +64,7 @@ const CustomerPage = () => {
         `page=${searchCurrentPage}&size=${MAX_CUSTOMERS_PAGE}`,
         {
           email: debouncedFilters.email,
-          name: debouncedFilters.name,
+          fullName: debouncedFilters.fullName,
           phone: debouncedFilters.phone,
           createdAt: debouncedFilters.createdAt,
         }
@@ -205,7 +205,7 @@ const CustomerPage = () => {
           setSelectedCustomer(null);
           setIsOpenDeleteModal(false);
         }}
-        title={`khách hàng: ${selectedCustomer?.name}`}
+        title={`khách hàng: ${selectedCustomer?.fullName}`}
         modalName={`Khách hàng`}
       />
     </div>

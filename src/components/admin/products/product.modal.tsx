@@ -2,8 +2,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import {
   apiCreateProduct,
+  apiFetchAllBrand,
   apiFetchAllCategory,
-  apiFetchAllSupplier,
   apiUpdateProduct,
   apiUploadSingleFile,
 } from "../../../config/api";
@@ -29,17 +29,17 @@ const ProductModal = (props: IProps) => {
 
   const createProductSchema = yup.object({
     name: yup.string().required("Tên sản phẩm không được để trống"),
-    quantity: yup.number().required("Số lượng không được để trống"),
-    unit: yup.string().required("Đơn vị không được để trống"),
+    stock: yup.number().required("Số lượng không được để trống"),
+    status: yup.string().required("Trạng thái không được để trống"),
     price: yup.number().required("Giá bán không được để trống"),
     category: yup.object({
       id: yup.string().required("Danh mục không được để trống"),
     }),
-    supplier: yup.object({
-      id: yup.string().required("Nhà cung cấp không được để trống"),
+    brand: yup.object({
+      id: yup.string().required("Thương hiệu không được để trống"),
     }),
     description: yup.string().required("Mô tả không được để trống"),
-    productImage: yup.string().nullable(),
+    image: yup.string().nullable(),
   });
 
   type FormValues = yup.InferType<typeof createProductSchema>;
@@ -53,17 +53,17 @@ const ProductModal = (props: IProps) => {
     resolver: yupResolver(createProductSchema) as any,
     defaultValues: {
       name: dataInit?.name ?? "",
-      quantity: dataInit?.quantity ?? 0,
-      unit: dataInit?.unit ?? "",
+      stock: dataInit?.stock ?? 0,
+      status: dataInit?.status ?? "",
       price: dataInit?.price ?? 0,
       category: {
         id: dataInit?.category?.id ?? "",
       },
-      supplier: {
-        id: dataInit?.supplier?.id ?? "",
+      brand: {
+        id: dataInit?.brand?.id ?? "",
       },
       description: dataInit?.description ?? "",
-      productImage: dataInit?.productImage ?? "",
+      image: dataInit?.image ?? "",
     },
   });
 
@@ -72,26 +72,26 @@ const ProductModal = (props: IProps) => {
     queryFn: () => apiFetchAllCategory(`page=1&size=20`),
   });
 
-  const { data: suppliers } = useQuery({
-    queryKey: ["fetchAllSuppliers"],
-    queryFn: () => apiFetchAllSupplier(`page=1&size=20`),
+  const { data: brands } = useQuery({
+    queryKey: ["fetchAllBrands"],
+    queryFn: () => apiFetchAllBrand(`page=1&size=20`),
   });
 
   // Reset form when dataInit change
   useEffect(() => {
     reset({
       name: dataInit?.name ?? "",
-      quantity: dataInit?.quantity ?? 0,
-      unit: dataInit?.unit ?? "",
+      stock: dataInit?.stock ?? 0,
+      status: dataInit?.status ?? "",
       price: dataInit?.price ?? 0,
       category: {
         id: dataInit?.category?.id ?? "",
       },
-      supplier: {
-        id: dataInit?.supplier?.id ?? "",
+      brand: {
+        id: dataInit?.brand?.id ?? "",
       },
       description: dataInit?.description ?? "",
-      productImage: dataInit?.productImage ?? "",
+      image: dataInit?.image ?? "",
     });
   }, [dataInit, reset]);
 
@@ -120,11 +120,11 @@ const ProductModal = (props: IProps) => {
           ? {
               id: dataInit.id,
               ...valuesForm,
-              productImage: productUploadedImage,
+              image: productUploadedImage,
             }
           : {
               ...valuesForm,
-              productImage: productUploadedImage,
+              image: productUploadedImage,
             };
 
         return dataInit?.id
@@ -139,7 +139,7 @@ const ProductModal = (props: IProps) => {
       toast.success(
         <CustomToast
           message={`${dataInit ? "Cập nhật" : "Thêm"} sản phẩm thành công!`}
-          className="text-green-600"
+          className="text-blue-600"
         />
       );
       onClose();
@@ -155,11 +155,9 @@ const ProductModal = (props: IProps) => {
     },
   });
 
-  const handleSubmitProduct = handleSubmit(
-    async (valuesForm: FormValues) => {
-      mutation.mutate(valuesForm);
-    }
-  );
+  const handleSubmitProduct = handleSubmit(async (valuesForm: FormValues) => {
+    mutation.mutate(valuesForm);
+  });
 
   return (
     <div
@@ -210,7 +208,7 @@ const ProductModal = (props: IProps) => {
             <div className="p-4 overflow-y-auto max-h-[460px]">
               <div className="grid sm:grid-cols-2 gap-6">
                 {/* Name */}
-                <div> 
+                <div>
                   <label
                     className="block text-sm font-medium text-gray-700 mb-2"
                     htmlFor="name"
@@ -233,40 +231,40 @@ const ProductModal = (props: IProps) => {
                 <div>
                   <label
                     className="block text-sm font-medium text-gray-700 mb-2"
-                    htmlFor="quantity"
+                    htmlFor="stock"
                   >
                     Số lượng
                   </label>
                   <input
-                    id="quantity"
+                    id="stock"
                     type="text"
                     className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    {...register("quantity")}
+                    {...register("stock")}
                     placeholder="Nhập số lượng"
-                    defaultValue={dataInit?.quantity}
+                    defaultValue={dataInit?.stock}
                   />
-                  {errors.quantity && (
-                    <p className="text-red-500">{errors.quantity.message}</p>
+                  {errors.stock && (
+                    <p className="text-red-500">{errors.stock.message}</p>
                   )}
                 </div>
 
                 <div>
                   <label
                     className="block text-sm font-medium text-gray-700 mb-2"
-                    htmlFor="unit"
+                    htmlFor="status"
                   >
-                    Đơn vị
+                    Trạng thái
                   </label>
                   <input
-                    id="unit"
+                    id="status"
                     type="text"
                     className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    {...register("unit")}
-                    placeholder="Nhập đơn vị bán"
-                    defaultValue={dataInit?.unit}
+                    {...register("status")}
+                    placeholder="Nhập trạng thái"
+                    defaultValue={dataInit?.status}
                   />
-                  {errors.unit && (
-                    <p className="text-red-500">{errors.unit.message}</p>
+                  {errors.status && (
+                    <p className="text-red-500">{errors.status.message}</p>
                   )}
                 </div>
 
@@ -303,12 +301,12 @@ const ProductModal = (props: IProps) => {
                     {...register("category.id")}
                     defaultValue={dataInit?.category?.id}
                   >
-                    <option className="text-gray-800 bg-gray-100" value="">
+                    <option className="text-gray-800 bg-gray-200" value="">
                       Chọn danh mục...
                     </option>
                     {categories?.data?.data?.result.map((category) => (
                       <option
-                        className="bg-gray-100 text-gray-800"
+                        className="bg-gray-200 text-gray-800"
                         value={category.id}
                         key={category.id}
                       >
@@ -321,26 +319,26 @@ const ProductModal = (props: IProps) => {
                 <div>
                   <label
                     className="block text-sm font-medium text-gray-700 mb-2"
-                    htmlFor="supplier"
+                    htmlFor="brand"
                   >
-                    Nhà cung cấp
+                    Thương hiệu
                   </label>
                   <select
-                    className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    id="supplier"
-                    {...register("supplier.id")}
-                    defaultValue={dataInit?.supplier?.id}
+                    className="block border w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                    id="brand"
+                    {...register("brand.id")}
+                    defaultValue={dataInit?.brand?.id}
                   >
-                    <option className="text-gray-800 bg-gray-100" value="">
-                      Chọn nhà cung cấp...
+                    <option className="text-gray-800 bg-gray-200" value="">
+                      Chọn thương hiệu...
                     </option>
-                    {suppliers?.data?.data?.result.map((supplier) => (
+                    {brands?.data?.data?.result.map((brand) => (
                       <option
-                        className="bg-gray-100 text-gray-800"
-                        value={supplier.id}
-                        key={supplier.id}
+                        className="bg-gray-200 text-gray-800"
+                        value={brand.id}
+                        key={brand.id}
                       >
-                        {supplier.name}
+                        {brand.name}
                       </option>
                     ))}
                   </select>
@@ -373,7 +371,7 @@ const ProductModal = (props: IProps) => {
                   <SingleUploadImg
                     onFileChange={handleFileChange}
                     isOpenActionModal={isOpenActionModal}
-                    defaultImg={dataInit?.productImage ?? ""}
+                    defaultImg={dataInit?.image ?? ""}
                   />
                 </div>
               </div>
@@ -389,7 +387,7 @@ const ProductModal = (props: IProps) => {
               </button>
               <button
                 type="submit"
-                className="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-green-800 text-white hover:bg-green-900 focus:outline-hidden focus:bg-green-900 disabled:opacity-50 disabled:pointer-events-none"
+                className="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
                 {dataInit ? "Cập nhật" : "Thêm mới"}
               </button>

@@ -8,6 +8,7 @@ import { Delete, Edit } from "../../common/icons";
 import DataTable from "../../common/data.table";
 import ButtonFilter from "../../common/button.filter";
 import SelectFilter from "../../common/select.filter";
+import dayjs from "dayjs";
 
 interface IProps {
   userData?: IUser[] | null;
@@ -152,7 +153,7 @@ const UserTable = (props: IProps) => {
           </div>
         </div>
       ),
-      render: (row: IUser) => row.createdAt,
+      render: (row: IUser) => row.createdAt ? dayjs(row.createdAt).format("DD/MM/YYYY") : "",
     },
     {
       key: "actions",
