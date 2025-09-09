@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 const RegisterPage = () => {
   const createUserSchema = yup
     .object({
-      name: yup.string().required("Tên không được để trống"),
+      fullName: yup.string().required("Tên không được để trống"),
       email: yup
         .string()
         .email("Email không hợp lệ")
@@ -28,6 +28,10 @@ const RegisterPage = () => {
         .string()
         .required("Số địện thoai không được để trống")
         .matches(/(0[3|5|7|8|9])+(\d{8})\b/g, "Số địện thoai không hợp lệ"),
+
+      address: yup
+        .string()
+        .required("Địa chỉ không được bỏ trống")
     })
     .required();
 
@@ -42,7 +46,7 @@ const RegisterPage = () => {
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
 
   const handleRegister: SubmitHandler<FormValues> = async (values) => {
-    const response = await apiRegisterForCustomer(values.name, values.email, values.password, values.phone);
+    const response = await apiRegisterForCustomer(values.fullName, values.email, values.password, values.address, values.phone);
     console.log(values)
     if (response.data?.data?.id) {
       toast.success(
@@ -239,14 +243,14 @@ const RegisterPage = () => {
 
                 {/* Form FullName */}
                 <div>
-                  <label htmlFor="name" className="block text-base mb-2">
+                  <label htmlFor="fullName" className="block text-base mb-2">
                     Họ và tên
                   </label>
                   <div className="relative">
                     <input
                       type="text"
-                      id="name"
-                      {...register("name")}
+                      id="fullName"
+                      {...register("fullName")}
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="Nhập họ và tên"
                     />
@@ -272,13 +276,53 @@ const RegisterPage = () => {
 
                   </div>
                   <div>
-                    {errors.name && (
-                      <p className="text-xs text-red-600 mt-1">{errors.name.message}</p>
+                    {errors.fullName && (
+                      <p className="text-xs text-red-600 mt-1">{errors.fullName.message}</p>
                     )}
                   </div>
                 </div>
                 {/* End Form FullName */}
+                {/* Form Address */}
+                <div>
+                  <label htmlFor="address" className="block text-base mb-2">
+                    Địa chỉ
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      id="address"
+                      {...register("address")}
+                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                      placeholder="Nhập địa chỉ"
+                    />
+                    <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
+                      <svg
+                        className="shrink-0 size-4 text-gray-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+                        <circle cx="9" cy="10" r="3"></circle>
+                        <path d="M15 8h4"></path>
+                        <path d="M15 12h4"></path>
+                      </svg>
+                    </div>
 
+                  </div>
+                  <div>
+                    {errors.address && (
+                      <p className="text-xs text-red-600 mt-1">{errors.address.message}</p>
+                    )}
+                  </div>
+                </div>
+                {/* End Form Address */}
                 {/* Form Phone */}
                 <div>
                   <label htmlFor="phone" className="block text-base mb-2">

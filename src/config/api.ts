@@ -10,8 +10,8 @@ export const apiLoginForInternalUser = (username: string, password: string) => {
     return axiosClient.post<IBackendResponse<IAccount>>('/admin/login', {username, password})
 }
 
-export const apiRegisterForCustomer = (name: string, email: string, password: string, phone: string ) => {
-    return axiosClient.post<IBackendResponse<IUser>>('/register', {name, email, password, phone})
+export const apiRegisterForCustomer = (fullName: string, email: string, password: string, address: string, phone: string ) => {
+    return axiosClient.post<IBackendResponse<IUser>>('/register', {fullName, email, password, address, phone})
 }
 
 export const apiRegisterForInternalUser = (name: string, email: string, password: string, phone: string, address: string ) => {
