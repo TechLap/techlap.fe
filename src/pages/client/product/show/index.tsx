@@ -77,7 +77,7 @@ const ProductShowPage = () => {
       <div className="mb-10">
         <h1 className="text-3xl font-bold mb-2">Sản phẩm</h1>
         <p className="text-gray-500">
-          Khám phá bộ sưu tập thực phẩm đông lạnh chất lượng cao
+          Khám phá bộ sưu tập các sản phẩm công nghệ chất lượng cao
         </p>
       </div>
       <div className="flex lg:flex-row flex-col gap-6">
@@ -116,9 +116,10 @@ const ProductShowPage = () => {
               <ProductCard
                 key={product.id}
                 id={product.id}
-                image={`${process.env.REACT_APP_URL_STORAGE_FILE}/productImgs/${product.productImage}`}
+                image={`/images/sample-laptop.jpg`}
                 name={product.name}
                 price={product.price}
+                discount={product.discount}
                 categoryName={product.category?.name || "Không có danh mục"}
                 description={product.description}
               />

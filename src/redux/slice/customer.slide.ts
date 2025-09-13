@@ -1,21 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiGetAccount } from "../../config/api";
+import { apiGetCustomer } from "../../config/api";
 
-export const fetchUserInfo = createAsyncThunk('auth/fetchUserInfo', async () => {
-    const response = await apiGetAccount();
+export const fetchCustomerInfo = createAsyncThunk('auth/fetchCustomerInfo', async () => {
+    const response = await apiGetCustomer();
     return response?.data?.data;
 }
 )
 
-interface IAccountState {
+interface ICustomerAccountState {
     isAuthenticated: boolean;
     isLoading: boolean;
     isRefreshToken: boolean;
     errorRefreshToken: string;
-    user: {
+    customer: {
         id: string;
         email: string;
         fullName: string;
+        totalCart?: number;
         role: {
             id?: string;
             name?: string;
@@ -31,15 +32,16 @@ interface IAccountState {
     }
 }
 
-const initialState: IAccountState = {
+const initialState: ICustomerAccountState = {
     isAuthenticated: false,
     isLoading: true,
     isRefreshToken: false,
     errorRefreshToken: '',
-    user: {
+    customer: {
         id: '',
         email: '',
         fullName: '',
+        totalCart: 0,
         role: {
             id: '',
             name: '',
@@ -49,19 +51,20 @@ const initialState: IAccountState = {
     }
 };
 
-export const accountSlice = createSlice({
-    name: 'account',
+export const customerAccountSlice = createSlice({
+    name: 'customer',
     initialState,
     reducers: {
-        setUserLoginInfo: (state, action) => {
+        setCustomerLoginInfo: (state, action) => {
             state.isAuthenticated = true;
             state.isLoading = false;
-            state.user.id = action?.payload?.id;
-            state.user.email = action.payload.email;
-            state.user.fullName = action.payload.fullName;
-            state.user.role = action?.payload?.role;
-            if (!action?.payload?.role) state.user.role = {};
-            state.user.role.permissions = action?.payload?.role?.permissions ?? [];
+            state.customer.id = action?.payload?.id;
+            state.customer.email = action.payload.email;
+            state.customer.fullName = action.payload.fullName;
+            state.customer.totalCart = action.payload.totalCart;
+            state.customer.role = action?.payload?.role;
+            if (!action?.payload?.role) state.customer.role = {};
+            state.customer.role.permissions = action?.payload?.role?.permissions ?? [];
         },
         setRefreshTokenAction: (state, action) => {
             state.isRefreshToken = action.payload?.status ?? false;
@@ -72,7 +75,7 @@ export const accountSlice = createSlice({
             localStorage.removeItem('access_token');
             state.isAuthenticated = false;
             state.isLoading = false;
-            state.user = {
+            state.customer = {
                 id: '',
                 email: '',
                 fullName: '',
@@ -86,31 +89,32 @@ export const accountSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchUserInfo.pending, (state, action) => {
+        builder.addCase(fetchCustomerInfo.pending, (state, action) => {
             if (action.payload) {
                 state.isAuthenticated = false;
                 state.isLoading = true;
             }
         })
-        builder.addCase(fetchUserInfo.fulfilled, (state, action) => {
+        builder.addCase(fetchCustomerInfo.fulfilled, (state, action) => {
             if (action.payload) {
                 state.isAuthenticated = true;
                 state.isLoading = false;
-                state.user.id = action.payload?.user?.id;
-                state.user.email = action.payload?.user?.email;
-                state.user.fullName = action.payload?.user?.fullName;
-                state.user.role = action.payload?.user?.role;
-                if (!action.payload?.user?.role) state.user.role = {};
-                state.user.role.permissions = action.payload?.user?.role?.permissions ?? [];
+                state.customer.id = action.payload?.customer?.id;
+                state.customer.email = action.payload?.customer?.email;
+                state.customer.fullName = action.payload?.customer?.fullName;
+                state.customer.totalCart = action.payload?.customer?.totalCart;
+                state.customer.role = action.payload?.customer?.role;
+                if (!action.payload?.customer?.role) state.customer.role = {};
+                state.customer.role.permissions = action.payload?.customer?.role?.permissions ?? [];
             }
         })
-        builder.addCase(fetchUserInfo.rejected, (state) => {
+        builder.addCase(fetchCustomerInfo.rejected, (state) => {
             state.isAuthenticated = false;
             state.isLoading = false;
         });
     },
 });
 
-export const { setUserLoginInfo, setRefreshTokenAction, setLogoutAction } = accountSlice.actions;
+export const { setCustomerLoginInfo, setRefreshTokenAction, setLogoutAction } = customerAccountSlice.actions;
 
-export default accountSlice.reducer;
+export default customerAccountSlice.reducer;

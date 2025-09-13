@@ -91,7 +91,7 @@ const ProductDetailPage = () => {
             <div className="relative group">
               <div className="relative overflow-hidden rounded-t-xl">
                 <img
-                  src={`${process.env.REACT_APP_URL_STORAGE_FILE}/productImgs/${product.data.data?.productImage}`}
+                  // src={`${process.env.REACT_APP_URL_STORAGE_FILE}/productImgs/${product.data.data?.productImage}`}
                   alt={product.data.data?.name}
                   className="w-full h-[450px] object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
                 />
@@ -203,10 +203,10 @@ const ProductDetailPage = () => {
                           label: "Danh mục",
                           value: product?.data.data?.category?.name,
                         },
-                        {
-                          label: "Thương hiệu",
-                          value: product?.data.data?.supplier?.name,
-                        },
+                        // {
+                        //   label: "Thương hiệu",
+                        //   value: product?.data.data?.supplier?.name,
+                        // },
                         { label: "Xuất xứ", value: "Việt Nam" },
                         {
                           label: "Hạn sử dụng",
@@ -356,7 +356,7 @@ const ProductDetailPage = () => {
                           />
                         </span>
                         <span className="text-green-700 text-base">
-                          /({product.data.data?.unit})
+                          {/* /({product.data.data?.unit}) */}
                         </span>
                       </div>
                       <span className="text-gray-500 text-lg line-through">

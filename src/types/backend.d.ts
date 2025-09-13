@@ -10,7 +10,29 @@ export interface IAccount {
     user: {
         id: string;
         email: string;
-        name: string;
+        fullName: string;
+        role: {
+            id: string;
+            name: string;
+            description: string;
+            permissions: {
+                id: string;
+                name: string;
+                route: string;
+                method: string;
+                module: string;
+            }[]
+        }
+    }
+}
+
+export interface ICustomerAccount {
+    access_token: string;
+    customer: {
+        id: string;
+        email: string;
+        fullName: string;
+        totalCart?: number;
         role: {
             id: string;
             name: string;
@@ -27,6 +49,7 @@ export interface IAccount {
 }
 
 export interface GetAccount extends Omit<IAccount, 'access_token'> { }
+export interface GetCustomer extends Omit<ICustomerAccount, 'access_token'> { }
 
 export interface IModelPagination<T> {
     meta: {
@@ -215,3 +238,43 @@ export interface ICustomerFilter {
     createdAt?: string | null;
 }
 
+export interface ICart {
+    id: number;
+    sum: number;
+    customer: {
+      id: number;
+      fullName: string;
+      email: string;
+      phone: string;
+      address: string;
+      createdAt: string;
+      updatedAt: string | null;
+      createdBy: string;
+      updatedBy: string | null;
+      totalSpending: number | null;
+      totalOrders: number | null;
+      roles: string[] | null;
+      orders: any[]; // có thể thay bằng kiểu OrderDTO nếu bạn định nghĩa riêng
+      cart: {
+        id: number;
+      };
+    };
+    cartDetails: {
+      id: number;
+      quantity: number;
+      price: number | null;
+      product: {
+        id: number;
+        name: string;
+        price: number;
+        discount: number;
+        stock: number;
+        description: string;
+        image: string | null;
+        category: {
+          id: number;
+          name: string;
+        };
+      };
+    }[];
+}

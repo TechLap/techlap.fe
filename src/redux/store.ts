@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import accountReducer from './slice/account.slice'
 import permissionReducer from './slice/permission.slice'
+import customerAccountReducer from './slice/customer.slide'
 
 export const store = configureStore({
   reducer: {
     account: accountReducer,
-    permissions: permissionReducer
+    customer: customerAccountReducer,
+    permissions: permissionReducer,
   },
 })
 

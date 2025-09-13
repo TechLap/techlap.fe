@@ -4,10 +4,10 @@ import { toast } from "react-toastify";
 import CustomToast from "../../components/common/toast.message";
 import { apiLoginForCustomer } from "../../config/api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setUserLoginInfo } from "../../redux/slice/account.slice";
 import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { setCustomerLoginInfo } from "../../redux/slice/customer.slide";
 
 
 const LoginPage = () => {
@@ -54,7 +54,7 @@ const LoginPage = () => {
     const response = await apiLoginForCustomer(username, password);
     if (response.data?.data) {
       localStorage.setItem("access_token", response?.data.data?.access_token);
-      dispacth(setUserLoginInfo(response?.data.data?.user));
+      dispacth(setCustomerLoginInfo(response?.data.data?.customer));
       toast.success(
         <CustomToast message="Đăng nhập thành công!" className="text-green-600" />
       );

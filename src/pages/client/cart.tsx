@@ -1,15 +1,17 @@
 import { ArrowLeft, CreditCard, MapPin, Minus, Package, Phone, Plus, ShoppingCart, Trash2, Truck, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ProductItem from '../../components/client/card/product.item';
+import { NumericFormat } from 'react-number-format';
 
 interface CartItem {
     id: number;
     name: string;
     price: number;
-    originalPrice?: number;
+    discount?: number;
     image: string;
     quantity: number;
-    specs: string;
+    discription: string;
 }
 
 interface CustomerInfo {
@@ -25,24 +27,25 @@ interface OrderInfo {
     address: string;
 }
 
-function App() {
+function CartPage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([
         {
             id: 1,
             name: "MacBook Pro 16-inch M3 Max",
             price: 65990000,
-            originalPrice: 69990000,
+            discount: 20,
             image: "https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400",
             quantity: 1,
-            specs: "M3 Max, 32GB RAM, 1TB SSD"
+            discription: "M3 Max, 32GB RAM, 1TB SSD"
         },
         {
             id: 2,
             name: "Dell XPS 13 Plus",
             price: 32990000,
+            discount: 40,
             image: "https://images.pexels.com/photos/205421/pexels-photo-205421.jpeg?auto=compress&cs=tinysrgb&w=400",
             quantity: 2,
-            specs: "Intel i7-13700H, 16GB RAM, 512GB SSD"
+            discription: "Intel i7-13700H, 16GB RAM, 512GB SSD"
         }
     ]);
 
@@ -77,22 +80,15 @@ function App() {
         setCartItems(items => items.filter(item => item.id !== id));
     };
 
-    const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND'
-        }).format(price);
-    };
-
-    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const subtotal = cartItems.reduce((sum, item) => sum + ((item.price) * item.quantity), 0);
     const shipping = 500000;
     const discount = cartItems.reduce((sum, item) => {
-        if (item.originalPrice) {
-            return sum + ((item.originalPrice - item.price) * item.quantity);
+        if (item.price) {
+            return sum + ((item.price - (item.price - (item.price * (item.discount as number / 100)))) * item.quantity);
         }
         return sum;
     }, 0);
-    const total = subtotal + shipping;
+    const total = subtotal + shipping - discount;
 
     const handleCustomerInfoChange = (field: keyof CustomerInfo, value: string) => {
         setCustomerInfo(prev => ({ ...prev, [field]: value }));
@@ -166,50 +162,12 @@ function App() {
 
                             <div className="space-y-4">
                                 {cartItems.map((item) => (
-                                    <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 p-3 sm:p-4 border border-gray-100 rounded-lg hover:border-blue-200 transition-colors">
-                                        <img
-                                            src={item.image}
-                                            alt={item.name}
-                                            className="w-full sm:w-20 h-48 sm:h-20 object-cover rounded-lg"
-                                        />
-                                        <div className="flex-1 w-full">
-                                            <h3 className="font-semibold text-gray-900 text-sm sm:text-base">{item.name}</h3>
-                                            <p className="text-xs sm:text-sm text-gray-500 mt-1">{item.specs}</p>
-                                            <div className="flex items-center space-x-2 mt-2">
-                                                <span className="text-base sm:text-lg font-bold text-blue-600">
-                                                    {formatPrice(item.price)}
-                                                </span>
-                                                {item.originalPrice && (
-                                                    <span className="text-xs sm:text-sm text-gray-400 line-through">
-                                                        {formatPrice(item.originalPrice)}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center justify-between w-full sm:w-auto sm:flex-col sm:space-y-2">
-                                            <div className="flex items-center space-x-2">
-                                                <button
-                                                    onClick={() => updateQuantity(item.id, -1)}
-                                                    className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                                                >
-                                                    <Minus className="w-4 h-4" />
-                                                </button>
-                                                <span className="w-12 text-center font-medium">{item.quantity}</span>
-                                                <button
-                                                    onClick={() => updateQuantity(item.id, 1)}
-                                                    className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                                                >
-                                                    <Plus className="w-4 h-4" />
-                                                </button>
-                                            </div>
-                                            <button
-                                                onClick={() => removeItem(item.id)}
-                                                className="text-red-500 hover:text-red-700 p-2 transition-colors"
-                                            >
-                                                <Trash2 className="w-5 h-5" />
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <ProductItem
+                                        key={item.id}
+                                        item={item}
+                                        updateQuantity={updateQuantity}
+                                        removeItem={removeItem}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -364,22 +322,48 @@ function App() {
                             <div className="space-y-3 sm:space-y-4">
                                 <div className="flex justify-between text-gray-600 text-sm sm:text-base">
                                     <span>Tạm tính</span>
-                                    <span>{formatPrice(subtotal)}</span>
+                                    <span>
+                                        <NumericFormat
+                                            value={subtotal}
+                                            displayType="text"
+                                            thousandSeparator={true}
+                                            suffix={"đ"}
+                                        />
+                                    </span>
                                 </div>
                                 <div className="flex justify-between text-gray-600 text-sm sm:text-base">
                                     <span>Phí vận chuyển</span>
-                                    <span>{formatPrice(shipping)}</span>
+                                    <span>
+                                        <NumericFormat
+                                            value={shipping}
+                                            displayType="text"
+                                            thousandSeparator={true}
+                                            suffix={"đ"}
+                                        />
+                                    </span>
                                 </div>
                                 {discount > 0 && (
                                     <div className="flex justify-between text-green-600 text-sm sm:text-base">
                                         <span>Giảm giá</span>
-                                        <span>-{formatPrice(discount)}</span>
+                                        <span>-<NumericFormat
+                                            value={discount}
+                                            displayType="text"
+                                            thousandSeparator={true}
+                                            suffix={"đ"}
+                                        /></span>
                                     </div>
                                 )}
                                 <div className="border-t pt-3 sm:pt-4">
                                     <div className="flex justify-between text-lg sm:text-xl font-semibold text-gray-900">
                                         <span>Tổng cộng</span>
-                                        <span className="text-blue-600">{formatPrice(total)}</span>
+                                        <span className="text-blue-600">
+                                            <NumericFormat
+                                                value={total}
+                                                displayType="text"
+                                                thousandSeparator={true}
+                                                suffix={"đ"}
+                                            />
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -416,4 +400,4 @@ function App() {
     );
 }
 
-export default App;
+export default CartPage;
