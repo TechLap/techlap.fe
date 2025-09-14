@@ -80,7 +80,7 @@ const Header = () => {
                 <div className="py-2 px-3 border-b border-gray-200 bg-green-50">
                   <p className="text-xs text-gray-500">Đăng nhập với tư cách</p>
                   <p className="text-xs font-medium text-gray-800">
-                    {userInfo?.name}
+                    {userInfo?.fullName || 'Admin'}
                   </p>
                 </div>
                 <div className="p-1 space-y-0.5">

@@ -1,17 +1,17 @@
 import axiosClient from "./axios-customize"
-import { GetAccount, IAccount, IBackendResponse, IBrand, ICategory, ICategoryFilter, ICustomer, ICustomerFilter, IModelPagination, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, ISupplier, ISupplierFilter, IUser, IUserFilter } from "../types/backend"
+import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, ISupplier, ISupplierFilter, IUser, IUserFilter } from "../types/backend"
 
 /* Module Auth */
 export const apiLoginForCustomer = (username: string, password: string) => {
-    return axiosClient.post<IBackendResponse<IAccount>>('/login', {username, password})
+    return axiosClient.post<IBackendResponse<ICustomerAccount>>('/login', {username, password})
 }
 
 export const apiLoginForInternalUser = (username: string, password: string) => {
     return axiosClient.post<IBackendResponse<IAccount>>('/admin/login', {username, password})
 }
 
-export const apiRegisterForCustomer = (name: string, email: string, password: string, phone: string ) => {
-    return axiosClient.post<IBackendResponse<IUser>>('/register', {name, email, password, phone})
+export const apiRegisterForCustomer = (fullName: string, email: string, password: string, address: string, phone: string ) => {
+    return axiosClient.post<IBackendResponse<IUser>>('/register', {fullName, email, password, address, phone})
 }
 
 export const apiRegisterForInternalUser = (name: string, email: string, password: string, phone: string, address: string ) => {
@@ -20,6 +20,10 @@ export const apiRegisterForInternalUser = (name: string, email: string, password
 
 export const apiGetAccount = () => {
     return axiosClient.get<IBackendResponse<GetAccount>>('/auth/account')
+}
+
+export const apiGetCustomer = () => {
+    return axiosClient.get<IBackendResponse<GetCustomer>>('/auth/customers/account')
 }
 
 export const apiLogout = () => {
@@ -67,6 +71,10 @@ export const apiUpdateCustomer = ( customer: ICustomer ) => {
 
 export const apiDeleteCustomer = ( id: string ) => {
     return axiosClient.delete<IBackendResponse<ICustomer>>(`/customers/${id}`)
+}
+
+export const apiAddToCart = (data : {productId: string, quantity: number}) => {
+    return axiosClient.post<IBackendResponse<ICart>>(`/customers/add-to-cart`, data)
 }
 
 

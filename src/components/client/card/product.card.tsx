@@ -1,12 +1,15 @@
 import { NumericFormat } from "react-number-format";
 import { CartIcon } from "../../common/icons";
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import { apiAddToCart } from "../../../config/api";
 
 interface ProductCardProps {
   id?: string;
   image: string | null;
   name: string;
   price: number;
+  discount?: number;
   categoryName?: string;
   description?: string;
   isBestSeller?: boolean;
@@ -19,6 +22,7 @@ const ProductCard = ({
   image,
   name,
   price,
+  discount,
   categoryName,
   description,
   isBestSeller,
@@ -37,6 +41,20 @@ const ProductCard = ({
     if (isSale) return "bg-red-500";
     return null;
   })();
+  const newPrice = price - (price * (discount as number / 100));
+  const [loading, setLoading] = useState(false);
+
+  const addToCart = async () => {
+    try {
+      setLoading(true);
+      const res = await apiAddToCart({ productId: id as string, quantity: 1 });
+      // TODO: update global cart state nếu cần
+    } catch (err) {
+      
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-white pb-4 rounded-xl hover:shadow-md transition-shadow border border-gray-100 flex flex-col h-full">
@@ -67,16 +85,28 @@ const ProductCard = ({
               {description || "Không có mô tả"}
             </p>
           </div>
-          <div className="flex items-center justify-between mt-4">
-            <span className="text-red-600 font-medium">
+          <div className="flex items-center gap-2 mt-4">
+            {/* Giá sau giảm (màu đỏ) */}
+            <span className="text-red-600 font-medium text-lg">
               <NumericFormat
-                value={price}
+                value={newPrice}
                 displayType="text"
-                allowLeadingZeros
                 thousandSeparator={true}
                 suffix={"đ"}
               />
             </span>
+
+            {/* Giá gốc (màu xám, gạch ngang) */}
+            {price && price > newPrice && (
+              <span className="text-gray-400 text-sm line-through">
+                <NumericFormat
+                  value={price}
+                  displayType="text"
+                  thousandSeparator={true}
+                  suffix={"đ"}
+                />
+              </span>
+            )}
           </div>
         </div>
       </NavLink>
@@ -87,10 +117,12 @@ const ProductCard = ({
             e.preventDefault();
             e.stopPropagation();
             // TODO: Add to cart logic here
+            addToCart();
           }}
+          disabled={loading}
         >
           <CartIcon size={16} color="white" className="size-4" />
-          Thêm vào giỏ
+          {loading ? "Đang thêm..." : "Thêm vào giỏ"}        
         </button>
       </div>
     </div>

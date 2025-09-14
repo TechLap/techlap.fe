@@ -4,16 +4,16 @@ import { toast } from "react-toastify";
 import CustomToast from "../../components/common/toast.message";
 import { apiLoginForCustomer } from "../../config/api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setUserLoginInfo } from "../../redux/slice/account.slice";
 import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { setCustomerLoginInfo } from "../../redux/slice/customer.slide";
 
 
 const LoginPage = () => {
   const createUserSchema = yup
     .object({
-      email: yup
+      username: yup
         .string()
         .email("Email không hợp lệ")
         .required("Email không được để trống"),
@@ -54,7 +54,7 @@ const LoginPage = () => {
     const response = await apiLoginForCustomer(username, password);
     if (response.data?.data) {
       localStorage.setItem("access_token", response?.data.data?.access_token);
-      dispacth(setUserLoginInfo(response?.data.data?.user));
+      dispacth(setCustomerLoginInfo(response?.data.data?.customer));
       toast.success(
         <CustomToast message="Đăng nhập thành công!" className="text-green-600" />
       );
@@ -160,13 +160,10 @@ const LoginPage = () => {
                     <input
                       type="email"
                       id="email"
-                      {...register("email")}
+                      {...register("username")}
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="Nhập email"
                     />
-                    {errors.email && (
-                      <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>
-                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -185,12 +182,11 @@ const LoginPage = () => {
                       </svg>
                     </div>
                   </div>
-                  <p
-                    className="hidden text-xs text-red-600 mt-2"
-                    id="email-error"
-                  >
-                    Vui lòng nhập địa chỉ email hợp lệ
-                  </p>
+                  <div>
+                    {errors.username && (
+                      <p className="text-xs text-red-600 mt-1">{errors.username.message}</p>
+                    )}
+                  </div>
                 </div>
                 {/* End Form Group */}
 
@@ -215,9 +211,6 @@ const LoginPage = () => {
                       className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="Nhập mật khẩu"
                     />
-                    {errors.password && (
-                      <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>
-                    )}
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
                       <svg
                         className="shrink-0 size-4 text-gray-500"
@@ -281,6 +274,11 @@ const LoginPage = () => {
                         )}
                       </button>
                     </div>
+                  </div>
+                  <div>
+                    {errors.password && (
+                      <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>
+                    )}
                   </div>
                 </div>
                 {/* End Form Group */}

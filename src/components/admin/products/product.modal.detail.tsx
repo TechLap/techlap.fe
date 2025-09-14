@@ -61,7 +61,7 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
               <div className="col-span-1">
                 <img
-                  src={`${process.env.REACT_APP_URL_STORAGE_FILE}/productImgs/${dataInit?.productImage}`}
+                  // src={`${process.env.REACT_APP_URL_STORAGE_FILE}/productImgs/${dataInit?.productImage}`}
                   alt="product"
                   className="w-full h-64 max-w-full max-h-52 object-cover rounded-lg"
                 />
@@ -93,7 +93,7 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                       Số lượng:
                     </span>
                     <span className="text-gray-600 font-medium text-sm">
-                      {dataInit?.quantity}
+                      {/* {dataInit?.quantity} */}
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
@@ -101,7 +101,7 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                       Đơn vị:
                     </span>
                     <span className="text-gray-600 font-medium text-sm">
-                      {dataInit?.unit}
+                      {/* {dataInit?.unit} */}
                     </span>
                   </div>
                 </div>
@@ -112,7 +112,7 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                 Thông tin nhà cung cấp
               </h3>
               <p className="text-gray-600 text-xs">
-                {dataInit?.supplier?.name}
+                {/* {dataInit?.supplier?.name} */}
               </p>
             </div>
             <div className="row-span-2 rounded-lg block p-4 border border-gray-200">

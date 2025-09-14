@@ -88,9 +88,9 @@ const SidebarFilter = ({
           <div className="font-medium text-gray-700 mb-2">Danh mục</div>
           <div className="space-y-2">
             <button
-              className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-green-700 hover:text-white ${
+              className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-500 hover:text-white ${
                 filters.category?.id === ""
-                  ? "bg-green-700 text-white"
+                  ? "bg-red-600 text-white"
                   : "text-gray-700"
               } transition-colors`}
               onClick={() => updateFilter("category", "")}
@@ -99,12 +99,12 @@ const SidebarFilter = ({
             </button>
             {categories.map(
               (category) =>
-                category.active === true && (
+                (
                   <button
                     key={category.id}
-                    className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-green-700 hover:text-white ${
+                    className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-500 hover:text-white ${
                       filters.category?.id === category.id
-                        ? "bg-green-700 text-white"
+                        ? "bg-red-600 text-white"
                         : "text-gray-700"
                     } transition-colors`}
                     onClick={() => updateFilter("category", category.id || "")}
@@ -170,16 +170,16 @@ const SidebarFilter = ({
         <div className="mb-6">
           <div className="font-medium text-gray-700 mb-2">Trạng thái</div>
           <div className="space-y-2">
-            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-green-700 hover:text-white focus:bg-green-700 focus:text-white transition-colors">
+            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white transition-colors">
               Tất cả
             </button>
-            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-green-700 hover:text-white focus:bg-green-700 focus:text-white transition-colors">
+            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white transition-colors">
               Sản phẩm nổi bật
             </button>
-            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-green-700 hover:text-white focus:bg-green-700 focus:text-white transition-colors">
+            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white transition-colors">
               Sản phẩm mới nhất
             </button>
-            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-green-700 hover:text-white focus:bg-green-700 focus:text-white transition-colors">
+            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white transition-color00s">
               Sản phẩm bán chạy
             </button>
           </div>

@@ -1,4 +1,4 @@
-import { Bell, Laptop, ShoppingCart, User } from "lucide-react";
+import { Laptop, ShoppingCart, User } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { apiLogout } from "../../config/api";
@@ -8,10 +8,10 @@ import CustomToast from "../common/toast.message";
 
 const Header = () => {
   const isAuthenticated = useAppSelector(
-    (state) => state.account.isAuthenticated
+    (state) => state.customer.isAuthenticated
   );
 
-  const userInfo = useAppSelector((state) => state.account.user);
+  const customerInfo = useAppSelector((state) => state.customer.customer);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -76,24 +76,24 @@ const Header = () => {
                 className="py-2 sm:py-2.5 ps-10 pe-4 block w-full border-gray-200 border rounded-full sm:text-sm focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                 type="text"
                 id="search"
-                placeholder="Tìm kiếm thực phẩm đông lạnh..."
+                placeholder="Tìm kiếm sản phẩm..."
               />
             </div>
           </div>
 
           <div className="hidden md:flex flex-row items-center gap-4">
-            <button
-              type="button"
-              className="hidden py-3 px-4 md:inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              <Bell className="h-5 w-5" />
-            </button>
 
             <NavLink
               to="/cart"
-              className="hidden py-3 px-4 md:inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+              className="relative hidden py-3 px-4 md:inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
             >
-              <ShoppingCart className="h-5 w-5" />
+              <div className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                {/* Badge số lượng */}
+                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                  {customerInfo.totalCart}
+                </span>
+              </div>
               Giỏ hàng
             </NavLink>
 
@@ -132,7 +132,7 @@ const Header = () => {
                   <div className="py-2 px-3 border-b border-gray-200 bg-green-50">
                     <p className="text-xs text-gray-500">Đăng nhập với tư cách</p>
                     <p className="text-xs font-medium text-gray-800">
-                      {userInfo?.name}
+                      {customerInfo?.fullName || 'Người dùng'}
                     </p>
                   </div>
                   <div className="p-1 space-y-0.5">

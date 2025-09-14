@@ -8,7 +8,7 @@ const ClientLayout = () => {
 
   const location = useLocation();
   // Check route
-  const hiddenNavRoutes = ["/about", "/contact"];
+  const hiddenNavRoutes = ["/cart"];
 
   const shouldShowNav = hiddenNavRoutes.includes(location.pathname);
   

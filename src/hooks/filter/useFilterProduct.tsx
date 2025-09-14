@@ -29,13 +29,13 @@ export const useFilterProduct = (
     name: "",
     priceRange: priceRange,
     quantity: 0,
-    unit: "",
+    // unit: "",
     category: {
       id: "",
     },
-    supplier: {
-      id: "",
-    },
+    // supplier: {
+    //   id: "",
+    // },
   };
 
   const [filters, setFilters] = useState<IProductFilter>({
@@ -52,14 +52,14 @@ export const useFilterProduct = (
       apiSearchProduct(`page=${searchCurrentPage}&size=${searchPageSize}`, {
         name: debouncedFilters.name,
         quantity: debouncedFilters.quantity,
-        unit: debouncedFilters.unit,
+        // unit: debouncedFilters.unit,
         price: debouncedFilters.price,
         ...(debouncedFilters.category?.id
           ? { category: { id: debouncedFilters.category.id } }
           : {}),
-        ...(debouncedFilters.supplier?.id
-          ? { supplier: { id: debouncedFilters.supplier.id } }
-          : {}),
+        // ...(debouncedFilters.supplier?.id
+        //   ? { supplier: { id: debouncedFilters.supplier.id } }
+        //   : {}),
         ...(debouncedFilters.priceRange?.min
           ? {
               priceRange: {
@@ -78,8 +78,8 @@ export const useFilterProduct = (
     let newValue: Partial<IProductFilter> = {};
     if (key === "category") {
       newValue = { category: { id: value as string } };
-    } else if (key === "supplier") {
-      newValue = { supplier: { id: value as string } };
+    // } else if (key === "supplier") {
+    //   newValue = { supplier: { id: value as string } };
     } else if (key === "priceRange") {
       newValue = { priceRange: { min: value as number, max: filters.priceRange?.max || 0 } };
     } else {

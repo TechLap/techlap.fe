@@ -31,6 +31,7 @@ import ErrorPage from "./pages/error-page";
 import { useAppDispatch } from "./redux/hooks";
 import { fetchUserInfo } from "./redux/slice/account.slice";
 import "./styles/datepicker-xs.css";
+import { fetchCustomerInfo } from "./redux/slice/customer.slide";
 
 declare global {
   interface Window {
@@ -168,6 +169,7 @@ function App() {
     )
       return;
     dispatch(fetchUserInfo());
+    dispatch(fetchCustomerInfo());
   }, []);
 
   const router = createBrowserRouter(routes);
