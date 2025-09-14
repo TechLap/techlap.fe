@@ -66,7 +66,7 @@ export const customerAccountSlice = createSlice({
             if (!action?.payload?.role) state.customer.role = {};
             state.customer.role.permissions = action?.payload?.role?.permissions ?? [];
         },
-        setRefreshTokenAction: (state, action) => {
+        setCustomerRefreshTokenAction: (state, action) => {
             state.isRefreshToken = action.payload?.status ?? false;
             state.errorRefreshToken = action.payload?.message ?? '';
         },
@@ -115,6 +115,6 @@ export const customerAccountSlice = createSlice({
     },
 });
 
-export const { setCustomerLoginInfo, setRefreshTokenAction, setLogoutAction } = customerAccountSlice.actions;
+export const { setCustomerLoginInfo, setCustomerRefreshTokenAction, setLogoutAction } = customerAccountSlice.actions;
 
 export default customerAccountSlice.reducer;

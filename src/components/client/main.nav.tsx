@@ -1,10 +1,9 @@
-import { ChevronDown } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const navItems = [
   { name: "Trang Chính", href: "/" },
   {
-    name: "Laptop",
+    name: "Sản Phẩm",
     href: "/products",
     subcategories: ["Laptop Gaming", "Laptop Văn Phòng", "Laptop Đồ Họa", "Laptop Mỏng Nhẹ"],
   },
@@ -28,23 +27,8 @@ const MainNav = () => {
                 }
               >
                 <span className="text-sm font-medium">{item.name}</span>
-                {item.subcategories && <ChevronDown className="h-4 w-4 text-gray-400" />}
               </NavLink>
 
-              {item.subcategories && (
-                <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                  <div className="p-2">
-                    {item.subcategories.map((sub, subIndex) => (
-                      <div
-                        key={subIndex}
-                        className="px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded cursor-pointer"
-                      >
-                        {sub}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           ))}
         </div>

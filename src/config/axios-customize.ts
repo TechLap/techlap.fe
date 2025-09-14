@@ -4,6 +4,7 @@ import { Slide, toast } from "react-toastify";
 import { setRefreshTokenAction } from "../redux/slice/account.slice";
 import { IBackendResponse } from '../types/backend';
 import { useStore } from "react-redux";
+import { getLoginTypeFromToken } from "../utils/token";
 
 
 interface AccessTokenResponse {
@@ -28,6 +29,15 @@ const handleRefreshToken = async (): Promise<string | null> => {
     });
 }
 
+const handleCustomerRefreshToken = async (): Promise<string | null> => {
+    return await mutex.runExclusive(async () => {
+        const response = await instance.get<IBackendResponse<AccessTokenResponse>>('/auth/customers/refresh');
+        if (response?.data?.data) {
+            return response?.data?.data?.access_token
+        } else return null;
+    });
+}
+
 instance.interceptors.request.use(function (config) {
     if (typeof window !== 'undefined' && window?.localStorage.getItem('access_token')) {
         config.headers.Authorization = 'Bearer ' + window.localStorage.getItem('access_token');
@@ -44,7 +54,8 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use((response) => response,
     async (error) => {
         if (error.config && error.response && +error.response.status === 401 && error.config.url !== '/login' && !error.config.headers[NO_RETRY_HEADER]) {
-            const access_token = await handleRefreshToken();
+            const loginType = getLoginTypeFromToken();
+            const access_token = loginType === 'CUSTOMER' ? await handleCustomerRefreshToken() : await handleRefreshToken();
             error.config.headers[NO_RETRY_HEADER] = 'true';
             if (access_token) {
                 error.config.headers['Authorization'] = `Bearer ${access_token}`;
@@ -73,6 +84,3 @@ instance.interceptors.response.use((response) => response,
     });
 
 export default instance;
-
-
-
