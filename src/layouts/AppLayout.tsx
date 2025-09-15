@@ -4,6 +4,7 @@ import CustomToast from "../components/common/toast.message";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setRefreshTokenAction } from "../redux/slice/account.slice";
 import { toast } from "react-toastify";
+import { setCustomerRefreshTokenAction } from "../redux/slice/customer.slide";
 
 const AppLayout = (props: any) => {
   const isRefreshToken = useAppSelector(
@@ -21,6 +22,7 @@ const AppLayout = (props: any) => {
         <CustomToast message={errorRefreshToken} className="text-red-600" />
       );
       dispatch(setRefreshTokenAction({ status: false, message: "" }));
+      dispatch(setCustomerRefreshTokenAction({ status: false, message: "" }));
       navigate("/login");
     }
   }, [isRefreshToken]);

@@ -3,8 +3,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { apiLogout } from "../../config/api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setLogoutAction } from "../../redux/slice/account.slice";
 import CustomToast from "../common/toast.message";
+import { setCustomerLogoutAction } from "../../redux/slice/customer.slide";
 
 const Header = () => {
   const isAuthenticated = useAppSelector(
@@ -18,7 +18,7 @@ const Header = () => {
   const handleLogout = async () => {
     const response = await apiLogout();
     if (response.data?.statusCode === 200) {
-      dispatch(setLogoutAction());
+      dispatch(setCustomerLogoutAction())
       navigate("/login");
       toast.success(
         <CustomToast
@@ -32,6 +32,8 @@ const Header = () => {
       );
     }
   };
+
+  console.log("Customer Info:", isAuthenticated, customerInfo);
 
   return (
     <header className="sticky top-0 inset-x-0 z-30 flex flex-col bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 border-b border-gray-200 text-sm pt-2 shadow-sm">
@@ -82,21 +84,21 @@ const Header = () => {
           </div>
 
           <div className="hidden md:flex flex-row items-center gap-4">
-
-            <NavLink
-              to="/cart"
-              className="relative hidden py-3 px-4 md:inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              <div className="relative">
-                <ShoppingCart className="h-5 w-5" />
-                {/* Badge số lượng */}
-                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                  {customerInfo.totalCart}
-                </span>
-              </div>
-              Giỏ hàng
-            </NavLink>
-
+            {customerInfo.totalCart && (
+              <NavLink
+                to="/cart"
+                className="relative hidden py-3 px-4 md:inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                <div className="relative">
+                  <ShoppingCart className="h-5 w-5" />
+                  {/* Badge số lượng */}
+                  <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                    {customerInfo.totalCart || 0}
+                  </span>
+                </div>
+                Giỏ hàng
+              </NavLink>
+            )}
             {!isAuthenticated ? (
               <NavLink
                 to="/login"
