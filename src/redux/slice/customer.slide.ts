@@ -71,7 +71,7 @@ export const customerAccountSlice = createSlice({
             state.errorRefreshToken = action.payload?.message ?? '';
         },
 
-        setLogoutAction: (state) => {
+        setCustomerLogoutAction: (state) => {
             localStorage.removeItem('access_token');
             state.isAuthenticated = false;
             state.isLoading = false;
@@ -115,6 +115,6 @@ export const customerAccountSlice = createSlice({
     },
 });
 
-export const { setCustomerLoginInfo, setCustomerRefreshTokenAction, setLogoutAction } = customerAccountSlice.actions;
+export const { setCustomerLoginInfo, setCustomerRefreshTokenAction, setCustomerLogoutAction } = customerAccountSlice.actions;
 
 export default customerAccountSlice.reducer;

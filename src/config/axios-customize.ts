@@ -5,6 +5,7 @@ import { setRefreshTokenAction } from "../redux/slice/account.slice";
 import { IBackendResponse } from '../types/backend';
 import { useStore } from "react-redux";
 import { getLoginTypeFromToken } from "../utils/token";
+import { setCustomerRefreshTokenAction } from "../redux/slice/customer.slide";
 
 
 interface AccessTokenResponse {
@@ -69,6 +70,7 @@ instance.interceptors.response.use((response) => response,
             // No call store directly to avoid circular dependency
             const store = useStore();
             store.dispatch(setRefreshTokenAction({ status: true, message: message }));
+            store.dispatch(setCustomerRefreshTokenAction({ status: true, message: message }));
         }
         if (+error.response.status === 403) {
             toast.error(`${error?.response?.data?.message ?? "Bạn không có quyền truy cập!"}`, {
