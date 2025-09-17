@@ -1,8 +1,14 @@
-import { ArrowLeft, CreditCard, MapPin, Minus, Package, Phone, Plus, ShoppingCart, Trash2, Truck, User } from 'lucide-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import ProductItem from '../../components/client/card/product.item';
+import { ArrowLeft, CreditCard, MapPin, Package, Phone, ShoppingCart, Truck, User } from 'lucide-react';
+import React, { useState } from 'react';
 import { NumericFormat } from 'react-number-format';
+import { useNavigate } from 'react-router-dom';
+import * as yup from "yup";
+import ProductItem from '../../components/client/card/product.item';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useAppSelector } from '../../redux/hooks';
+import { apiFetchCart } from '../../config/api';
+import { ICart } from '../../types/backend';
 
 interface CartItem {
     id: number;
@@ -20,12 +26,40 @@ interface CustomerInfo {
     phone: string;
 }
 
+const customerInfoSchema = yup
+    .object({
+        fullName: yup.string().required("Tên không được để trống"),
+        email: yup
+            .string()
+            .email("Email không hợp lệ")
+            .required("Email không được để trống"),
+        phone: yup
+            .string()
+            .required("Số địện thoai không được để trống")
+            .matches(/(0[3|5|7|8|9])+(\d{8})\b/g, "Số địện thoai không hợp lệ"),
+    })
+    .required();
+
 interface OrderInfo {
     receiverName: string;
     receiverPhone: string;
-    city: string;
     address: string;
 }
+
+const orderInfoSchema = yup
+    .object({
+        receiverName: yup.string().required("Tên không được để trống"),
+        receiverPhone: yup
+            .string()
+            .required("Số địện thoai không được để trống")
+            .matches(/(0[3|5|7|8|9])+(\d{8})\b/g, "Số địện thoai không hợp lệ"),
+        address: yup.string().required("Địa chỉ không được để trống"),
+    })
+    .required();
+
+type CustomerFormValues = yup.InferType<typeof customerInfoSchema>;
+type OrderFormValues = yup.InferType<typeof orderInfoSchema>;
+
 
 function CartPage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([
@@ -48,6 +82,20 @@ function CartPage() {
             discription: "Intel i7-13700H, 16GB RAM, 512GB SSD"
         }
     ]);
+    const [cartInfo, setCartInfo] = useState<ICart>();
+
+    const getCart = async () => {
+        try {
+            const response = await apiFetchCart();
+            setCartInfo(response.data.data);
+        } catch (error) {
+            console.error("Failed to fetch cart:", error);
+        }
+    };
+
+    React.useEffect(() => {
+        getCart();
+    }, []);
 
     const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
         fullName: '',
@@ -55,12 +103,39 @@ function CartPage() {
         phone: ''
     });
 
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<CustomerFormValues>({
+        resolver: yupResolver(customerInfoSchema) as any,
+        defaultValues: {
+            fullName: cartInfo?.customer?.fullName ?? "",
+            email: cartInfo?.customer?.email ?? "",
+            phone: cartInfo?.customer?.phone ?? "",
+        },
+    });
+
     const [orderInfo, setOrderInfo] = useState<OrderInfo>({
         receiverName: '',
         receiverPhone: '',
-        city: '',
         address: ''
     });
+
+    // const {
+    //     register,
+    //     handleSubmit,
+    //     reset,
+    //     formState: { errors },
+    // } = useForm<OrderFormValues>({
+    //     resolver: yupResolver(orderInfoSchema) as any,
+    //     defaultValues: {
+    //         receiverName: "",
+    //         receiverPhone:  "",
+    //         address: "",
+    //     },
+    // });
 
     const [paymentMethod, setPaymentMethod] = useState('credit-card');
     const [currentStep, setCurrentStep] = useState(1);
@@ -219,56 +294,43 @@ function CartPage() {
                                 <Package className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
                                 Thông tin giao hàng
                             </h2>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Tên người nhận</label>
-                                    <input
-                                        type="text"
-                                        value={orderInfo.receiverName}
-                                        onChange={(e) => handleOrderInfoChange('receiverName', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                        placeholder="Nhập tên người nhận hàng"
-                                    />
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Tên người nhận</label>
+                                        <input
+                                            type="text"
+                                            value={orderInfo.receiverName}
+                                            onChange={(e) => handleOrderInfoChange('receiverName', e.target.value)}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                            placeholder="Nhập tên người nhận hàng"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại người nhận</label>
+                                        <input
+                                            type="tel"
+                                            value={orderInfo.receiverPhone}
+                                            onChange={(e) => handleOrderInfoChange('receiverPhone', e.target.value)}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                            placeholder="0xxx xxx xxx"
+                                        />
+                                    </div>
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại người nhận</label>
-                                    <input
-                                        type="tel"
-                                        value={orderInfo.receiverPhone}
-                                        onChange={(e) => handleOrderInfoChange('receiverPhone', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                        placeholder="0xxx xxx xxx"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Tỉnh/Thành phố</label>
-                                    <select
-                                        value={orderInfo.city}
-                                        onChange={(e) => handleOrderInfoChange('city', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                    >
-                                        <option value="">Chọn tỉnh/thành</option>
-                                        <option value="hanoi">Hà Nội</option>
-                                        <option value="hcm">TP. Hồ Chí Minh</option>
-                                        <option value="danang">Đà Nẵng</option>
-                                        <option value="haiphong">Hải Phòng</option>
-                                        <option value="cantho">Cần Thơ</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Địa chỉ cụ thể</label>
-                                    <input
-                                        type="text"
-                                        value={orderInfo.address}
-                                        onChange={(e) => handleOrderInfoChange('address', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                        placeholder="Số nhà, tên đường, phường/xã, quận/huyện"
-                                    />
+                                <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Địa chỉ cụ thể</label>
+                                        <input
+                                            type="text"
+                                            value={orderInfo.address}
+                                            onChange={(e) => handleOrderInfoChange('address', e.target.value)}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                            placeholder="Số nhà, tên đường, phường/xã, quận/huyện"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
                         {/* 4. Phương thức thanh toán */}
                         <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
                             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">

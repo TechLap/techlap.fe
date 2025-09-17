@@ -48,7 +48,6 @@ const ProductCard = ({
     try {
       setLoading(true);
       const res = await apiAddToCart({ productId: id as string, quantity: 1 });
-      // TODO: update global cart state nếu cần
     } catch (err) {
       
     } finally {

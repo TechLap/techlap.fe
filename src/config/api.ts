@@ -77,6 +77,10 @@ export const apiAddToCart = (data : {productId: string, quantity: number}) => {
     return axiosClient.post<IBackendResponse<ICart>>(`/customers/add-to-cart`, data)
 }
 
+export const apiFetchCart = () => {
+    return axiosClient.get<IBackendResponse<ICart>>(`/customers/get-cart`)
+}
+
 
 /* Module Role */
 export const apiFetchAllRole = ( query: string ) => {
