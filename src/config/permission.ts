@@ -10,7 +10,7 @@ export function groupPermissionsByModule(permissions: IPermission[]) {
 
 export function getPermissionsByModule(permissions: IPermission[], module: string) {
     return permissions?.filter(permission => permission.module === module).map(permission => ({
-        route: permission.route,
+        apiPath: (permission as any).apiPath ?? (permission as any).route,
         method: permission.method,
         id: permission.id,
     }));

@@ -6,8 +6,9 @@ import DataTable from "../../common/data.table";
 import ButtonFilter from "../../common/button.filter";
 import { NumericFormat } from "react-number-format";
 import Access from "../../../pages/auth/route/access";
-import { Delete, Edit } from "../../common/icons";
+import { Delete, Edit, View } from "../../common/icons";
 import SelectFilter from "../../common/select.filter";
+import ProductStatusBadge from "../../common/product.status.badge";
 interface IProps {
   productData?: IProduct[] | null;
   onEditClick: (product: IProduct) => void;
@@ -114,17 +115,32 @@ const ProductTable = (props: IProps) => {
             />
           </div>
         ),
-        render: (row: IProduct) => row.status,
+        render: (row: IProduct) => (
+          <ProductStatusBadge status={row.status} />
+        ),
       },
       {
         key: "actions",
         header: "Thao tác",
         render: (row: IProduct) => (
           <>
+          <Access permission={{ name: "View a product" }} hideChildren>
+              <button
+                type="button"
+                className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
+                onClick={() => onViewClick(row)}
+              >
+                <View
+                  size={16}
+                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 focus:bg-blue-100 rounded-lg"
+                />
+              </button>
+            </Access>
+
             <Access permission={{ name: "Update a product" }} hideChildren>
               <button
                 type="button"
-                className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
                 onClick={() => onEditClick(row)}
               >
                 <Edit
@@ -137,7 +153,7 @@ const ProductTable = (props: IProps) => {
             <Access permission={{ name: "Delete a product" }} hideChildren>
               <button
                 type="button"
-                className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
                 onClick={() => onDeleteClick(row)}
               >
                 <Delete

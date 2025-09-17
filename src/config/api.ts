@@ -1,5 +1,5 @@
 import axiosClient from "./axios-customize"
-import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, ISupplier, ISupplierFilter, IUser, IUserFilter } from "../types/backend"
+import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
 
 /* Module Auth */
 export const apiLoginForCustomer = (username: string, password: string) => {
@@ -126,6 +126,22 @@ export const apiFetchAllBrand = ( query: string ) => {
     return axiosClient.get<IBackendResponse<IModelPagination<IBrand>>>(`/brands?${query}`)
 }
 
+export const apiCreateBrand = ( brand: IBrand ) => {
+    return axiosClient.post<IBackendResponse<IBrand>>(`/brands`, {...brand})
+}
+
+export const apiUpdateBrand = ( brand: IBrand ) => {
+    return axiosClient.put<IBackendResponse<IBrand>>(`/brands`, {...brand})
+}
+
+export const apiDeleteBrand = ( id: string ) => {
+    return axiosClient.delete<IBackendResponse<IBrand>>(`/brands/${id}`)
+}
+
+export const apiFetchBrandById = ( id: string ) => {
+    return axiosClient.get<IBackendResponse<IBrand>>(`/brands/${id}`)
+}
+
 /* Search */
 export const apiSearchUser = ( query: string, userFilter: IUserFilter ) => {
     return axiosClient.post<IBackendResponse<IModelPagination<IUser>>>(`/users/filter?${query}`, {...userFilter})
@@ -135,8 +151,8 @@ export const apiSearchProduct = ( query: string, productFilter: IProductFilter )
     return axiosClient.post<IBackendResponse<IModelPagination<IProduct>>>(`/products/filter?${query}`, {...productFilter})
 }
 
-export const apiSearchSupplier = ( query: string, supplierFilter: ISupplierFilter ) => {
-    return axiosClient.post<IBackendResponse<IModelPagination<ISupplier>>>(`/suppliers/filter?${query}`, {...supplierFilter})
+export const apiSearchBrand = ( query: string, brandFilter: { name?: string; createdAt?: string | null } ) => {
+    return axiosClient.post<IBackendResponse<IModelPagination<IBrand>>>(`/brands/filter?${query}`, {...brandFilter})
 }
 
 export const apiSearchCategory = ( query: string, categoryFilter: ICategoryFilter ) => {
@@ -173,21 +189,21 @@ export const apiDeleteCategory = ( id: string ) => {
 }
 
 /* Module Supplier */
-export const apiFetchAllSupplier = ( query: string ) => {
-    return axiosClient.get<IBackendResponse<IModelPagination<ISupplier>>>(`/suppliers?${query}`)
-}
+// export const apiFetchAllSupplier = ( query: string ) => {
+//     return axiosClient.get<IBackendResponse<IModelPagination<ISupplier>>>(`/suppliers?${query}`)
+// }
 
-export const apiUpdateSupplier = ( supplier: ISupplier ) => {
-    return axiosClient.put<IBackendResponse<ISupplier>>(`/suppliers`, {...supplier})
-}
+// export const apiUpdateSupplier = ( supplier: ISupplier ) => {
+//     return axiosClient.put<IBackendResponse<ISupplier>>(`/suppliers`, {...supplier})
+// }
 
-export const apiCreateSupplier = ( supplier: ISupplier ) => {
-    return axiosClient.post<IBackendResponse<ISupplier>>(`/suppliers`, {...supplier})
-}
+// export const apiCreateSupplier = ( supplier: ISupplier ) => {
+//     return axiosClient.post<IBackendResponse<ISupplier>>(`/suppliers`, {...supplier})
+// }
 
-export const apiDeleteSupplier = ( id: string ) => {
-    return axiosClient.delete<IBackendResponse<ISupplier>>(`/suppliers/${id}`)
-}
+// export const apiDeleteSupplier = ( id: string ) => {
+//     return axiosClient.delete<IBackendResponse<ISupplier>>(`/suppliers/${id}`)
+// }
 
 
 /* Module Permission */
@@ -212,7 +228,7 @@ export const apiUploadSingleFile = ( file: File, folderType: string ) => {
     const bodyFormData = new FormData();
     bodyFormData.append("file", file);
     bodyFormData.append("folder", folderType);
-    return axiosClient<IBackendResponse<{fileName: string}>>({
+    return axiosClient<{fileName: string, uploadedAt: string}>({
         url: "/files",
         method: "post",
         data: bodyFormData,

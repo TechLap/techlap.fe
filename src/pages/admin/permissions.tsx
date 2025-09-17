@@ -32,7 +32,7 @@ const PermissionPage = () => {
     name: "",
     module: "",
     method: "",
-    route: "",
+    apiPath: "",
     createdAt: null,
   });
   const [debouncedFilters] = useDebounce(filters, 500);
@@ -67,7 +67,7 @@ const PermissionPage = () => {
           name: debouncedFilters.name,
           module: debouncedFilters.module,
           method: debouncedFilters.method,
-          route: debouncedFilters.route,
+          apiPath: (debouncedFilters as any).apiPath ?? (debouncedFilters as any).route,
           createdAt: debouncedFilters.createdAt,
         }
       ),

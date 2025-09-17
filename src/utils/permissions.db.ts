@@ -23,7 +23,7 @@ export const storeAllPermissionsInStore = async (permissions: IPermission[]) => 
             name: permission.name,
             module: permission.module,
             method: permission.method,
-            route: permission.route,
+            apiPath: (permission as any).apiPath ?? (permission as any).route,
         });
     }));
     await tx.done;

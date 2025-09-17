@@ -14,3 +14,4 @@ export { default as Star } from './star';
 export { default as Filter } from './filter';
 export { default as Edit } from './edit';
 export { default as Delete } from './delete';
+export { default as View } from './view';

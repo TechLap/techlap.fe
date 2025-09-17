@@ -2,7 +2,7 @@
 interface RolePermissionAccordionProps {
   title: string;
   content?: {
-    route: string;
+    apiPath: string;
     method: string;
     id?: string;
   }[];
@@ -29,7 +29,8 @@ const RolePermissionAccordion = ({
 
   const methodColor = (method: string) => {
     if (method === "GET") return "text-green-600";
-    if (method === "POST") return "text-yellow-600";
+    if (method === "POST") return "text-amber-600";
+    if (method === "PUT") return "text-purple-600";
     if (method === "DELETE") return "text-red-600";
     return "text-black-600";
   };
@@ -109,7 +110,7 @@ const RolePermissionAccordion = ({
               <div className="flex items-center gap-x-2" key={item.id}>
                 <input
                   type="checkbox"
-                  className="shrink-0 mt-0.5 border-gray-200 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                  className="shrink-0 mt-0.5 rounded-sm accent-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                   id={`hs-default-checkbox-${item.id}`}
                   onChange={() => handleCheckedPermission(item.id ?? "")}
                   checked={
@@ -118,11 +119,11 @@ const RolePermissionAccordion = ({
                 />
                 <label
                   htmlFor={`hs-default-checkbox-${item.id}`}
-                  className={`text-gray-800 text-xs ${methodColor(
+                  className={`text-xs ${methodColor(
                     item.method
                   )}`}
                 >
-                  {item.route} - {item.method}
+                  {(item as any).apiPath} - {item.method}
                 </label>
               </div>
             ))}

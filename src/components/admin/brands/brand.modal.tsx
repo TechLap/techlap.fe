@@ -3,30 +3,26 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import * as yup from "yup";
-import {
-    apiCreateCategory,
-    apiUpdateCategory
-} from "../../../config/api";
-import { ICategory } from "../../../types/backend";
+import { apiCreateBrand, apiUpdateBrand } from "../../../config/api";
+import { IBrand } from "../../../types/backend";
 import CustomToast from "../../common/toast.message";
 
 interface IProps {
   isOpenActionModal: boolean;
-  dataInit?: ICategory | null;
-  setDataInit?: React.Dispatch<React.SetStateAction<ICategory | null>>;
+  dataInit?: IBrand | null;
+  setDataInit?: React.Dispatch<React.SetStateAction<IBrand | null>>;
   onClose: () => void;
   reloadTable: () => void;
 }
 
-const createCategorySchema = yup.object({
+const createBrandSchema = yup.object({
   id: yup.string().optional(),
   name: yup.string().required("Tên không được để trống"),
-  description: yup.string().required("Mô tả không được để trống"),
 });
 
-type FormValues = yup.InferType<typeof createCategorySchema>;
+type FormValues = yup.InferType<typeof createBrandSchema>;
 
-const CategoryModal = (props: IProps) => {
+const BrandModal = (props: IProps) => {
   const { isOpenActionModal, dataInit, onClose, reloadTable } = props;
 
   const {
@@ -35,47 +31,44 @@ const CategoryModal = (props: IProps) => {
     reset,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: yupResolver(createCategorySchema) as any,
+    resolver: yupResolver(createBrandSchema) as any,
     defaultValues: {
       id: dataInit?.id ?? "",
       name: dataInit?.name ?? "",
-      description: dataInit?.description ?? "",
     },
   });
 
-  // Reset form when dataInit change
   useEffect(() => {
     reset({
       name: dataInit?.name ?? "",
-      description: dataInit?.description ?? "",
     });
   }, [dataInit, reset]);
 
-  const handleSubmitCategory = handleSubmit(async (valuesForm: FormValues) => {
-      const transformedValues = {
-        id: dataInit?.id,
-        ...valuesForm,
-      };
+  const handleSubmitBrand = handleSubmit(async (valuesForm: FormValues) => {
+    const transformedValues = {
+      id: dataInit?.id,
+      ...valuesForm,
+    };
 
-      const res = dataInit?.id
-        ? await apiUpdateCategory(transformedValues)
-        : await apiCreateCategory(valuesForm);
-      if (res?.data?.data) {
-        reloadTable();
-        toast.success(
-          <CustomToast
-            message={`${dataInit ? "Cập nhật" : "Thêm"} danh mục thành công!`}
-            className="text-green-600"
-          />
-        );
-        onClose();
-        reset();
-      } else {
-        toast.error(
-          <CustomToast
-            message={`${dataInit ? "Cập nhật" : "Thêm"} danh mục thất bại!`}
-            className="text-red-600"
-          />
+    const res = dataInit?.id
+      ? await apiUpdateBrand(transformedValues as any)
+      : await apiCreateBrand(valuesForm as any);
+    if (res?.data?.data) {
+      reloadTable();
+      toast.success(
+        <CustomToast
+          message={`${dataInit ? "Cập nhật" : "Thêm"} thương hiệu thành công!`}
+          className="text-green-600"
+        />
+      );
+      onClose();
+      reset();
+    } else {
+      toast.error(
+        <CustomToast
+          message={`${dataInit ? "Cập nhật" : "Thêm"} thương hiệu thất bại!`}
+          className="text-red-600"
+        />
       );
     }
   });
@@ -92,14 +85,14 @@ const CategoryModal = (props: IProps) => {
       {isOpenActionModal && (
         <div className="z-[-1] transition duration fixed inset-0 bg-gray-900/50"></div>
       )}
-      <div className="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all lg:max-w-2xl lg:w-full m-3 md:mx-auto">
+      <div className="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all md:max-w-lg md:w-full m-3 md:mx-auto">
         <div className="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">
           <div className="flex justify-between items-center py-3 px-4 border-b">
             <h3
               id="hs-medium-modal-label"
               className="font-bold text-gray-800 text-lg"
             >
-              {dataInit ? "Cập nhật danh mục" : "Thêm mới danh mục"}
+              {dataInit ? "Cập nhật thương hiệu" : "Thêm mới thương hiệu"}
             </h3>
             <button
               type="button"
@@ -126,7 +119,7 @@ const CategoryModal = (props: IProps) => {
             </button>
           </div>
 
-          <form onSubmit={handleSubmitCategory}>
+          <form onSubmit={handleSubmitBrand}>
             <div className="p-4 overflow-y-auto">
               <div className="grid sm:grid-cols-1 gap-6">
                 {/* Name */}
@@ -135,39 +128,18 @@ const CategoryModal = (props: IProps) => {
                     className="block text-sm font-medium text-gray-700 mb-2"
                     htmlFor="name"
                   >
-                    Tên danh mục
+                    Tên thương hiệu
                   </label>
                   <input
                     id="name"
                     type="text"
                     className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     {...register("name")}
-                    placeholder="Nhập tên danh mục"
+                    placeholder="Nhập tên thương hiệu"
                     defaultValue={dataInit?.name}
                   />
                   {errors.name && (
                     <p className="text-red-500">{errors.name.message}</p>
-                  )}
-                </div>
-
-                {/* Description */}
-                <div>
-                  <label
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                    htmlFor="description"
-                  >
-                    Mô tả
-                  </label>
-                  <textarea
-                    id="description"
-                    rows={4}
-                    className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black resize-none"
-                    {...register("description")}
-                    placeholder="Nhập mô tả danh mục"
-                    defaultValue={dataInit?.description}
-                  />
-                  {errors.description && (
-                    <p className="text-red-500">{errors.description.message}</p>
                   )}
                 </div>
               </div>
@@ -195,4 +167,6 @@ const CategoryModal = (props: IProps) => {
   );
 };
 
-export default CategoryModal;
+export default BrandModal;
+
+

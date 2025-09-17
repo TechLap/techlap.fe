@@ -1,6 +1,7 @@
 import { NumericFormat } from "react-number-format";
 import { IProduct } from "../../../types/backend";
 import dayjs from "dayjs";
+import ProductStatusBadge from "../../common/product.status.badge";
 
 interface IProductModalDetailProps {
   isOpenViewModal: boolean;
@@ -24,7 +25,7 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
       {isOpenViewModal && (
         <div className="z-[-1] transition duration fixed inset-0 bg-gray-900/50"></div>
       )}
-      <div className="md:max-w-xl md:w-full m-3 md:mx-auto">
+      <div className="md:max-w-3xl md:w-full m-3 md:mx-auto">
         <div className="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">
           <div className="flex justify-between items-center py-3 px-4 border-b border-gray-200">
             <h3
@@ -57,11 +58,11 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
               </svg>
             </button>
           </div>
-          <div className="p-4 overflow-y-auto grid grid-row-4 gap-4 max-h-[460px]">
+          <div className="p-4 overflow-y-auto grid grid-row-4 gap-4 max-h-80vh">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
               <div className="col-span-1">
                 <img
-                  // src={`${process.env.REACT_APP_URL_STORAGE_FILE}/productImgs/${dataInit?.productImage}`}
+                  src={`${process.env.REACT_APP_URL_STORAGE_FILE}/${dataInit?.image}`}
                   alt="product"
                   className="w-full h-64 max-w-full max-h-52 object-cover rounded-lg"
                 />
@@ -70,7 +71,7 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                 <p className="text-base text-gray-800 font-bold mb-2">
                   {dataInit?.name}
                 </p>
-                <span className="inline-flex w-fit items-center gap-x-1.5 py-1.5 px-3 rounded-full text-sm font-medium bg-teal-100 text-teal-800">
+                <span className="inline-flex w-fit items-center gap-x-1.5 py-1.5 px-3 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                   {dataInit?.category?.name}
                 </span>
                 <div className="grid grid-row-3 mt-12 divide-y divide-gray-200">
@@ -78,7 +79,7 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                     <span className="text-gray-600 font-medium text-sm">
                       Giá:
                     </span>
-                    <span className="text-green-600 font-medium text-sm">
+                    <span className="text-blue-600 font-medium text-sm">
                       <NumericFormat
                         value={dataInit?.price}
                         displayType="text"
@@ -93,26 +94,24 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                       Số lượng:
                     </span>
                     <span className="text-gray-600 font-medium text-sm">
-                      {/* {dataInit?.quantity} */}
+                      {dataInit?.stock}
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
                     <span className="text-gray-600 font-medium text-sm">
-                      Đơn vị:
+                      Trạng thái:
                     </span>
-                    <span className="text-gray-600 font-medium text-sm">
-                      {/* {dataInit?.unit} */}
-                    </span>
+                    <ProductStatusBadge status={dataInit?.status || ""} />
                   </div>
                 </div>
               </div>
             </div>
             <div className="row-span-2 rounded-lg block p-4 border border-gray-200">
               <h3 className="text-sm font-medium mb-2">
-                Thông tin nhà cung cấp
+                Thông tin thương hiệu
               </h3>
               <p className="text-gray-600 text-xs">
-                {/* {dataInit?.supplier?.name} */}
+                {dataInit?.brand?.name}
               </p>
             </div>
             <div className="row-span-2 rounded-lg block p-4 border border-gray-200">
@@ -127,9 +126,7 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                     Ngày tạo:
                   </span>
                   <p className="text-gray-600 font-medium text-xs">
-                    {dayjs
-                      .unix(Number(dataInit?.createdAt))
-                      .format("DD/MM/YYYY")}
+                    {dataInit?.createdAt ? dayjs(dataInit?.createdAt).format("DD/MM/YYYY") : ""}
                   </p>
                 </div>
                 <div className="flex justify-between items-center">
@@ -137,7 +134,7 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                     Người tạo:
                   </span>
                   <p className="text-gray-600 font-medium text-xs">
-                    {dataInit?.createdBy}
+                    {dataInit?.createdBy ? dataInit?.createdBy : ""}
                   </p>
                 </div>
               </div>
