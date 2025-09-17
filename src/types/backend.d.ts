@@ -18,7 +18,7 @@ export interface IAccount {
             permissions: {
                 id: string;
                 name: string;
-                route: string;
+                apiPath: string;
                 method: string;
                 module: string;
             }[]
@@ -40,7 +40,7 @@ export interface ICustomerAccount {
             permissions: {
                 id: string;
                 name: string;
-                route: string;
+                apiPath: string;
                 method: string;
                 module: string;
             }[]
@@ -95,7 +95,7 @@ export interface IPermission {
     name: string;
     module: string;
     method: string;
-    route: string;
+    apiPath: string;
     createdBy?: string;
     createdAt?: string;
     updatedAt?: string;
@@ -140,7 +140,7 @@ export interface IProduct {
 export interface ICategory {
     id?: string;
     name: string;
-    active: boolean;
+    description?: string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -165,7 +165,6 @@ export interface IProductFilter {
 
 export interface ICategoryFilter {
     name?: string;
-    active?: boolean;
     createdAt?: string | null;
 }
 
@@ -177,7 +176,10 @@ export interface IBrand {
         id: string;
         name?: string;
     }[];
+    createdAt?: string;
+    updatedAt?: string;
 }
+
 export interface ISupplier {
     id?: string;
     name: string;
@@ -199,7 +201,7 @@ export interface IPermissionFilter {
     name?: string;
     module?: string;
     method?: string;
-    route?: string;
+    apiPath?: string;
     createdAt?: string | null;
 }
 

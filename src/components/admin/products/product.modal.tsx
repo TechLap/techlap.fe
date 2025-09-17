@@ -15,6 +15,48 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import CustomToast from "../../common/toast.message";
 
+// Price input with live formatting as Vietnamese currency
+const formatCurrencyVND = (value: number): string => {
+  try {
+    // Use comma as thousands separator (e.g., 32,000,000 đ)
+    return new Intl.NumberFormat("en-US").format(value) + " đ";
+  } catch {
+    return `${value.toString()} đ`;
+  }
+};
+
+interface PriceInputProps {
+  id?: string;
+  className?: string;
+  defaultNumber?: number | null;
+  setValue: (name: "price", value: number, options?: any) => void;
+}
+
+const PriceInput = ({ id, className, defaultNumber, setValue }: PriceInputProps) => {
+  const [display, setDisplay] = useState<string>(formatCurrencyVND(Number(defaultNumber || 0)));
+
+  useEffect(() => {
+    setDisplay(formatCurrencyVND(Number(defaultNumber || 0)));
+  }, [defaultNumber]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/[^0-9]/g, "");
+    const numeric = raw ? parseInt(raw, 10) : 0;
+    setValue("price", numeric);
+    setDisplay(formatCurrencyVND(numeric));
+  };
+
+  return (
+    <input
+      id={id}
+      type="text"
+      className={className}
+      value={display}
+      onChange={handleChange}
+    />
+  );
+};
+
 interface IProps {
   isOpenActionModal: boolean;
   dataInit?: IProduct | null;
@@ -48,12 +90,13 @@ const ProductModal = (props: IProps) => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: yupResolver(createProductSchema) as any,
     defaultValues: {
       name: dataInit?.name ?? "",
-      stock: dataInit?.stock ?? 0,
+      stock: (dataInit?.stock as any) ?? (undefined as any),
       status: dataInit?.status ?? "",
       price: dataInit?.price ?? 0,
       category: {
@@ -66,6 +109,12 @@ const ProductModal = (props: IProps) => {
       image: dataInit?.image ?? "",
     },
   });
+
+  // Ensure price field is registered since we manage it via custom component
+  useEffect(() => {
+    // valueAsNumber ensures proper type when validating
+    register("price" as any);
+  }, [register]);
 
   const { data: categories } = useQuery({
     queryKey: ["fetchAllCategories"],
@@ -81,7 +130,7 @@ const ProductModal = (props: IProps) => {
   useEffect(() => {
     reset({
       name: dataInit?.name ?? "",
-      stock: dataInit?.stock ?? 0,
+      stock: (dataInit?.stock as any) ?? (undefined as any),
       status: dataInit?.status ?? "",
       price: dataInit?.price ?? 0,
       category: {
@@ -110,31 +159,45 @@ const ProductModal = (props: IProps) => {
 
         if (selectedFile) {
           const res = await apiUploadSingleFile(selectedFile, "productImgs");
-          if (!res?.data?.data?.fileName) {
+          if (!res?.data?.fileName || !res?.data?.uploadedAt) {
             throw new Error("Upload ảnh thất bại");
           }
-          productUploadedImage = res.data.data.fileName;
+          productUploadedImage = res.data.fileName;
         }
 
         const productData = dataInit?.id
           ? {
               id: dataInit.id,
               ...valuesForm,
-              image: productUploadedImage,
+              image: productUploadedImage || dataInit.image,
+              brand: {
+                id: valuesForm.brand.id,
+              },
+              category: {
+                id: valuesForm.category.id,
+              },
             }
           : {
               ...valuesForm,
+              brand: {
+                id: valuesForm.brand.id,
+              },
+              category: {
+                id: valuesForm.category.id,
+              },
               image: productUploadedImage,
             };
 
-        return dataInit?.id
+        const result = dataInit?.id
           ? await apiUpdateProduct(productData)
           : await apiCreateProduct(productData);
+
+        return result;
       } catch (error: any) {
-        throw new Error(error.message);
+        throw new Error(error.message || "Có lỗi xảy ra");
       }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       reloadTable();
       toast.success(
         <CustomToast
@@ -145,7 +208,7 @@ const ProductModal = (props: IProps) => {
       onClose();
       reset();
     },
-    onError: () => {
+    onError: (error) => {
       toast.error(
         <CustomToast
           message={`${dataInit ? "Cập nhật" : "Thêm"} sản phẩm thất bại!`}
@@ -170,7 +233,7 @@ const ProductModal = (props: IProps) => {
       {isOpenActionModal && (
         <div className="z-[-1] transition duration fixed inset-0 bg-gray-900/50"></div>
       )}
-      <div className="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all lg:max-w-3xl lg:w-full m-3 md:mx-auto">
+      <div className="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all lg:max-w-4xl lg:w-full m-3 md:mx-auto ">
         <div className="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">
           <div className="flex justify-between items-center py-3 px-4 border-b">
             <h3
@@ -205,7 +268,7 @@ const ProductModal = (props: IProps) => {
           </div>
 
           <form onSubmit={handleSubmitProduct}>
-            <div className="p-4 overflow-y-auto max-h-[460px]">
+            <div className="p-4 overflow-y-auto max-h-90vh">
               <div className="grid sm:grid-cols-2 gap-6">
                 {/* Name */}
                 <div>
@@ -241,7 +304,6 @@ const ProductModal = (props: IProps) => {
                     className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     {...register("stock")}
                     placeholder="Nhập số lượng"
-                    defaultValue={dataInit?.stock}
                   />
                   {errors.stock && (
                     <p className="text-red-500">{errors.stock.message}</p>
@@ -255,14 +317,20 @@ const ProductModal = (props: IProps) => {
                   >
                     Trạng thái
                   </label>
-                  <input
+                  <select
                     id="status"
-                    type="text"
                     className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     {...register("status")}
-                    placeholder="Nhập trạng thái"
-                    defaultValue={dataInit?.status}
-                  />
+                    defaultValue={dataInit?.status ?? ""}
+                  >
+                    <option className="text-gray-800 bg-gray-200" value="">
+                      Chọn trạng thái...
+                    </option>
+                    <option className="bg-gray-200 text-gray-800" value="ACTIVE">ACTIVE</option>
+                    <option className="bg-gray-200 text-gray-800" value="INACTIVE">INACTIVE</option>
+                    <option className="bg-gray-200 text-gray-800" value="OUT_OF_STOCK">OUT_OF_STOCK</option>
+                    <option className="bg-gray-200 text-gray-800" value="DISCONTINUED">DISCONTINUED</option>
+                  </select>
                   {errors.status && (
                     <p className="text-red-500">{errors.status.message}</p>
                   )}
@@ -275,13 +343,11 @@ const ProductModal = (props: IProps) => {
                   >
                     Giá bán
                   </label>
-                  <input
+                  <PriceInput
                     id="price"
-                    type="text"
                     className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    {...register("price")}
-                    // placeholder="Nhập giá bán"
-                    defaultValue={dataInit?.price}
+                    setValue={setValue}
+                    defaultNumber={dataInit?.price}
                   />
                   {errors.price && (
                     <p className="text-red-500">{errors.price.message}</p>

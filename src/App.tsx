@@ -15,7 +15,7 @@ import OrderPage from "./pages/admin/orders";
 import PermissionPage from "./pages/admin/permissions";
 import ProductPage from "./pages/admin/products";
 import RolePage from "./pages/admin/roles";
-import SupplierPage from "./pages/admin/supplier";
+import BrandPage from "./pages/admin/brand";
 import UserPage from "./pages/admin/users";
 import LoginPage from "./pages/auth/login";
 import LoginInternalUserPage from "./pages/auth/login.internal.user";
@@ -131,9 +131,9 @@ export const routes = [
         breadcrumb: "Đơn hàng",
       },
       {
-        path: "suppliers",
-        element: <SupplierPage />,
-        breadcrumb: "Nhà cung cấp",
+        path: "brands",
+        element: <BrandPage />,
+        breadcrumb: "Thương hiệu",
       },
       {
         path: "categories",

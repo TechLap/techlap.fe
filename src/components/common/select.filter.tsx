@@ -56,7 +56,7 @@ const SelectFilter = (props: SelectFilterProps) => {
                 </select>
                 <div className="absolute top-1/2 end-2.5 -translate-y-1/2">
                   <svg
-                    className="shrink-0 size-4 text-gray-500 dark:text-neutral-500"
+                    className="shrink-0 size-4 text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"

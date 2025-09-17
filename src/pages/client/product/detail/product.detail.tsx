@@ -91,7 +91,7 @@ const ProductDetailPage = () => {
             <div className="relative group">
               <div className="relative overflow-hidden rounded-t-xl">
                 <img
-                  // src={`${process.env.REACT_APP_URL_STORAGE_FILE}/productImgs/${product.data.data?.productImage}`}
+                  src={`${process.env.REACT_APP_URL_STORAGE_FILE}/${product.data.data?.image}`}
                   alt={product.data.data?.name}
                   className="w-full h-[450px] object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
                 />

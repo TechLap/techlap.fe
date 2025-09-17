@@ -3,10 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import * as yup from "yup";
-import {
-    apiCreatePermission,
-    apiUpdatePermission
-} from "../../../config/api";
+import { apiCreatePermission, apiUpdatePermission } from "../../../config/api";
 import { IPermission } from "../../../types/backend";
 import CustomToast from "../../common/toast.message";
 
@@ -23,7 +20,7 @@ const createPermissionSchema = yup.object({
   id: yup.string().optional(),
   name: yup.string().required("Tên không được để trống"),
   module: yup.string().required("Module không được để trống"),
-  route: yup.string().required("Đường dẫn không được để trống"),
+  apiPath: yup.string().required("Đường dẫn không được để trống"),
   method: yup.string().required("Phương thức không được để trống"),
 });
 
@@ -43,7 +40,7 @@ const PermissionModal = (props: IProps) => {
       id: dataInit?.id ?? "",
       name: dataInit?.name ?? "",
       module: dataInit?.module ?? "",
-      route: dataInit?.route ?? "",
+      apiPath: (dataInit as any)?.apiPath ?? (dataInit as any)?.route ?? "",
       method: dataInit?.method ?? "",
     },
   });
@@ -53,12 +50,13 @@ const PermissionModal = (props: IProps) => {
     reset({
       name: dataInit?.name ?? "",
       module: dataInit?.module ?? "",
-      route: dataInit?.route ?? "",
+      apiPath: (dataInit as any)?.apiPath ?? (dataInit as any)?.route ?? "",
       method: dataInit?.method ?? "",
     });
   }, [dataInit, reset]);
 
-  const handleSubmitPermission = handleSubmit(async (valuesForm: FormValues) => {
+  const handleSubmitPermission = handleSubmit(
+    async (valuesForm: FormValues) => {
       const transformedValues = {
         id: dataInit?.id,
         ...valuesForm,
@@ -85,7 +83,8 @@ const PermissionModal = (props: IProps) => {
           />
         );
       }
-  });
+    }
+  );
 
   return (
     <div
@@ -97,7 +96,7 @@ const PermissionModal = (props: IProps) => {
       aria-labelledby="hs-medium-modal-label"
     >
       {isOpenActionModal && (
-        <div className="z-[-1] transition duration fixed inset-0 bg-gray-900/50 dark:bg-neutral-900/80"></div>
+        <div className="z-[-1] transition duration fixed inset-0 bg-gray-900/50"></div>
       )}
       <div className="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all md:max-w-lg md:w-full m-3 md:mx-auto">
         <div className="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">
@@ -178,24 +177,28 @@ const PermissionModal = (props: IProps) => {
                   )}
                 </div>
 
-                {/* Route */}
+                {/* API Path */}
                 <div>
                   <label
                     className="block text-sm font-medium text-gray-700 mb-2"
-                    htmlFor="route"
+                    htmlFor="apiPath"
                   >
                     Đường dẫn
                   </label>
                   <input
-                    id="route"
+                    id="apiPath"
                     type="text"
                     className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     placeholder="Nhập đường dẫn"
-                    {...register("route")}
-                    defaultValue={dataInit?.route}
+                    {...register("apiPath")}
+                    defaultValue={
+                      (dataInit as any)?.apiPath ?? (dataInit as any)?.route
+                    }
                   />
-                  {errors.route && (
-                    <p className="text-red-500">{errors.route.message}</p>
+                  {errors.apiPath && (
+                    <p className="text-red-500">
+                      {(errors as any).apiPath.message}
+                    </p>
                   )}
                 </div>
 
@@ -222,7 +225,13 @@ const PermissionModal = (props: IProps) => {
                     <option className="text-gray-800 bg-gray-100" value="POST">
                       POST
                     </option>
-                    <option className="text-gray-800 bg-gray-100" value="DELETE">
+                    <option className="text-gray-800 bg-gray-100" value="PUT">
+                      PUT
+                    </option>
+                    <option
+                      className="text-gray-800 bg-gray-100"
+                      value="DELETE"
+                    >
                       DELETE
                     </option>
                   </select>
@@ -230,7 +239,6 @@ const PermissionModal = (props: IProps) => {
                     <p className="text-red-500">{errors.method.message}</p>
                   )}
                 </div>
-            
               </div>
             </div>
             <div className="flex justify-end items-center gap-x-2 py-3 px-4 border-t">
@@ -244,7 +252,7 @@ const PermissionModal = (props: IProps) => {
               </button>
               <button
                 type="submit"
-                className="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-green-800 text-white hover:bg-green-900 focus:outline-hidden focus:bg-green-900 disabled:opacity-50 disabled:pointer-events-none"
+                className="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
                 {dataInit ? "Cập nhật" : "Thêm mới"}
               </button>

@@ -141,7 +141,7 @@ const UserModal = (props: IProps) => {
       aria-labelledby="hs-medium-modal-label"
     >
       {isOpenActionModal && (
-        <div className="z-[-1] transition duration fixed inset-0 bg-gray-900/50 dark:bg-neutral-900/80"></div>
+        <div className="z-[-1] transition duration fixed inset-0 bg-gray-900/50"></div>
       )}
       <div className="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all lg:max-w-3xl lg:w-full m-3 md:mx-auto">
         <div className="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">

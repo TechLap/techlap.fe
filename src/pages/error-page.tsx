@@ -24,9 +24,9 @@ export default function ErrorPage() {
       {/* ========== MAIN CONTENT ========== */}
       <main id="content">
         <div className="text-center py-10 px-4 sm:px-6 lg:px-8">
-          <h1 className="block text-7xl font-bold text-gray-800 sm:text-9xl dark:text-white">{error.statusCode ?? 500}</h1>
-          <p className="mt-3 text-gray-600 dark:text-neutral-400">Oops, something went wrong.</p>
-          <p className="text-gray-600 dark:text-neutral-400">
+          <h1 className="block text-7xl font-bold text-gray-800 sm:text-9xl">{error.statusCode ?? 500}</h1>
+          <p className="mt-3 text-gray-600">Oops, something went wrong.</p>
+          <p className="text-gray-600">
             <i>{error.error ?? error.message}</i>
           </p>
           <div className="mt-5 flex flex-col justify-center items-center gap-2 sm:flex-row sm:gap-3">
@@ -42,7 +42,7 @@ export default function ErrorPage() {
       {/* ========== FOOTER ========== */}
       <footer className="mt-auto text-center py-5">
         <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-sm text-gray-500 dark:text-neutral-500">© All Rights Reserved. 2022.</p>
+          <p className="text-sm text-gray-500">© All Rights Reserved. 2022.</p>
         </div>
       </footer>
       {/* ========== END FOOTER ========== */}
