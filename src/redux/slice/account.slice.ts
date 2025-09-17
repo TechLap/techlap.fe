@@ -23,7 +23,7 @@ interface IAccountState {
             permissions?: {
                 id: string;
                 name: string;
-                route: string;
+                apiPath: string;
                 method: string;
                 module: string;
             }[]

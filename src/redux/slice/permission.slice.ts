@@ -14,7 +14,7 @@ interface IPermissionState {
         id?: string;
         name: string;
         module: string;
-        route: string;
+        apiPath: string;
         method: string;
     }[];
     isLoading: boolean;

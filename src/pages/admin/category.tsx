@@ -31,7 +31,6 @@ const CategoryPage = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [filters, setFilters] = useState<ICategoryFilter>({
     name: "",
-    active: true,
     createdAt: null,
   });
   const [debouncedFilters] = useDebounce(filters, 500);
@@ -59,7 +58,6 @@ const CategoryPage = () => {
         `page=${searchCurrentPage}&size=${CATEGORIES_PER_PAGE}`,
         {
           name: debouncedFilters.name,
-          active: debouncedFilters.active,
           createdAt: debouncedFilters.createdAt,
         }
       ),
