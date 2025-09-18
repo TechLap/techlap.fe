@@ -202,7 +202,7 @@ const ProductModal = (props: IProps) => {
       toast.success(
         <CustomToast
           message={`${dataInit ? "Cập nhật" : "Thêm"} sản phẩm thành công!`}
-          className="text-blue-600"
+          className="text-green-600"
         />
       );
       onClose();
