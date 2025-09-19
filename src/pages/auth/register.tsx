@@ -15,7 +15,6 @@ const RegisterPage = () => {
         .string()
         .email("Email không hợp lệ")
         .required("Email không được để trống"),
-
       password: yup
         .string()
         .required("Mật khẩu không được để trống")
@@ -23,12 +22,14 @@ const RegisterPage = () => {
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{12,})/,
           "Mật khẩu phải chứa ít nhất 12 kí tự: bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt"
         ),
-
+      confirmPassword: yup
+        .string()
+        .required("Vui lòng nhập lại mật khẩu")
+        .oneOf([yup.ref("password")], "Mật khẩu nhập lại không khớp"),
       phone: yup
         .string()
         .required("Số địện thoai không được để trống")
         .matches(/(0[3|5|7|8|9])+(\d{8})\b/g, "Số địện thoai không hợp lệ"),
-
       address: yup
         .string()
         .required("Địa chỉ không được bỏ trống")
@@ -45,9 +46,15 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
 
-  const handleRegister: SubmitHandler<FormValues> = async (values) => {
-    const response = await apiRegisterForCustomer(values.fullName, values.email, values.password, values.address, values.phone);
-    console.log(values)
+  const handleRegister: SubmitHandler<FormValues> = async ({ confirmPassword, ...values }) => {
+    const response = await apiRegisterForCustomer(
+      values.fullName,
+      values.email,
+      values.password,
+      values.address,
+      values.phone
+    );
+    console.log(values);
     if (response.data?.data?.id) {
       toast.success(
         <CustomToast
@@ -240,6 +247,35 @@ const RegisterPage = () => {
                     )}</div>
                 </div>
                 {/* End Form Password */}
+
+                {/* Form Confirm Password */}
+                <div>
+                  <label htmlFor="confirmPassword" className="block text-base mb-2">
+                    Nhập lại mật khẩu
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={isVisiblePassword ? "text" : "password"}
+                      id="confirmPassword"
+                      {...register("confirmPassword")}
+                      className="peer py-2.5 sm:py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 sm:text-base focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                      placeholder="Nhập lại mật khẩu"
+                    />
+                    <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2">
+                      <svg
+                        className="shrink-0 size-4 text-gray-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.4 10c1.5-5 7-7 8.6-7s7.1 2 8.6 7c-1.5 5-7 7-8.6 7S4.9 15 3.4 10Z" />
+                      </svg>
+                    </div>
+                  </div>
+                  {errors.confirmPassword && (
+                    <p className="text-xs text-red-600 mt-1">{errors.confirmPassword.message}</p>
+                  )}
+                </div>
+                {/* End Form Confirm Password */}
 
                 {/* Form FullName */}
                 <div>
