@@ -47,10 +47,9 @@ const ProductCard = ({
   const addToCart = async () => {
     try {
       setLoading(true);
-      const res = await apiAddToCart({ productId: id as string, quantity: 1 });
-      // TODO: update global cart state nếu cần
+      const res = await apiAddToCart({ productId: id as string, quantity: 1, update: false });
     } catch (err) {
-      
+
     } finally {
       setLoading(false);
     }
@@ -122,7 +121,7 @@ const ProductCard = ({
           disabled={loading}
         >
           <CartIcon size={16} color="white" className="size-4" />
-          {loading ? "Đang thêm..." : "Thêm vào giỏ"}        
+          {loading ? "Đang thêm..." : "Thêm vào giỏ"}
         </button>
       </div>
     </div>

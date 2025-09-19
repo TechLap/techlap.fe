@@ -1,107 +1,148 @@
-import { ArrowLeft, CreditCard, MapPin, Minus, Package, Phone, Plus, ShoppingCart, Trash2, Truck, User } from 'lucide-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import ProductItem from '../../components/client/card/product.item';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ArrowLeft, CreditCard, MapPin, Package, Phone, ShoppingCart, Truck, User } from 'lucide-react';
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
+import { useNavigate } from 'react-router-dom';
+import * as yup from "yup";
+import ProductItem from '../../components/client/card/product.item';
+import { apiAddToCart, apiFetchCart, apiRemoveCartDetail } from '../../config/api';
+import { ICart } from '../../types/backend';
+import { R } from '@tanstack/react-query-devtools/build/legacy/ReactQueryDevtools-Cn7cKi7o';
 
 interface CartItem {
     id: number;
-    name: string;
-    price: number;
-    discount?: number;
-    image: string;
     quantity: number;
-    discription: string;
+    price: number;
+    product: {
+        id: number;
+        name: string;
+        price: number;
+        discount: number;
+        stock: number;
+        description: string;
+        image: string;
+        category: {
+            id: number;
+            name: string;
+        };
+    };
 }
 
-interface CustomerInfo {
-    fullName: string;
-    email: string;
-    phone: string;
-}
+const orderInfoSchema = yup
+    .object({
+        receiverName: yup.string().required("Tên không được để trống"),
+        receiverPhone: yup
+            .string()
+            .required("Số địện thoai không được để trống")
+            .matches(/(0[3|5|7|8|9])+(\d{8})\b/g, "Số địện thoai không hợp lệ"),
+        address: yup.string().required("Địa chỉ không được để trống"),
+        note: yup.string().notRequired(),
+        paymentMethod: yup.string().oneOf(['vnpay', 'cod']).required("Phương thức thanh toán là bắt buộc"),
+    })
+    .required();
 
-interface OrderInfo {
-    receiverName: string;
-    receiverPhone: string;
-    city: string;
-    address: string;
-}
+type CartFormValues = yup.InferType<typeof orderInfoSchema>;
 
 function CartPage() {
+    // Sản phẩm trong giỏ hàng
     const [cartItems, setCartItems] = useState<CartItem[]>([
-        {
-            id: 1,
-            name: "MacBook Pro 16-inch M3 Max",
-            price: 65990000,
-            discount: 20,
-            image: "https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400",
-            quantity: 1,
-            discription: "M3 Max, 32GB RAM, 1TB SSD"
-        },
-        {
-            id: 2,
-            name: "Dell XPS 13 Plus",
-            price: 32990000,
-            discount: 40,
-            image: "https://images.pexels.com/photos/205421/pexels-photo-205421.jpeg?auto=compress&cs=tinysrgb&w=400",
-            quantity: 2,
-            discription: "Intel i7-13700H, 16GB RAM, 512GB SSD"
-        }
     ]);
-
-    const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
-        fullName: '',
-        email: '',
-        phone: ''
+    // Tổng tiền (sau khi phí ship, giảm giá)
+    const [totalPrice, setTotalPrice] = useState(0);
+    // Thông tin giỏ hàng (khách hàng, chi tiết giỏ hàng)
+    const [cartInfo, setCartInfo] = useState<ICart>();
+    // React Hook Form
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useForm<CartFormValues>({
+        resolver: yupResolver(orderInfoSchema) as any,
+        defaultValues: {
+            receiverName: "",
+            receiverPhone: "",
+            address: cartInfo?.customer?.address ?? "",
+            note: "",
+            paymentMethod: "cod"
+        },
     });
+    // Submit form
+    const handleSubmitForm = handleSubmit(async (valuesForm: CartFormValues) => {
+        console.log("Form Data:", valuesForm);
+    })
+    // Lấy thông tin giỏ hàng từ API
+    const getCart = async () => {
+        try {
+            const response = await apiFetchCart();
+            setCartInfo(response.data.data);
+            if (response.data.data?.cartDetails) setCartItems(response.data.data?.cartDetails);
+        } catch (error) {
+            console.error("Failed to fetch cart:", error);
+        }
+    };
 
-    const [orderInfo, setOrderInfo] = useState<OrderInfo>({
-        receiverName: '',
-        receiverPhone: '',
-        city: '',
-        address: ''
-    });
-
-    const [paymentMethod, setPaymentMethod] = useState('credit-card');
     const [currentStep, setCurrentStep] = useState(1);
     const navigate = useNavigate();
+    // Cập nhật số lượng sản phẩm trong giỏ hàng
+    const updateQuantity = async (id: number, change: number) => {
+        const oldItems = [...cartItems];
+        const updatedItem = cartItems.find((item) => item.id === id);
+        if (!updatedItem) return;
 
-    const updateQuantity = (id: number, change: number) => {
-        setCartItems(items =>
-            items.map(item =>
-                item.id === id
-                    ? { ...item, quantity: Math.max(1, item.quantity + change) }
-                    : item
+        const newQuantity = Math.max(1, updatedItem.quantity + change);
+
+        // Cập nhật UI ngay
+        setCartItems((items) =>
+            items.map((item) =>
+                item.id === id ? { ...item, quantity: newQuantity } : item
             )
         );
-    };
 
-    const removeItem = (id: number) => {
-        setCartItems(items => items.filter(item => item.id !== id));
-    };
-
-    const subtotal = cartItems.reduce((sum, item) => sum + ((item.price) * item.quantity), 0);
-    const shipping = 500000;
-    const discount = cartItems.reduce((sum, item) => {
-        if (item.price) {
-            return sum + ((item.price - (item.price - (item.price * (item.discount as number / 100)))) * item.quantity);
+        try {
+            await apiAddToCart({
+                productId: updatedItem.product.id.toString(),
+                quantity: newQuantity,
+                update: true,
+            });
+        } catch (error) {
+            // rollback nếu BE lỗi
+            setCartItems(oldItems);
         }
-        return sum;
-    }, 0);
-    const total = subtotal + shipping - discount;
-
-    const handleCustomerInfoChange = (field: keyof CustomerInfo, value: string) => {
-        setCustomerInfo(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleOrderInfoChange = (field: keyof OrderInfo, value: string) => {
-        setOrderInfo(prev => ({ ...prev, [field]: value }));
+    const removeItem = async (customerId: number, cartDetailId: number) => {
+        try {
+            // gọi API BE
+            await apiRemoveCartDetail({ cartDetailId, customerId });
+
+            // cập nhật lại state FE
+            setCartItems(items => items.filter(item => item.id !== cartDetailId));
+
+            console.log("Xóa sản phẩm thành công");
+        } catch (error) {
+            console.error("Xóa sản phẩm thất bại:", error);
+        }
     };
+
+    // Tính toán các khoản tiền
+    const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    const shipping = 0; // Giả sử phí vận chuyển là 0
+    const discount = cartItems.reduce((sum, item) => sum + (item.product.price * (item.product.discount as number / 100)) * item.quantity, 0);
 
     const steps = [
         { id: 1, title: 'Giỏ hàng', icon: ShoppingCart },
         { id: 2, title: 'Thanh toán', icon: CreditCard }
     ];
+
+    React.useEffect(() => {
+        getCart();
+    }, []);
+
+    React.useEffect(() => {
+        setTotalPrice(subtotal - discount + shipping)
+    }, [subtotal, discount]);
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -152,6 +193,7 @@ function CartPage() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                     {/* Main Content */}
+
                     <div className="lg:col-span-2 space-y-6 sm:space-y-8">
                         {/* 1. Sản phẩm */}
                         <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
@@ -164,154 +206,174 @@ function CartPage() {
                                 {cartItems.map((item) => (
                                     <ProductItem
                                         key={item.id}
-                                        item={item}
+                                        item={{ ...item.product, id: item.id, quantity: item.quantity }}
+                                        customerId={cartInfo?.customer.id}
                                         updateQuantity={updateQuantity}
                                         removeItem={removeItem}
                                     />
                                 ))}
                             </div>
                         </div>
+                        <form id='checkoutForm' onSubmit={handleSubmitForm}>
+                            {/* 2. Thông tin khách hàng */}
+                            <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+                                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                                    <User className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
+                                    Thông tin khách hàng
+                                </h2>
 
-                        {/* 2. Thông tin khách hàng */}
-                        <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
-                            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                                <User className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
-                                Thông tin khách hàng
-                            </h2>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="sm:col-span-2">
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Họ và tên người đặt</label>
-                                    <input
-                                        type="text"
-                                        value={customerInfo.fullName}
-                                        onChange={(e) => handleCustomerInfoChange('fullName', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                        placeholder="Nhập họ và tên người đặt hàng"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                    <input
-                                        type="email"
-                                        value={customerInfo.email}
-                                        onChange={(e) => handleCustomerInfoChange('email', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                        placeholder="email@example.com"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
-                                    <input
-                                        type="tel"
-                                        value={customerInfo.phone}
-                                        onChange={(e) => handleCustomerInfoChange('phone', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                        placeholder="0xxx xxx xxx"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* 3. Thông tin đơn hàng */}
-                        <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
-                            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                                <Package className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
-                                Thông tin giao hàng
-                            </h2>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Tên người nhận</label>
-                                    <input
-                                        type="text"
-                                        value={orderInfo.receiverName}
-                                        onChange={(e) => handleOrderInfoChange('receiverName', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                        placeholder="Nhập tên người nhận hàng"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại người nhận</label>
-                                    <input
-                                        type="tel"
-                                        value={orderInfo.receiverPhone}
-                                        onChange={(e) => handleOrderInfoChange('receiverPhone', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                        placeholder="0xxx xxx xxx"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Tỉnh/Thành phố</label>
-                                    <select
-                                        value={orderInfo.city}
-                                        onChange={(e) => handleOrderInfoChange('city', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                    >
-                                        <option value="">Chọn tỉnh/thành</option>
-                                        <option value="hanoi">Hà Nội</option>
-                                        <option value="hcm">TP. Hồ Chí Minh</option>
-                                        <option value="danang">Đà Nẵng</option>
-                                        <option value="haiphong">Hải Phòng</option>
-                                        <option value="cantho">Cần Thơ</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Địa chỉ cụ thể</label>
-                                    <input
-                                        type="text"
-                                        value={orderInfo.address}
-                                        onChange={(e) => handleOrderInfoChange('address', e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                        placeholder="Số nhà, tên đường, phường/xã, quận/huyện"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* 4. Phương thức thanh toán */}
-                        <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
-                            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                                <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
-                                Phương thức thanh toán
-                            </h2>
-
-                            <div className="space-y-3 sm:space-y-4">
-                                <div
-                                    className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${paymentMethod === 'credit-card' ? 'border-blue-600 bg-blue-50 shadow-sm' : 'border-gray-200 hover:border-gray-300'
-                                        }`}
-                                    onClick={() => setPaymentMethod('credit-card')}
-                                >
-                                    <div className="flex items-center space-x-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="sm:col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Họ và tên người đặt</label>
                                         <input
-                                            type="radio"
-                                            checked={paymentMethod === 'credit-card'}
-                                            onChange={() => setPaymentMethod('credit-card')}
-                                            className="text-blue-600 focus:ring-blue-500"
+                                            type="text"
+                                            defaultValue={cartInfo?.customer.fullName}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                            disabled
                                         />
-                                        <CreditCard className="w-5 h-5 text-gray-400" />
-                                        <span className="font-medium text-sm sm:text-base">Thẻ tín dụng/ghi nợ</span>
                                     </div>
-                                </div>
-
-                                <div
-                                    className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${paymentMethod === 'cod' ? 'border-blue-600 bg-blue-50 shadow-sm' : 'border-gray-200 hover:border-gray-300'
-                                        }`}
-                                    onClick={() => setPaymentMethod('cod')}
-                                >
-                                    <div className="flex items-center space-x-3">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                                         <input
-                                            type="radio"
-                                            checked={paymentMethod === 'cod'}
-                                            onChange={() => setPaymentMethod('cod')}
-                                            className="text-blue-600 focus:ring-blue-500"
+                                            type="email"
+                                            defaultValue={cartInfo?.customer.email}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                            disabled
                                         />
-                                        <Truck className="w-5 h-5 text-gray-400" />
-                                        <span className="font-medium text-sm sm:text-base">Thanh toán khi nhận hàng (COD)</span>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
+                                        <input
+                                            type="tel"
+                                            defaultValue={cartInfo?.customer.phone}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                            disabled
+                                        />
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                            {/* 3. Thông tin đơn hàng */}
+                            <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+                                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                                    <Package className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
+                                    Thông tin giao hàng
+                                </h2>
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Tên người nhận</label>
+                                            <input
+                                                type="text"
+                                                {...register("receiverName")}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                                placeholder="Nhập tên người nhận hàng"
+                                            />
+                                            {errors.receiverName && (
+                                                <p className="text-red-500">{errors.receiverName.message}</p>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại người nhận</label>
+                                            <input
+                                                type="tel"
+                                                {...register("receiverPhone")}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                                placeholder="0xxx xxx xxx"
+                                            />
+                                            {errors.receiverPhone && (
+                                                <p className="text-red-500">{errors.receiverPhone.message}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Địa chỉ cụ thể</label>
+                                            <input
+                                                type="text"
+                                                defaultValue={cartInfo?.customer.address}
+                                                {...register("address")}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                                placeholder="Số nhà, tên đường, phường/xã, quận/huyện"
+                                            />
+                                            {errors.address && (
+                                                <p className="text-red-500">{errors.address.message}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Ghi chú</label>
+                                            <input
+                                                type="text"
+                                                {...register("note")}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                                placeholder="Ghi chú cho đơn hàng (nếu có)"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* 4. Phương thức thanh toán */}
+                            <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+                                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                                    <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
+                                    Phương thức thanh toán
+                                </h2>
+
+                                <Controller
+                                    name="paymentMethod"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <div className="space-y-3 sm:space-y-4">
+                                            <div
+                                                className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${field.value === "cod"
+                                                    ? "border-blue-600 bg-blue-50 shadow-sm"
+                                                    : "border-gray-200 hover:border-gray-300"
+                                                    }`}
+                                                onClick={() => field.onChange("cod")}
+                                            >
+                                                <div className="flex items-center space-x-3">
+                                                    <input
+                                                        type="radio"
+                                                        value="cod"
+                                                        checked={field.value === "cod"}
+                                                        onChange={() => field.onChange("cod")}
+                                                        className="text-blue-600 focus:ring-blue-500"
+                                                    />
+                                                    <Truck className="w-5 h-5 text-gray-400" />
+                                                    <span className="font-medium text-sm sm:text-base">
+                                                        Thanh toán khi nhận hàng (COD)
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${field.value === "vnpay"
+                                                    ? "border-blue-600 bg-blue-50 shadow-sm"
+                                                    : "border-gray-200 hover:border-gray-300"
+                                                    }`}
+                                                onClick={() => field.onChange("vnpay")}
+                                            >
+                                                <div className="flex items-center space-x-3">
+                                                    <input
+                                                        type="radio"
+                                                        value="vnpay"
+                                                        checked={field.value === "vnpay"}
+                                                        onChange={() => field.onChange("vnpay")}
+                                                        className="text-blue-600 focus:ring-blue-500"
+                                                    />
+                                                    <CreditCard className="w-5 h-5 text-gray-400" />
+                                                    <span className="font-medium text-sm sm:text-base">
+                                                        Thanh toán bằng VNPay
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                />
+
+                            </div>
+                        </form>
                     </div>
 
                     {/* Right Sidebar - Order Summary */}
@@ -358,7 +420,7 @@ function CartPage() {
                                         <span>Tổng cộng</span>
                                         <span className="text-blue-600">
                                             <NumericFormat
-                                                value={total}
+                                                value={totalPrice}
                                                 displayType="text"
                                                 thousandSeparator={true}
                                                 suffix={"đ"}
@@ -368,7 +430,7 @@ function CartPage() {
                                 </div>
                             </div>
 
-                            <button className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold mt-4 sm:mt-6 hover:bg-blue-700 transition-colors focus:ring-4 focus:ring-blue-200 text-sm sm:text-base">
+                            <button type="submit" form='checkoutForm' className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold mt-4 sm:mt-6 hover:bg-blue-700 transition-colors focus:ring-4 focus:ring-blue-200 text-sm sm:text-base">
                                 Đặt hàng ngay
                             </button>
 
@@ -394,9 +456,12 @@ function CartPage() {
                             </div>
                         </div>
                     </div>
+
                 </div>
+
             </div>
-        </div>
+
+        </div >
     );
 }
 

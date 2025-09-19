@@ -6,16 +6,22 @@ export interface ProductItemProps {
         id: number;
         name: string;
         price: number;
-        discount?: number;
+        discount: number;
+        stock: number;
+        description: string;
         image: string;
+        category: {
+            id: number;
+            name: string;
+        };
         quantity: number;
-        discription: string;
     };
+    customerId?: number;
     updateQuantity: (id: number, delta: number) => void;
-    removeItem: (id: number) => void;
+    removeItem: (customerId: number, cartDetailId: number) => void;
 }
 
-export default function ProductItem({ item, updateQuantity, removeItem }: ProductItemProps) {
+export default function ProductItem({ item, customerId, updateQuantity, removeItem }: ProductItemProps) {
     return (
         <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 p-3 sm:p-4 border border-gray-100 rounded-lg hover:border-blue-200 transition-colors">
             {/* Ảnh sản phẩm */}
@@ -28,13 +34,13 @@ export default function ProductItem({ item, updateQuantity, removeItem }: Produc
             {/* Thông tin */}
             <div className="flex-1 w-full">
                 <h3 className="font-semibold text-gray-900 text-sm sm:text-base">{item.name}</h3>
-                <p className="text-xs sm:text-sm text-gray-500 mt-1">{item.discription}</p>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">{item.description}</p>
 
                 {/* Giá */}
                 <div className="flex items-center space-x-2 mt-2">
                     <span className="text-base sm:text-lg font-bold text-blue-600">
                         <NumericFormat
-                            value={item.price - (item.discount as number / 100 )}
+                            value={item.price - (item.price*item.discount as number / 100)}
                             displayType="text"
                             thousandSeparator={true}
                             suffix={"đ"}
@@ -71,7 +77,7 @@ export default function ProductItem({ item, updateQuantity, removeItem }: Produc
                     </button>
                 </div>
                 <button
-                    onClick={() => removeItem(item.id)}
+                    onClick={() => removeItem(customerId as number, item.id)}
                     className="text-red-500 hover:text-red-700 p-2 transition-colors"
                 >
                     <Trash2 className="w-5 h-5" />
