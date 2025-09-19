@@ -73,7 +73,7 @@ export const apiDeleteCustomer = ( id: string ) => {
     return axiosClient.delete<IBackendResponse<ICustomer>>(`/customers/${id}`)
 }
 
-export const apiAddToCart = (data : {productId: string, quantity: number}) => {
+export const apiAddToCart = (data : {productId: string, quantity: number, update: boolean}) => {
     return axiosClient.post<IBackendResponse<ICart>>(`/customers/add-to-cart`, data)
 }
 
@@ -81,6 +81,9 @@ export const apiFetchCart = () => {
     return axiosClient.get<IBackendResponse<ICart>>(`/customers/get-cart`)
 }
 
+export const apiRemoveCartDetail = ( data : {cartDetailId: number, customerId: number }) => {
+    return axiosClient.delete<IBackendResponse<ICart>>(`/customers/remove-cart-detail`, {data})
+}
 
 /* Module Role */
 export const apiFetchAllRole = ( query: string ) => {

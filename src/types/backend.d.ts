@@ -264,7 +264,7 @@ export interface ICart {
     cartDetails: {
       id: number;
       quantity: number;
-      price: number | null;
+      price: number;
       product: {
         id: number;
         name: string;
@@ -272,7 +272,7 @@ export interface ICart {
         discount: number;
         stock: number;
         description: string;
-        image: string | null;
+        image: string;
         category: {
           id: number;
           name: string;
