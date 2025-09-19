@@ -183,13 +183,15 @@ const PermissionTable = (props: IProps) => {
     },
   ];
 
-  return (
-    <DataTable
-      data={permissionData ?? []}
-      columns={columns}
-      rowKey={(row: IPermission, index: number) => row.id ?? `permission-${index}`}
-    />
-  );
+    return (
+      <Access permission={{ name: "Get permissions with pagination" }} hideChildren>
+        <DataTable
+          data={permissionData ?? []}
+          columns={columns}
+          rowKey={(row: IPermission, index: number) => row.id ?? `permission-${index}`}
+        />
+      </Access>
+    );
 };
 
 export default PermissionTable;
