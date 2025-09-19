@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiGetCustomer } from "../../config/api";
+import { set } from "date-fns";
 
 export const fetchCustomerInfo = createAsyncThunk('auth/fetchCustomerInfo', async () => {
     const response = await apiGetCustomer();
@@ -86,6 +87,12 @@ export const customerAccountSlice = createSlice({
                     permissions: []
                 }
             }
+        },
+        setCustomerAddToCart: (state, action) => {
+            state.customer.totalCart = (state.customer.totalCart || 0) + action.payload?.quantity;
+        },
+        setCustomerRemoveFromCart: (state, action) => {
+            state.customer.totalCart = (state.customer.totalCart || 0) - action.payload?.quantity;
         }
     },
     extraReducers: (builder) => {
@@ -115,6 +122,6 @@ export const customerAccountSlice = createSlice({
     },
 });
 
-export const { setCustomerLoginInfo, setCustomerRefreshTokenAction, setCustomerLogoutAction } = customerAccountSlice.actions;
+export const { setCustomerLoginInfo, setCustomerRefreshTokenAction, setCustomerLogoutAction, setCustomerAddToCart, setCustomerRemoveFromCart } = customerAccountSlice.actions;
 
 export default customerAccountSlice.reducer;

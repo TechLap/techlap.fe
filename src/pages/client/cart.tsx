@@ -9,6 +9,8 @@ import ProductItem from '../../components/client/card/product.item';
 import { apiAddToCart, apiFetchCart, apiRemoveCartDetail } from '../../config/api';
 import { ICart } from '../../types/backend';
 import { R } from '@tanstack/react-query-devtools/build/legacy/ReactQueryDevtools-Cn7cKi7o';
+import { useAppDispatch } from '../../redux/hooks';
+import { setCustomerAddToCart, setCustomerRemoveFromCart } from '../../redux/slice/customer.slide';
 
 interface CartItem {
     id: number;
@@ -52,6 +54,8 @@ function CartPage() {
     const [totalPrice, setTotalPrice] = useState(0);
     // Thông tin giỏ hàng (khách hàng, chi tiết giỏ hàng)
     const [cartInfo, setCartInfo] = useState<ICart>();
+    // Redux
+    const dispath = useAppDispatch();
     // React Hook Form
     const {
         register,
@@ -115,7 +119,10 @@ function CartPage() {
     const removeItem = async (customerId: number, cartDetailId: number) => {
         try {
             // gọi API BE
-            await apiRemoveCartDetail({ cartDetailId, customerId });
+            const res = await apiRemoveCartDetail({ cartDetailId, customerId });
+            if (res.data.statusCode === 200) {
+                dispath(setCustomerRemoveFromCart({ quantity: 1 }));
+            }
 
             // cập nhật lại state FE
             setCartItems(items => items.filter(item => item.id !== cartDetailId));

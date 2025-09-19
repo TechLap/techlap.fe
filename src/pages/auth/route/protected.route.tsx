@@ -22,7 +22,7 @@ const ProtectedRoute = (props: any) => {
           {isAuthenticated === true ? (
             <RoleBase>{props.children}</RoleBase>
           ) : (
-            <Navigate to={"/login"} replace />
+            <Navigate to={"/admin/login"} replace />
           )}
         </>
       )}

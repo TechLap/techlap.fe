@@ -1,7 +1,7 @@
 import { Laptop, ShoppingCart, User } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { apiLogout } from "../../config/api";
+import { apiLogout, apiLogoutForCustomer } from "../../config/api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import CustomToast from "../common/toast.message";
 import { setCustomerLogoutAction } from "../../redux/slice/customer.slide";
@@ -16,7 +16,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const response = await apiLogout();
+    const response = await apiLogoutForCustomer();
     if (response.data?.statusCode === 200) {
       dispatch(setCustomerLogoutAction())
       navigate("/login");
