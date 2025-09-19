@@ -30,6 +30,9 @@ export const apiLogout = () => {
     return axiosClient.post<IBackendResponse<string>>('/auth/logout')
 }
 
+export const apiLogoutForCustomer = () => {
+    return axiosClient.post<IBackendResponse<string>>('/auth/customers/logout')
+}
 
 /* Module User */
 export const apiFetchAllUser = ( query: string ) => {

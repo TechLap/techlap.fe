@@ -3,6 +3,8 @@ import { CartIcon } from "../../common/icons";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { apiAddToCart } from "../../../config/api";
+import { setCustomerAddToCart } from "../../../redux/slice/customer.slide";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 
 interface ProductCardProps {
   id?: string;
@@ -43,11 +45,17 @@ const ProductCard = ({
   })();
   const newPrice = price - (price * (discount as number / 100));
   const [loading, setLoading] = useState(false);
-
+  // Redux
+  const dispatch = useAppDispatch();
+  const totalCart = useAppSelector((state) => state.customer.customer.totalCart);
   const addToCart = async () => {
     try {
       setLoading(true);
       const res = await apiAddToCart({ productId: id as string, quantity: 1, update: false });
+      const tolalCartAfter = res?.data?.data?.sum;
+      if (res.data.statusCode === 201 && tolalCartAfter !== undefined && tolalCartAfter > totalCart!) {
+        dispatch(setCustomerAddToCart({ quantity: 1 }));
+      }
     } catch (err) {
 
     } finally {
