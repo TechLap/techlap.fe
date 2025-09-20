@@ -127,7 +127,7 @@ const Header = () => {
                   aria-orientation="vertical"
                   aria-labelledby="hs-dropdown-with-header"
                 >
-                  <div className="py-2 px-3 border-b border-gray-200 bg-red-50">
+                  <div className="py-2 px-3 border-b border-gray-200 bg-blue-50">
                     <p className="text-xs text-gray-500">Đăng nhập với tư cách</p>
                     <p className="text-xs font-medium text-gray-800">
                       {customerInfo?.fullName || 'Người dùng'}
@@ -137,7 +137,7 @@ const Header = () => {
                     
                     <a
                       className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
-                      href="#"
+                      href="/history-order"
                     >
                       <svg
                         className="shrink-0 size-3.5"

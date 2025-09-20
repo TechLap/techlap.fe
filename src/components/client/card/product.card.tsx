@@ -62,7 +62,7 @@ const ProductCard = ({
         }
       }
     } catch (err) {
-      toast.success(<CustomToast message='Thêm vào giỏ hàng không thành công' className='text-red-600' />)
+      toast.error(<CustomToast message='Thêm vào giỏ hàng không thành công' className='text-red-600' />)
     } finally {
       setLoading(false);
     }

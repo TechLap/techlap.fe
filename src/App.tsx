@@ -32,6 +32,7 @@ import { useAppDispatch } from "./redux/hooks";
 import { fetchUserInfo } from "./redux/slice/account.slice";
 import "./styles/datepicker-xs.css";
 import { fetchCustomerInfo } from "./redux/slice/customer.slide";
+import { HistoryOrder } from "./pages/client/history-order";
 
 declare global {
   interface Window {
@@ -79,6 +80,11 @@ export const routes = [
         element: <CartPage />,
         breadcrumb: "Giỏ hàng",
       },
+      {
+        path: "history-order",
+        element: <HistoryOrder />,
+        breadcrumb: "Lịch sử đơn hàng",
+      }
     ],
   },
   {

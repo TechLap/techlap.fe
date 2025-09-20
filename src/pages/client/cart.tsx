@@ -225,7 +225,7 @@ function CartPage() {
                             </div>
                         </div>
                         {cartItems.length > 0 && (
-                            <form id='checkoutForm' onSubmit={handleSubmitForm}>
+                            <form id='checkoutForm' onSubmit={handleSubmitForm} className="space-y-6 sm:space-y-8">
                                 {/* 2. Thông tin khách hàng */}
                                 <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
                                     <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
@@ -354,7 +354,7 @@ function CartPage() {
                                                         />
                                                         <Truck className="w-5 h-5 text-gray-400" />
                                                         <span className="font-medium text-sm sm:text-base">
-                                                            Thanh toán khi nhận hàng (COD)
+                                                            Nhận tại cửa hàng (COD)
                                                         </span>
                                                     </div>
                                                 </div>
