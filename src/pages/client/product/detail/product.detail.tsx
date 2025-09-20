@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { NavLink, useParams } from "react-router-dom";
 import {
@@ -12,11 +12,9 @@ import {
   ArrowPath,
   Heart,
   Shield,
-  Star,
-  Truck,
+  Truck
 } from "../../../../components/common/icons";
 import Cart from "../../../../components/common/icons/cart";
-import InputNumber from "../../../../components/common/input.number";
 import LoadingSpinner from "../../../../components/common/loading.spinner";
 import {
   Tabs,
@@ -24,7 +22,9 @@ import {
   TabsItem,
   TabsList,
 } from "../../../../components/common/tabs";
-import { apiFetchProductById } from "../../../../config/api";
+import { apiAddToCart, apiFetchProductById } from "../../../../config/api";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { setCustomerAddToCart } from "../../../../redux/slice/customer.slide";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -37,7 +37,24 @@ const ProductDetailPage = () => {
     queryFn: () => apiFetchProductById(id || ""),
     enabled: !!id,
   });
+  const [loading, setLoading] = useState(false);
+  // Redux
+  const dispatch = useAppDispatch();
+  const totalCart = useAppSelector((state) => state.customer.customer.totalCart);
+  const addToCart = async () => {
+    try {
+      setLoading(true);
+      const res = await apiAddToCart({ productId: id as string, quantity: 1, update: false });
+      const tolalCartAfter = res?.data?.data?.sum;
+      if (res.data.statusCode === 201 && tolalCartAfter !== undefined && tolalCartAfter > totalCart!) {
+        dispatch(setCustomerAddToCart({ quantity: 1 }));
+      }
+    } catch (err) {
 
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     if (product) {
       window.HSStaticMethods.autoInit(["tabs", "input-number"]);
@@ -56,7 +73,7 @@ const ProductDetailPage = () => {
         </p>
         <NavLink
           to="/products"
-          className="inline-flex items-center px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition-colors"
+          className="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
         >
           ← Quay lại trang sản phẩm
         </NavLink>
@@ -120,9 +137,9 @@ const ProductDetailPage = () => {
                   Ảnh sản phẩm chính thức
                 </p>
                 <div className="flex items-center justify-center gap-2">
-                  <div className="w-2 h-2 rounded-full animate-pulse bg-green-700"></div>
-                  <span className="text-xs text-green-700">Chất lượng HD</span>
-                  <div className="w-2 h-2 rounded-full animate-pulse bg-green-700"></div>
+                  <div className="w-2 h-2 rounded-full animate-pulse bg-red-600"></div>
+                  <span className="text-xs text-red-600">Chất lượng HD</span>
+                  <div className="w-2 h-2 rounded-full animate-pulse bg-red-600"></div>
                 </div>
               </div>
             </div>
@@ -144,7 +161,7 @@ const ProductDetailPage = () => {
                     <p className="text-gray-600 leading-relaxed text-lg">
                       {product.data.data?.description}
                     </p>
-                    <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+                    {/* <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
                       <div>
                         <span className="text-green-700 text-base font-semibold">
                           Ưu điểm nổi bật
@@ -191,7 +208,7 @@ const ProductDetailPage = () => {
                           </li>
                         </ul>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </TabsContent>
                 <TabsContent id="parameter" className="hidden">
@@ -203,20 +220,15 @@ const ProductDetailPage = () => {
                           label: "Danh mục",
                           value: product?.data.data?.category?.name,
                         },
-                        // {
-                        //   label: "Thương hiệu",
-                        //   value: product?.data.data?.supplier?.name,
-                        // },
+                        {
+                          label: "Hãng sản xuất",
+                          value: product?.data.data?.brand?.name
+                        },
                         { label: "Xuất xứ", value: "Việt Nam" },
                         {
-                          label: "Hạn sử dụng",
-                          value: "12 tháng kể từ ngày sản xuất",
-                        },
-                        {
-                          label: "Nhiệt độ bảo quản",
-                          value: "-18°C đến -20°C",
-                        },
-                        { label: "Đóng gói", value: "Túi PA/PE chân không" },
+                          label: "Bảo hành",
+                          value: "24 tháng kể từ ngày mua",
+                        }
                       ].map((item) => (
                         <div
                           key={item.label}
@@ -243,7 +255,7 @@ const ProductDetailPage = () => {
                       <Card>
                         <CardHeader>
                           <CardTitle className="flex items-center gap-2 text-lg">
-                            <Truck size={24} className="text-green-700" />
+                            <Truck size={24} className="text-red-600" />
                             Giao hàng miễn phí
                           </CardTitle>
                         </CardHeader>
@@ -257,7 +269,7 @@ const ProductDetailPage = () => {
                       <Card>
                         <CardHeader>
                           <CardTitle className="flex items-center gap-2 text-lg">
-                            <Shield size={24} className="text-green-700" />
+                            <Shield size={24} className="text-red-600" />
                             Đảm bảo chất lượng
                           </CardTitle>
                         </CardHeader>
@@ -299,11 +311,10 @@ const ProductDetailPage = () => {
                             {item.label}
                           </span>
                           <span
-                            className={` text-base font-medium ${
-                              item.value === "1-2 giờ"
-                                ? "text-green-700"
-                                : "text-gray-600"
-                            }`}
+                            className={` text-base font-medium ${item.value === "1-2 giờ"
+                              ? "text-red-500"
+                              : "text-gray-600"
+                              }`}
                           >
                             {item.value}
                           </span>
@@ -322,46 +333,31 @@ const ProductDetailPage = () => {
           <div className="sticky top-8 space-y-6">
             <Card className="border-none shadow-xl hover:shadow-md transition-shadow">
               <CardContent>
-                <div className="space-y-6">
+                <div className="space-y-2">
                   <div>
                     <h1 className="text-2xl font-bold mb-2">
                       {product.data.data?.name}
                     </h1>
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            size={16}
-                            className="text-amber-300"
-                            fill="currentColor"
-                          />
-                        ))}
-                      </div>
-                      <span className="text-gray-500 text-sm">
-                        (4.5) • 125 đánh giá
-                      </span>
-                    </div>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <div className="flex items-center gap-3">
                       <div>
-                        <span className="text-green-700 text-2xl font-bold">
+                        <span className="text-red-600 text-2xl font-bold">
                           <NumericFormat
-                            value={product.data.data?.price}
+                            value={product.data.data?.price - (product.data.data?.price * (product.data.data?.discount as number / 100))}
                             displayType="text"
                             allowLeadingZeros
                             thousandSeparator={true}
                             suffix={"đ"}
                           />
                         </span>
-                        <span className="text-green-700 text-base">
+                        <span className="text-red-600 text-base">
                           {/* /({product.data.data?.unit}) */}
                         </span>
                       </div>
                       <span className="text-gray-500 text-lg line-through">
                         <NumericFormat
-                          value={product.data.data?.price * 0.8}
+                          value={product.data.data?.price}
                           displayType="text"
                           allowLeadingZeros
                           thousandSeparator={true}
@@ -370,13 +366,12 @@ const ProductDetailPage = () => {
                       </span>
                     </div>
                     {/* Promote sale */}
-                    <div className="bg-green-50 text-green-700 p-3 rounded-lg border border-green-200">
+                    <div className="bg-red-50 text-red-600 p-3 rounded-lg border border-red-200">
                       <span className="font-medium">
                         🎉 Tiết kiệm{" "}
                         <NumericFormat
                           value={
-                            product.data.data?.price -
-                            product.data.data?.price * 0.8
+                            (product.data.data?.price * (product.data.data?.discount as number / 100))
                           }
                           displayType="text"
                           allowLeadingZeros
@@ -388,26 +383,18 @@ const ProductDetailPage = () => {
                     <div className="flex items-center gap-2"></div>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-700 text-base font-medium">
-                        Số lượng:
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <InputNumber />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     <div className="flex flex-col gap-2">
-                      <button className="bg-green-700 text-white font-medium text-sm px-4 py-3 rounded-md flex items-center justify-center gap-2 hover:bg-green-800 transition-colors">
+                      <button
+                        className="bg-red-600 text-white font-medium text-sm px-4 py-3 rounded-md flex items-center justify-center gap-2 hover:bg-red-700 transition-colors"
+                        onClick={addToCart}
+                        disabled={loading}
+                      >
+
                         <Cart size={16} className="text-white" />
-                        Thêm vào giỏ hàng
+                        {loading ? "Đang thêm..." : "Thêm vào giỏ"}
                       </button>
-                      <button className="bg-gray-200 font-medium text-sm px-4 py-3 rounded-md flex items-center justify-center hover:bg-gray-300 transition-colors">
-                        Mua ngay
-                      </button>
+                      
                     </div>
                   </div>
                 </div>

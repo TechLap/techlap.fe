@@ -7,10 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from "yup";
 import ProductItem from '../../components/client/card/product.item';
 import { apiAddToCart, apiFetchCart, apiRemoveCartDetail } from '../../config/api';
-import { ICart } from '../../types/backend';
-import { R } from '@tanstack/react-query-devtools/build/legacy/ReactQueryDevtools-Cn7cKi7o';
 import { useAppDispatch } from '../../redux/hooks';
-import { setCustomerAddToCart, setCustomerRemoveFromCart } from '../../redux/slice/customer.slide';
+import { setCustomerRemoveFromCart } from '../../redux/slice/customer.slide';
+import { ICart } from '../../types/backend';
 
 interface CartItem {
     id: number;
@@ -81,9 +80,11 @@ function CartPage() {
         try {
             const response = await apiFetchCart();
             setCartInfo(response.data.data);
-            if (response.data.data?.cartDetails) setCartItems(response.data.data?.cartDetails);
+            if (response.data.data?.cartDetails) {
+                setCartItems(response.data.data?.cartDetails);
+            }
         } catch (error) {
-            console.error("Failed to fetch cart:", error);
+
         }
     };
 
@@ -208,7 +209,9 @@ function CartPage() {
                                 <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
                                 Sản phẩm trong giỏ hàng
                             </h2>
-
+                            {cartItems.length === 0 && (
+                                <p className="text-gray-600">Chưa có sản phẩm trong giỏ hàng</p>
+                            )}
                             <div className="space-y-4">
                                 {cartItems.map((item) => (
                                     <ProductItem
@@ -221,166 +224,168 @@ function CartPage() {
                                 ))}
                             </div>
                         </div>
-                        <form id='checkoutForm' onSubmit={handleSubmitForm}>
-                            {/* 2. Thông tin khách hàng */}
-                            <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
-                                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                                    <User className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
-                                    Thông tin khách hàng
-                                </h2>
+                        {cartItems.length > 0 && (
+                            <form id='checkoutForm' onSubmit={handleSubmitForm} className="space-y-6 sm:space-y-8">
+                                {/* 2. Thông tin khách hàng */}
+                                <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+                                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                                        <User className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
+                                        Thông tin khách hàng
+                                    </h2>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div className="sm:col-span-2">
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Họ và tên người đặt</label>
-                                        <input
-                                            type="text"
-                                            defaultValue={cartInfo?.customer.fullName}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                            disabled
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                        <input
-                                            type="email"
-                                            defaultValue={cartInfo?.customer.email}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                            disabled
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
-                                        <input
-                                            type="tel"
-                                            defaultValue={cartInfo?.customer.phone}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                            disabled
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* 3. Thông tin đơn hàng */}
-                            <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
-                                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                                    <Package className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
-                                    Thông tin giao hàng
-                                </h2>
-                                <div className="space-y-4">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Tên người nhận</label>
+                                        <div className="sm:col-span-2">
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Họ và tên người đặt</label>
                                             <input
                                                 type="text"
-                                                {...register("receiverName")}
+                                                defaultValue={cartInfo?.customer.fullName}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                                placeholder="Nhập tên người nhận hàng"
+                                                disabled
                                             />
-                                            {errors.receiverName && (
-                                                <p className="text-red-500">{errors.receiverName.message}</p>
-                                            )}
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại người nhận</label>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                            <input
+                                                type="email"
+                                                defaultValue={cartInfo?.customer.email}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                                disabled
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
                                             <input
                                                 type="tel"
-                                                {...register("receiverPhone")}
+                                                defaultValue={cartInfo?.customer.phone}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                                placeholder="0xxx xxx xxx"
-                                            />
-                                            {errors.receiverPhone && (
-                                                <p className="text-red-500">{errors.receiverPhone.message}</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Địa chỉ cụ thể</label>
-                                            <input
-                                                type="text"
-                                                defaultValue={cartInfo?.customer.address}
-                                                {...register("address")}
-                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                                placeholder="Số nhà, tên đường, phường/xã, quận/huyện"
-                                            />
-                                            {errors.address && (
-                                                <p className="text-red-500">{errors.address.message}</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Ghi chú</label>
-                                            <input
-                                                type="text"
-                                                {...register("note")}
-                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                                placeholder="Ghi chú cho đơn hàng (nếu có)"
+                                                disabled
                                             />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            {/* 4. Phương thức thanh toán */}
-                            <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
-                                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                                    <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
-                                    Phương thức thanh toán
-                                </h2>
 
-                                <Controller
-                                    name="paymentMethod"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <div className="space-y-3 sm:space-y-4">
-                                            <div
-                                                className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${field.value === "cod"
-                                                    ? "border-blue-600 bg-blue-50 shadow-sm"
-                                                    : "border-gray-200 hover:border-gray-300"
-                                                    }`}
-                                                onClick={() => field.onChange("cod")}
-                                            >
-                                                <div className="flex items-center space-x-3">
-                                                    <input
-                                                        type="radio"
-                                                        value="cod"
-                                                        checked={field.value === "cod"}
-                                                        onChange={() => field.onChange("cod")}
-                                                        className="text-blue-600 focus:ring-blue-500"
-                                                    />
-                                                    <Truck className="w-5 h-5 text-gray-400" />
-                                                    <span className="font-medium text-sm sm:text-base">
-                                                        Thanh toán khi nhận hàng (COD)
-                                                    </span>
-                                                </div>
+                                {/* 3. Thông tin đơn hàng */}
+                                <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+                                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                                        <Package className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
+                                        Thông tin giao hàng
+                                    </h2>
+                                    <div className="space-y-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">Tên người nhận</label>
+                                                <input
+                                                    type="text"
+                                                    {...register("receiverName")}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                                    placeholder="Nhập tên người nhận hàng"
+                                                />
+                                                {errors.receiverName && (
+                                                    <p className="text-red-500">{errors.receiverName.message}</p>
+                                                )}
                                             </div>
-                                            <div
-                                                className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${field.value === "vnpay"
-                                                    ? "border-blue-600 bg-blue-50 shadow-sm"
-                                                    : "border-gray-200 hover:border-gray-300"
-                                                    }`}
-                                                onClick={() => field.onChange("vnpay")}
-                                            >
-                                                <div className="flex items-center space-x-3">
-                                                    <input
-                                                        type="radio"
-                                                        value="vnpay"
-                                                        checked={field.value === "vnpay"}
-                                                        onChange={() => field.onChange("vnpay")}
-                                                        className="text-blue-600 focus:ring-blue-500"
-                                                    />
-                                                    <CreditCard className="w-5 h-5 text-gray-400" />
-                                                    <span className="font-medium text-sm sm:text-base">
-                                                        Thanh toán bằng VNPay
-                                                    </span>
-                                                </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại người nhận</label>
+                                                <input
+                                                    type="tel"
+                                                    {...register("receiverPhone")}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                                    placeholder="0xxx xxx xxx"
+                                                />
+                                                {errors.receiverPhone && (
+                                                    <p className="text-red-500">{errors.receiverPhone.message}</p>
+                                                )}
                                             </div>
                                         </div>
-                                    )}
-                                />
+                                        <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">Địa chỉ cụ thể</label>
+                                                <input
+                                                    type="text"
+                                                    defaultValue={cartInfo?.customer.address}
+                                                    {...register("address")}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                                    placeholder="Số nhà, tên đường, phường/xã, quận/huyện"
+                                                />
+                                                {errors.address && (
+                                                    <p className="text-red-500">{errors.address.message}</p>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">Ghi chú</label>
+                                                <input
+                                                    type="text"
+                                                    {...register("note")}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                                    placeholder="Ghi chú cho đơn hàng (nếu có)"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* 4. Phương thức thanh toán */}
+                                <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+                                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                                        <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
+                                        Phương thức thanh toán
+                                    </h2>
 
-                            </div>
-                        </form>
+                                    <Controller
+                                        name="paymentMethod"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <div className="space-y-3 sm:space-y-4">
+                                                <div
+                                                    className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${field.value === "cod"
+                                                        ? "border-blue-600 bg-blue-50 shadow-sm"
+                                                        : "border-gray-200 hover:border-gray-300"
+                                                        }`}
+                                                    onClick={() => field.onChange("cod")}
+                                                >
+                                                    <div className="flex items-center space-x-3">
+                                                        <input
+                                                            type="radio"
+                                                            value="cod"
+                                                            checked={field.value === "cod"}
+                                                            onChange={() => field.onChange("cod")}
+                                                            className="text-blue-600 focus:ring-blue-500"
+                                                        />
+                                                        <Truck className="w-5 h-5 text-gray-400" />
+                                                        <span className="font-medium text-sm sm:text-base">
+                                                            Nhận tại cửa hàng (COD)
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${field.value === "vnpay"
+                                                        ? "border-blue-600 bg-blue-50 shadow-sm"
+                                                        : "border-gray-200 hover:border-gray-300"
+                                                        }`}
+                                                    onClick={() => field.onChange("vnpay")}
+                                                >
+                                                    <div className="flex items-center space-x-3">
+                                                        <input
+                                                            type="radio"
+                                                            value="vnpay"
+                                                            checked={field.value === "vnpay"}
+                                                            onChange={() => field.onChange("vnpay")}
+                                                            className="text-blue-600 focus:ring-blue-500"
+                                                        />
+                                                        <CreditCard className="w-5 h-5 text-gray-400" />
+                                                        <span className="font-medium text-sm sm:text-base">
+                                                            Thanh toán bằng VNPay
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    />
+
+                                </div>
+                            </form>
+                        )}
                     </div>
 
                     {/* Right Sidebar - Order Summary */}

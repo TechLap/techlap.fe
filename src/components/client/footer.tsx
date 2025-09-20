@@ -31,7 +31,7 @@ const Footer = () => {
             <div className="flex items-center space-x-2 mb-4">
               <div className="bg-red-600 text-white p-2 rounded-lg font-bold text-xl">LT</div>
               <div>
-                <h3 className="text-xl font-bold">LapTech</h3>
+                <h3 className="text-xl font-bold">TechLap</h3>
                 <p className="text-sm opacity-80">Thế giới LapTop dành cho bạn</p>
               </div>
             </div>

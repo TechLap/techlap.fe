@@ -200,7 +200,7 @@ const RegisterPage = () => {
                         onClick={handleShowPassword}
                         className="cursor-pointer"
                         type="button"
-                        tabIndex={0}
+                        tabIndex={-1}
                       >
                         {isVisiblePassword ? (
                           <svg

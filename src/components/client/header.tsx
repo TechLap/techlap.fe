@@ -127,37 +127,17 @@ const Header = () => {
                   aria-orientation="vertical"
                   aria-labelledby="hs-dropdown-with-header"
                 >
-                  <div className="py-2 px-3 border-b border-gray-200 bg-green-50">
+                  <div className="py-2 px-3 border-b border-gray-200 bg-blue-50">
                     <p className="text-xs text-gray-500">Đăng nhập với tư cách</p>
                     <p className="text-xs font-medium text-gray-800">
                       {customerInfo?.fullName || 'Người dùng'}
                     </p>
                   </div>
                   <div className="p-1 space-y-0.5">
+                    
                     <a
                       className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
-                      href="#"
-                    >
-                      <svg
-                        className="shrink-0 size-3.5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                      </svg>
-                      Thư mới
-                    </a>
-                    <a
-                      className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
-                      href="#"
+                      href="/history-order"
                     >
                       <svg
                         className="shrink-0 size-3.5"

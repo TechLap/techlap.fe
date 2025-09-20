@@ -153,6 +153,7 @@ const LoginInternalUserPage = () => {
                     <a
                       className="inline-flex items-center gap-x-1 text-base text-red-500 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
                       href="../examples/html/recover-account.html"
+                      tabIndex={-1}
                     >
                       Quên mật khẩu?
                     </a>
