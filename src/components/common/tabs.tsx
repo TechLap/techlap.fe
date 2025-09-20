@@ -51,7 +51,7 @@ const TabsItem = ({
     <button
       type="button"
       className={cn(
-        "py-2 px-3 text-nowrap inline-flex items-center justify-center gap-x-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 focus:outline-hidden focus:text-gray-700 font-medium rounded-lg hover:hover:text-green-600 disabled:opacity-50 disabled:pointer-events-none",
+        "py-2 px-3 text-nowrap inline-flex items-center justify-center gap-x-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 focus:outline-hidden focus:text-gray-700 font-medium rounded-lg hover:hover:text-red-400 disabled:opacity-50 disabled:pointer-events-none",
         "hs-tab-active:bg-white hs-tab-active:text-gray-700",
         active && "active",
         className

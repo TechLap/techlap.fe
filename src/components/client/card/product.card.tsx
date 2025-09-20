@@ -5,6 +5,8 @@ import { useState } from "react";
 import { apiAddToCart } from "../../../config/api";
 import { setCustomerAddToCart } from "../../../redux/slice/customer.slide";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { toast } from "react-toastify";
+import CustomToast from "../../common/toast.message";
 
 interface ProductCardProps {
   id?: string;
@@ -53,11 +55,14 @@ const ProductCard = ({
       setLoading(true);
       const res = await apiAddToCart({ productId: id as string, quantity: 1, update: false });
       const tolalCartAfter = res?.data?.data?.sum;
-      if (res.data.statusCode === 201 && tolalCartAfter !== undefined && tolalCartAfter > totalCart!) {
-        dispatch(setCustomerAddToCart({ quantity: 1 }));
+      if (res.data.statusCode === 201) {
+        toast.success(<CustomToast message='Thêm vào giỏ hàng thành công' className='text-green-600' />)
+        if (tolalCartAfter !== undefined && tolalCartAfter > totalCart!) {
+          dispatch(setCustomerAddToCart({ quantity: 1 }));
+        }
       }
     } catch (err) {
-
+      toast.success(<CustomToast message='Thêm vào giỏ hàng không thành công' className='text-red-600' />)
     } finally {
       setLoading(false);
     }
