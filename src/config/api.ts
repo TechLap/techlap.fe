@@ -127,6 +127,14 @@ export const apiFetchProductById = ( id: string ) => {
     return axiosClient.get<IBackendResponse<IProduct>>(`/products/${id}`)
 }
 
+export const apiFetchLatestProduct = () => {
+    return axiosClient.get<IBackendResponse<IProduct[]>>(`/products/latest`)
+}
+
+export const apiFetchBestSellerProduct = () => {
+    return axiosClient.get<IBackendResponse<IProduct[]>>(`/products/best-sellers`)
+}
+
 /* Module Brand */
 export const apiFetchAllBrand = ( query: string ) => {
     return axiosClient.get<IBackendResponse<IModelPagination<IBrand>>>(`/brands?${query}`)

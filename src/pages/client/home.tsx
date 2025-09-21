@@ -11,6 +11,7 @@ const HomePage = () => {
       <ProductSection
         title="Sản phẩm nổi bật"
         subtitle="Các sản phẩm được khách hàng yêu thích nhất"
+        type="featured"
       />
       <div className="my-10">
         <CategoryShowcase />
@@ -18,11 +19,13 @@ const HomePage = () => {
       <ProductSection
         title="Sản phẩm mới nhất"
         subtitle="Các sản phẩm mới về kho"
+        type="latest"
       />
       <FeaturesSection />
       <ProductSection
         title="Sản phẩm bán chạy"
         subtitle="Các sản phẩm được khách hàng mua nhiều nhất"
+        type="bestseller"
       />
       <NewsletterSection />
     </>
