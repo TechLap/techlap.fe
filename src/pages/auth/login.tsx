@@ -209,7 +209,7 @@ const LoginPage = () => {
                     </label>
                     <a
                       className="inline-flex items-center gap-x-1 text-base text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
-                      href="../examples/html/recover-account.html"
+                      href="/forgot-password"
                       tabIndex={-1}
                     >
                       Quên mật khẩu?

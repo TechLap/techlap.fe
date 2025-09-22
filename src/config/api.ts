@@ -115,6 +115,25 @@ export const apiChangePasswordForCustomer = (data : {oldPassword: string, newPas
     return axiosClient.post<IBackendResponse<string>>(`/customers/me/change-password`, data)
 }
 
+export const apiForgotPasswordForCustomer = (email: string) => {
+  const formData = new FormData();
+  formData.append("email", email);
+
+  return axiosClient.post<IBackendResponse<string>>(
+    "/customer/reset-password",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+};
+
+export const apiResetPasswordForCustomer = (data: { token: string; newPassword: string; reNewPassword: string }) => {
+    return axiosClient.post<IBackendResponse<string>>(`/cusomter/change-password`, data)
+}
+
 /* Module Role */
 export const apiFetchAllRole = ( query: string ) => {
     return axiosClient.get<IBackendResponse<IModelPagination<IRole>>>(`/roles?${query}`)

@@ -37,6 +37,8 @@ import ChangePasswordPageForCustomer from "./pages/client/password/change-passwo
 import ChangePasswordPageForUser from "./pages/admin/password/change-password";
 import ForgotPasswordPageForUser from "./pages/admin/password/forgot-password";
 import ResetPasswordPageForUser from "./pages/admin/password/reset-password";
+import ForgotPasswordPageForCustomer from "./pages/client/password/forgot-password";
+import ResetPasswordPageForCustomer from "./pages/client/password/reset-password";
 
 declare global {
   interface Window {
@@ -92,8 +94,16 @@ export const routes = [
       {
         path: "change-password",
         element: <ChangePasswordPageForCustomer />,
-      }
+      },
     ],
+  },
+  {
+    path: "forgot-password",
+    element: <ForgotPasswordPageForCustomer />,
+  },
+  {
+    path: "reset-password",
+    element: <ResetPasswordPageForCustomer />,
   },
   {
     path: "/login",
