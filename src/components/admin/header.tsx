@@ -86,7 +86,7 @@ const Header = () => {
                 <div className="p-1 space-y-0.5">
                   <a
                     className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
-                    href="#"
+                    href="/admin/change-password"
                   >
                     <svg
                       className="shrink-0 size-3.5"
@@ -100,10 +100,12 @@ const Header = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      <path d="M12 15v2" />
+                      <path d="M10 19h4" />
                     </svg>
-                    Thư mới
+                    Đổi mật khẩu
                   </a>
                   <a
                     className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-xs text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"

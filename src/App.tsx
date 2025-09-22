@@ -33,6 +33,8 @@ import { fetchUserInfo } from "./redux/slice/account.slice";
 import "./styles/datepicker-xs.css";
 import { fetchCustomerInfo } from "./redux/slice/customer.slide";
 import { HistoryOrder } from "./pages/client/history-order";
+import ChangePasswordPageForCustomer from "./pages/client/password/change-password";
+import ChangePasswordPageForUser from "./pages/admin/password/change-password";
 
 declare global {
   interface Window {
@@ -84,6 +86,10 @@ export const routes = [
         path: "history-order",
         element: <HistoryOrder />,
         breadcrumb: "Lịch sử đơn hàng",
+      },
+      {
+        path: "change-password",
+        element: <ChangePasswordPageForCustomer />,
       }
     ],
   },
@@ -156,6 +162,10 @@ export const routes = [
         element: <RolePage />,
         breadcrumb: "Vai trò",
       },
+      {
+        path: "change-password",
+        element: <ChangePasswordPageForUser />,
+      }
     ],
   },
   {

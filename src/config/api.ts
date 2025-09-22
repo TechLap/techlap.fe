@@ -55,6 +55,11 @@ export const apiDeleteUser = ( id: string ) => {
     return axiosClient.delete<IBackendResponse<IUser>>(`/users/${id}`)
 }
 
+export const apiChangePasswordForUser = (data : {oldPassword: string, newPassword: string, reNewPassword: string}) => {
+    return axiosClient.post<IBackendResponse<string>>(`/users/me/change-password`, data)
+}
+
+
 /* Module Customer */
 export const apiFetchAllCustomer = ( query: string ) => {
     return axiosClient.get<IBackendResponse<IModelPagination<ICustomer>>>(`/customers?${query}`)
@@ -86,6 +91,10 @@ export const apiFetchCart = () => {
 
 export const apiRemoveCartDetail = ( data : {cartDetailId: number, customerId: number }) => {
     return axiosClient.delete<IBackendResponse<ICart>>(`/customers/remove-cart-detail`, {data})
+}
+
+export const apiChangePasswordForCustomer = (data : {oldPassword: string, newPassword: string, reNewPassword: string}) => {
+    return axiosClient.post<IBackendResponse<string>>(`/customers/me/change-password`, data)
 }
 
 /* Module Role */
