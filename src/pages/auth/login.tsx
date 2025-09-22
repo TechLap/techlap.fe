@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { setCustomerLoginInfo } from "../../redux/slice/customer.slide";
+import { forbiddenWords, sanitizeInput } from "../../components/common/forbiddenWord";
 
 
 const LoginPage = () => {
@@ -15,8 +16,18 @@ const LoginPage = () => {
     .object({
       username: yup
         .string()
+        .transform((value) => sanitizeInput(value))
         .email("Email không hợp lệ")
-        .required("Email không được để trống"),
+        .required("Email không được để trống")
+        .test(
+          "forbidden-words",
+          "Tên đăng nhập chứa từ khóa không hợp lệ",
+          (value) => {
+            if (!value) return false;
+            const lowerValue = value.toLowerCase();
+            return !forbiddenWords.some((word) => lowerValue.includes(word));
+          }
+        ),
 
       password: yup
         .string()

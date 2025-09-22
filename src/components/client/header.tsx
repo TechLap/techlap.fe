@@ -1,11 +1,10 @@
 import { Laptop, ShoppingCart, User } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { apiLogout, apiLogoutForCustomer } from "../../config/api";
+import { apiLogoutForCustomer } from "../../config/api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import CustomToast from "../common/toast.message";
 import { setCustomerLogoutAction } from "../../redux/slice/customer.slide";
-import { is } from "date-fns/locale";
+import CustomToast from "../common/toast.message";
 
 const Header = () => {
   const isAuthenticated = useAppSelector(

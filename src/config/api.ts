@@ -59,6 +59,24 @@ export const apiChangePasswordForUser = (data : {oldPassword: string, newPasswor
     return axiosClient.post<IBackendResponse<string>>(`/users/me/change-password`, data)
 }
 
+export const apiForgotPasswordForUser = (email: string) => {
+  const formData = new FormData();
+  formData.append("email", email);
+
+  return axiosClient.post<IBackendResponse<string>>(
+    "/user/reset-password",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+};
+
+export const apiResetPasswordForUser = (data: { token: string; newPassword: string; reNewPassword: string }) => {
+    return axiosClient.post<IBackendResponse<string>>(`/user/change-password`, data)
+}
 
 /* Module Customer */
 export const apiFetchAllCustomer = ( query: string ) => {

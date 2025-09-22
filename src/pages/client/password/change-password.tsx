@@ -45,7 +45,6 @@ const ChangePasswordPageForCustomer = () => {
         const response = await apiChangePasswordForCustomer(
             values as { oldPassword: string, newPassword: string, reNewPassword: string }
         );
-        console.log(values);
         if (response.data) {
             toast.success(
                 <CustomToast
@@ -364,7 +363,7 @@ const ChangePasswordPageForCustomer = () => {
                                     type="submit"
                                     className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-base font-medium rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 focus:outline-hidden focus:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
                                 >
-                                    Đăng ký
+                                    Đổi mật khẩu
                                 </button>
                             </div>
                         </form>

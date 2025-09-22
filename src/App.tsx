@@ -35,6 +35,8 @@ import { fetchCustomerInfo } from "./redux/slice/customer.slide";
 import { HistoryOrder } from "./pages/client/history-order";
 import ChangePasswordPageForCustomer from "./pages/client/password/change-password";
 import ChangePasswordPageForUser from "./pages/admin/password/change-password";
+import ForgotPasswordPageForUser from "./pages/admin/password/forgot-password";
+import ResetPasswordPageForUser from "./pages/admin/password/reset-password";
 
 declare global {
   interface Window {
@@ -172,6 +174,14 @@ export const routes = [
     path: "admin/login",
     element: <LoginInternalUserPage />,
   },
+  {
+    path: "admin/forgot-password",
+    element: <ForgotPasswordPageForUser />,
+  },
+  {
+    path: "admin/reset-password",
+    element: <ResetPasswordPageForUser />,
+  }
 ];
 
 function App() {
