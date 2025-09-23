@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiGetCustomer } from "../../config/api";
-import { set } from "date-fns";
 
 export const fetchCustomerInfo = createAsyncThunk('auth/fetchCustomerInfo', async () => {
     const response = await apiGetCustomer();

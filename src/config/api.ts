@@ -1,5 +1,5 @@
 import axiosClient from "./axios-customize"
-import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
+import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IOrder, IPermission, IPermissionFilter, IProduct, IProductFilter, IRequestCreateOrder, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
 
 /* Module Auth */
 export const apiLoginForCustomer = (username: string, password: string) => {
@@ -55,6 +55,29 @@ export const apiDeleteUser = ( id: string ) => {
     return axiosClient.delete<IBackendResponse<IUser>>(`/users/${id}`)
 }
 
+export const apiChangePasswordForUser = (data : {oldPassword: string, newPassword: string, reNewPassword: string}) => {
+    return axiosClient.post<IBackendResponse<string>>(`/users/me/change-password`, data)
+}
+
+export const apiForgotPasswordForUser = (email: string) => {
+  const formData = new FormData();
+  formData.append("email", email);
+
+  return axiosClient.post<IBackendResponse<string>>(
+    "/user/reset-password",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+};
+
+export const apiResetPasswordForUser = (data: { token: string; newPassword: string; reNewPassword: string }) => {
+    return axiosClient.post<IBackendResponse<string>>(`/user/change-password`, data)
+}
+
 /* Module Customer */
 export const apiFetchAllCustomer = ( query: string ) => {
     return axiosClient.get<IBackendResponse<IModelPagination<ICustomer>>>(`/customers?${query}`)
@@ -86,6 +109,33 @@ export const apiFetchCart = () => {
 
 export const apiRemoveCartDetail = ( data : {cartDetailId: number, customerId: number }) => {
     return axiosClient.delete<IBackendResponse<ICart>>(`/customers/remove-cart-detail`, {data})
+}
+
+export const apiChangePasswordForCustomer = (data : {oldPassword: string, newPassword: string, reNewPassword: string}) => {
+    return axiosClient.post<IBackendResponse<string>>(`/customers/me/change-password`, data)
+}
+
+export const apiForgotPasswordForCustomer = (email: string) => {
+  const formData = new FormData();
+  formData.append("email", email);
+
+  return axiosClient.post<IBackendResponse<string>>(
+    "/customer/reset-password",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+};
+
+export const apiResetPasswordForCustomer = (data: { token: string; newPassword: string; reNewPassword: string }) => {
+    return axiosClient.post<IBackendResponse<string>>(`/cusomter/change-password`, data)
+}
+
+export const apiFetchOrderHistory = ( query: string ) => {
+    return axiosClient.get<IBackendResponse<IModelPagination<IOrder>>>(`/customers/history-orders?${query}`)
 }
 
 /* Module Role */
@@ -125,6 +175,14 @@ export const apiDeleteProduct = ( id: string ) => {
 
 export const apiFetchProductById = ( id: string ) => {
     return axiosClient.get<IBackendResponse<IProduct>>(`/products/${id}`)
+}
+
+export const apiFetchLatestProduct = () => {
+    return axiosClient.get<IBackendResponse<IProduct[]>>(`/products/latest`)
+}
+
+export const apiFetchBestSellerProduct = () => {
+    return axiosClient.get<IBackendResponse<IProduct[]>>(`/products/best-sellers`)
 }
 
 /* Module Brand */
@@ -243,3 +301,27 @@ export const apiUploadSingleFile = ( file: File, folderType: string ) => {
         },
     })
 }
+
+export const apiCreateOrder = ( order: IRequestCreateOrder ) => {
+    return axiosClient.post<IBackendResponse<{paymentMethod: string, paymentUrl: string, orderCode: string}>>(`/orders`, {...order})
+}
+
+export const apiGetByCode = ( orderCode: string ) => {
+    return axiosClient.get<IBackendResponse<IOrder>>(`/orders/code/${orderCode}`)
+}
+
+// VNPay - Verify return params (no IPN flow)
+export const apiVerifyVnpayReturn = ( params: Record<string, string> ) => {
+    // BE trả plain text và dùng HTTP status (200/400). validateStatus=true để không ném lỗi.
+    return axiosClient.post<string>(
+        `/payment/vnpay-verify`,
+        { ...params },
+        { validateStatus: () => true }
+    )
+}
+
+/* Module Order */
+export const apiFetchAllOrder = ( query: string ) => {
+    return axiosClient.get<IBackendResponse<IModelPagination<IOrder>>>(`/orders?${query}`)
+}
+

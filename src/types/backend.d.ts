@@ -280,3 +280,55 @@ export interface ICart {
       };
     }[];
 }
+
+export interface IOrder {
+    id: number;
+    orderCode: string;
+    totalPrice: number;
+    receiverName: string;
+    receiverPhone: string;
+    receiverAddress: string;
+    note?: string;
+    paymentMethod: string;
+    paymentStatus: string;
+    paymentUrl?: string;
+    status: string;
+    customer?: {
+        id: number;
+        fullName: string;
+        email: string;
+        phone: string;
+        address: string;
+    }
+    orderDetails: {
+        id: number;
+        quantity: number;
+        price: number;
+        product: {
+            id: number;
+            name: string;
+            image: string;
+            price: number;
+        }
+    }[];
+    createdAt?: string;
+    updatedAt?: string;
+    createdBy?: string;
+    updatedBy?: string;
+}
+
+export interface IRequestCreateOrder {
+    receiverName: string;
+    receiverPhone: string;
+    receiverAddress: string;
+    note?: string;
+}
+
+export interface IResOrderDTO {
+    id: number;
+    receiverName: string;
+    receiverPhone: string;
+    receiverAddress: string;
+    note?: string;
+    paymentUrl?: string;
+}
