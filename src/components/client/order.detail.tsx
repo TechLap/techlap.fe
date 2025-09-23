@@ -64,7 +64,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpen, onCl
                                         {order.orderDetails.map((item) => (
                                             <div key={item.id} className="flex items-center space-x-4 p-3 bg-white rounded-lg border">
                                                 <img
-                                                    src={item.product.image || ""}
+                                                    src={`${process.env.REACT_APP_URL_STORAGE_FILE}/${item.product.image}`}
                                                     alt={item.product.name}
                                                     className="w-16 h-16 object-cover rounded-lg"
                                                 />
@@ -113,21 +113,21 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpen, onCl
                                             <User className="w-4 h-4 text-gray-400" />
                                             <div>
                                                 <p className="text-xs text-gray-500">Họ và tên</p>
-                                                <p className="text-sm font-medium">{order.customer.fullName}</p>
+                                                <p className="text-sm font-medium">{order?.customer?.fullName}</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center space-x-3">
                                             <Mail className="w-4 h-4 text-gray-400" />
                                             <div>
                                                 <p className="text-xs text-gray-500">Email</p>
-                                                <p className="text-sm font-medium">{order.customer.email}</p>
+                                                <p className="text-sm font-medium">{order?.customer?.email}</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center space-x-3">
                                             <Phone className="w-4 h-4 text-gray-400" />
                                             <div>
                                                 <p className="text-xs text-gray-500">Số điện thoại</p>
-                                                <p className="text-sm font-medium">{order.customer.phone}</p>
+                                                <p className="text-sm font-medium">{order?.customer?.phone}</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center space-x-3">
@@ -135,7 +135,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpen, onCl
                                             <div>
                                                 <p className="text-xs text-gray-500">Thanh toán</p>
                                                 <p className="text-sm font-medium">
-                                                    {order.paymentMethod}
+                                                    {order?.paymentMethod}
                                                 </p>
                                             </div>
                                         </div>
@@ -153,17 +153,17 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpen, onCl
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             <div>
                                                 <p className="text-xs text-gray-500 mb-1">Người nhận</p>
-                                                <p className="text-sm font-medium">{order.receiverName}</p>
+                                                <p className="text-sm font-medium">{order?.receiverName}</p>
                                             </div>
                                             <div>
                                                 <p className="text-xs text-gray-500 mb-1">Số điện thoại</p>
-                                                <p className="text-sm font-medium">{order.receiverPhone}</p>
+                                                <p className="text-sm font-medium">{order?.receiverPhone}</p>
                                             </div>
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-500 mb-1">Địa chỉ giao hàng</p>
                                             <p className="text-sm font-medium">
-                                                {order.receiverAddress}
+                                                {order?.receiverAddress}
                                             </p>
                                         </div>
                                     </div>
@@ -194,7 +194,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpen, onCl
                                                 <span>Tổng cộng</span>
                                                 <span className="text-blue-600">
                                                     <NumericFormat
-                                                        value={order.totalPrice}
+                                                        value={order?.totalPrice}
                                                         displayType="text"
                                                         thousandSeparator={true}
                                                         suffix={"đ"}

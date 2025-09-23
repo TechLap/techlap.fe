@@ -26,7 +26,7 @@ export default function ProductItem({ item, customerId, updateQuantity, removeIt
         <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 p-3 sm:p-4 border border-gray-100 rounded-lg hover:border-blue-200 transition-colors">
             {/* Ảnh sản phẩm */}
             <img
-                src={item.image}
+                src={`${process.env.REACT_APP_URL_STORAGE_FILE}/${item.image}`}
                 alt={item.name}
                 className="w-full sm:w-20 h-48 sm:h-20 object-cover rounded-lg"
             />
