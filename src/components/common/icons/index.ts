@@ -16,3 +16,8 @@ export { default as Edit } from './edit';
 export { default as Delete } from './delete';
 export { default as View } from './view';
 export { default as Phone } from './phone';
+export { default as Mail } from './mail';
+export { default as MapPin } from './map-pin';
+export { default as Clock } from './clock';
+export { default as CheckCircle } from './check-circle';
+export { default as XCircle } from './x-circle';

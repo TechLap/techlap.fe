@@ -27,6 +27,7 @@ import ContactPage from "./pages/client/contact";
 import HomePage from "./pages/client/home";
 import ProductDetailPage from "./pages/client/product/detail/product.detail";
 import ProductShowPage from "./pages/client/product/show";
+import WarrantyPage from "./pages/client/warranty";
 import ErrorPage from "./pages/error-page";
 import { useAppDispatch } from "./redux/hooks";
 import { fetchUserInfo } from "./redux/slice/account.slice";
@@ -67,6 +68,11 @@ export const routes = [
         path: "about",
         element: <AboutPage />,
         breadcrumb: "Giới thiệu",
+      },
+      {
+        path: "warranty",
+        element: <WarrantyPage />,
+        breadcrumb: "Bảo hành",
       },
       {
         path: "contact",
