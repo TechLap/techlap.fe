@@ -6,10 +6,11 @@ import { NumericFormat } from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
 import * as yup from "yup";
 import ProductItem from '../../components/client/card/product.item';
-import { apiAddToCart, apiFetchCart, apiRemoveCartDetail } from '../../config/api';
+import { apiAddToCart, apiCreateOrder, apiFetchCart, apiRemoveCartDetail } from '../../config/api';
 import { useAppDispatch } from '../../redux/hooks';
 import { setCustomerRemoveFromCart } from '../../redux/slice/customer.slide';
-import { ICart } from '../../types/backend';
+import { ICart, IResOrderDTO } from '../../types/backend';
+import { toast } from 'react-toastify';
 
 interface CartItem {
     id: number;
@@ -72,9 +73,7 @@ function CartPage() {
         },
     });
     // Submit form
-    const handleSubmitForm = handleSubmit(async (valuesForm: CartFormValues) => {
-        console.log("Form Data:", valuesForm);
-    })
+    
     // Lấy thông tin giỏ hàng từ API
     const getCart = async () => {
         try {
@@ -151,6 +150,28 @@ function CartPage() {
     React.useEffect(() => {
         setTotalPrice(subtotal - discount + shipping)
     }, [subtotal, discount]);
+
+    // Logic submit order
+    const handleSubmitForm = handleSubmit(async (valuesForm: CartFormValues) => {
+        const payload = {
+            receiverName: valuesForm.receiverName,
+            receiverPhone: valuesForm.receiverPhone,
+            receiverAddress: valuesForm.address,
+            note: valuesForm.note ?? "",
+            paymentMethod: valuesForm.paymentMethod as "vnpay" | "cod",
+        }
+        const response = await apiCreateOrder(payload);
+        const { paymentMethod, paymentUrl, orderCode } = response.data.data as { paymentMethod: string, paymentUrl: string, orderCode: string };
+        if (paymentMethod === "vnpay") {
+            console.log("paymentUrl", paymentUrl);
+            window.location.href = paymentUrl;
+            return;
+        } else {
+            toast.success("Đặt hàng thành công!");
+            navigate(`/order/${orderCode}`);
+        }
+    });
+
 
     return (
         <div className="min-h-screen bg-gray-50">

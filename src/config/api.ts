@@ -1,5 +1,5 @@
 import axiosClient from "./axios-customize"
-import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
+import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IOrder, IPermission, IPermissionFilter, IProduct, IProductFilter, IRequestCreateOrder, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
 
 /* Module Auth */
 export const apiLoginForCustomer = (username: string, password: string) => {
@@ -243,3 +243,27 @@ export const apiUploadSingleFile = ( file: File, folderType: string ) => {
         },
     })
 }
+
+export const apiCreateOrder = ( order: IRequestCreateOrder ) => {
+    return axiosClient.post<IBackendResponse<{paymentMethod: string, paymentUrl: string, orderCode: string}>>(`/orders`, {...order})
+}
+
+export const apiGetByCode = ( orderCode: string ) => {
+    return axiosClient.get<IBackendResponse<IOrder>>(`/orders/code/${orderCode}`)
+}
+
+// VNPay - Verify return params (no IPN flow)
+export const apiVerifyVnpayReturn = ( params: Record<string, string> ) => {
+    // BE trả plain text và dùng HTTP status (200/400). validateStatus=true để không ném lỗi.
+    return axiosClient.post<string>(
+        `/payment/vnpay-verify`,
+        { ...params },
+        { validateStatus: () => true }
+    )
+}
+
+/* Module Order */
+export const apiFetchAllOrder = ( query: string ) => {
+    return axiosClient.get<IBackendResponse<IModelPagination<IOrder>>>(`/orders?${query}`)
+}
+

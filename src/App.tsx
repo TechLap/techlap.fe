@@ -33,6 +33,7 @@ import { fetchUserInfo } from "./redux/slice/account.slice";
 import "./styles/datepicker-xs.css";
 import { fetchCustomerInfo } from "./redux/slice/customer.slide";
 import { HistoryOrder } from "./pages/client/history-order";
+import VnpayReturnPage from "./pages/client/payment/vnpay.return";
 
 declare global {
   interface Window {
@@ -161,6 +162,10 @@ export const routes = [
   {
     path: "admin/login",
     element: <LoginInternalUserPage />,
+  },
+  {
+    path: "/payment/vnpay-return",
+    element: <VnpayReturnPage />,
   },
 ];
 
