@@ -95,6 +95,7 @@ export const routes = [
         path: "change-password",
         element: <ChangePasswordPageForCustomer />,
       },
+
     ],
   },
   {

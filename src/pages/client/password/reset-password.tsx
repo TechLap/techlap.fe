@@ -52,7 +52,7 @@ const ResetPasswordPageForCustomer = () => {
                     className="text-green-600"
                 />
             );
-            navigate("/admin/login");
+            navigate("/login");
         } else {
             toast.error(
                 <CustomToast

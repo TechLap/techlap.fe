@@ -1,5 +1,5 @@
 import axiosClient from "./axios-customize"
-import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
+import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IOrder, IPermission, IPermissionFilter, IProduct, IProductFilter, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
 
 /* Module Auth */
 export const apiLoginForCustomer = (username: string, password: string) => {
@@ -132,6 +132,10 @@ export const apiForgotPasswordForCustomer = (email: string) => {
 
 export const apiResetPasswordForCustomer = (data: { token: string; newPassword: string; reNewPassword: string }) => {
     return axiosClient.post<IBackendResponse<string>>(`/cusomter/change-password`, data)
+}
+
+export const apiFetchOrderHistory = ( query: string ) => {
+    return axiosClient.get<IBackendResponse<IModelPagination<IOrder>>>(`/customers/history-orders?${query}`)
 }
 
 /* Module Role */

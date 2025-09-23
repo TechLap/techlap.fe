@@ -280,3 +280,58 @@ export interface ICart {
       };
     }[];
 }
+
+export interface IOrder {
+  id: number;
+  receiverName: string;
+  receiverAddress: string;
+  receiverPhone: string;
+  note: string;
+  status: string;
+  paymentMethod: string;
+  createdAt: string;
+  updatedAt: string | null;
+  createdBy: string;
+  updatedBy: string | null;
+  totalPrice: string;
+  customer: {
+    id: number;
+    fullName: string;
+    email: string;
+    phone: string;
+    address: string;
+    createdAt: string;
+    updatedAt: string;
+    createdBy: string;
+    updatedBy: string;
+    totalSpending: number | null;
+    totalOrders: number | null;
+    roles: string[] | null;
+    orders: {
+      id: number;
+      orderNumber: string | null;
+    }[];
+    cart: {
+      id: number;
+    };
+  };
+  orderDetails: {
+    id: number;
+    quantity: number;
+    price: number;
+    product: {
+      id: number;
+      name: string;
+      price: number;
+      discount: number;
+      stock: number;
+      description: string;
+      image: string | null;
+      category: {
+        id: number;
+        name: string;
+      };
+    };
+  }[];
+};
+
