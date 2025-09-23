@@ -15,3 +15,4 @@ export { default as Filter } from './filter';
 export { default as Edit } from './edit';
 export { default as Delete } from './delete';
 export { default as View } from './view';
+export { default as Phone } from './phone';

@@ -282,56 +282,53 @@ export interface ICart {
 }
 
 export interface IOrder {
-  id: number;
-  receiverName: string;
-  receiverAddress: string;
-  receiverPhone: string;
-  note: string;
-  status: string;
-  paymentMethod: string;
-  createdAt: string;
-  updatedAt: string | null;
-  createdBy: string;
-  updatedBy: string | null;
-  totalPrice: string;
-  customer: {
     id: number;
-    fullName: string;
-    email: string;
-    phone: string;
-    address: string;
-    createdAt: string;
-    updatedAt: string;
-    createdBy: string;
-    updatedBy: string;
-    totalSpending: number | null;
-    totalOrders: number | null;
-    roles: string[] | null;
-    orders: {
-      id: number;
-      orderNumber: string | null;
-    }[];
-    cart: {
-      id: number;
-    };
-  };
-  orderDetails: {
-    id: number;
-    quantity: number;
-    price: number;
-    product: {
-      id: number;
-      name: string;
-      price: number;
-      discount: number;
-      stock: number;
-      description: string;
-      image: string | null;
-      category: {
+    orderCode: string;
+    totalPrice: number;
+    receiverName: string;
+    receiverPhone: string;
+    receiverAddress: string;
+    note?: string;
+    paymentMethod: string;
+    paymentStatus: string;
+    paymentUrl?: string;
+    status: string;
+    customer?: {
         id: number;
-        name: string;
-      };
-    };
-  }[];
-};
+        fullName: string;
+        email: string;
+        phone: string;
+        address: string;
+    }
+    orderDetails: {
+        id: number;
+        quantity: number;
+        price: number;
+        product: {
+            id: number;
+            name: string;
+            image: string;
+            price: number;
+        }
+    }[];
+    createdAt?: string;
+    updatedAt?: string;
+    createdBy?: string;
+    updatedBy?: string;
+}
 
+export interface IRequestCreateOrder {
+    receiverName: string;
+    receiverPhone: string;
+    receiverAddress: string;
+    note?: string;
+}
+
+export interface IResOrderDTO {
+    id: number;
+    receiverName: string;
+    receiverPhone: string;
+    receiverAddress: string;
+    note?: string;
+    paymentUrl?: string;
+}
