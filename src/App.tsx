@@ -191,6 +191,7 @@ export const routes = [
     path: "/payment/vnpay-return",
     element: <VnpayReturnPage />,
   },
+  {
     path: "admin/forgot-password",
     element: <ForgotPasswordPageForUser />,
   },

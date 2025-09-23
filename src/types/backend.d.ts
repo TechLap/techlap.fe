@@ -309,6 +309,8 @@ export interface IOrder {
             name: string;
             image: string;
             price: number;
+            description: string;
+            discount: number;
         }
     }[];
     createdAt?: string;

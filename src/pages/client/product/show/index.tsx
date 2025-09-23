@@ -116,7 +116,7 @@ const ProductShowPage = () => {
               <ProductCard
                 key={product.id}
                 id={product.id}
-                image={`/images/sample-laptop.jpg`}
+                image={product.image || null}
                 name={product.name}
                 price={product.price}
                 discount={product.discount}

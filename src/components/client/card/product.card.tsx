@@ -73,7 +73,7 @@ const ProductCard = ({
       <NavLink to={`/products/${id}`} className="block flex-1">
         <div className="relative">
           <img
-            src={image || ""}
+            src={`${process.env.REACT_APP_URL_STORAGE_FILE}/${image}`}
             alt={name}
             className="w-full h-44 object-cover rounded-t-xl hover:opacity-90 transition-opacity"
           />
