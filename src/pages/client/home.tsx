@@ -9,21 +9,19 @@ const HomePage = () => {
     <>
       <HeroBanner />
       <ProductSection
-        title="Sản phẩm nổi bật"
-        subtitle="Các sản phẩm được khách hàng yêu thích nhất"
+        title="Sản phẩm mới nhất"
+        subtitle="Các sản phẩm mới về kho"
+        type="latest"
       />
       <div className="my-10">
         <CategoryShowcase />
       </div>
       <ProductSection
-        title="Sản phẩm mới nhất"
-        subtitle="Các sản phẩm mới về kho"
-      />
-      <FeaturesSection />
-      <ProductSection
         title="Sản phẩm bán chạy"
         subtitle="Các sản phẩm được khách hàng mua nhiều nhất"
+        type="bestseller"
       />
+      <FeaturesSection />
       <NewsletterSection />
     </>
   );

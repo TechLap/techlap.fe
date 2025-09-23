@@ -34,6 +34,13 @@ import "./styles/datepicker-xs.css";
 import { fetchCustomerInfo } from "./redux/slice/customer.slide";
 import { HistoryOrder } from "./pages/client/history-order";
 import VnpayReturnPage from "./pages/client/payment/vnpay.return";
+import ChangePasswordPageForCustomer from "./pages/client/password/change-password";
+import ChangePasswordPageForUser from "./pages/admin/password/change-password";
+import ForgotPasswordPageForUser from "./pages/admin/password/forgot-password";
+import ResetPasswordPageForUser from "./pages/admin/password/reset-password";
+import ForgotPasswordPageForCustomer from "./pages/client/password/forgot-password";
+import ResetPasswordPageForCustomer from "./pages/client/password/reset-password";
+
 
 declare global {
   interface Window {
@@ -85,8 +92,21 @@ export const routes = [
         path: "history-order",
         element: <HistoryOrder />,
         breadcrumb: "Lịch sử đơn hàng",
-      }
+      },
+      {
+        path: "change-password",
+        element: <ChangePasswordPageForCustomer />,
+      },
+
     ],
+  },
+  {
+    path: "forgot-password",
+    element: <ForgotPasswordPageForCustomer />,
+  },
+  {
+    path: "reset-password",
+    element: <ResetPasswordPageForCustomer />,
   },
   {
     path: "/login",
@@ -157,6 +177,10 @@ export const routes = [
         element: <RolePage />,
         breadcrumb: "Vai trò",
       },
+      {
+        path: "change-password",
+        element: <ChangePasswordPageForUser />,
+      }
     ],
   },
   {
@@ -167,6 +191,13 @@ export const routes = [
     path: "/payment/vnpay-return",
     element: <VnpayReturnPage />,
   },
+    path: "admin/forgot-password",
+    element: <ForgotPasswordPageForUser />,
+  },
+  {
+    path: "admin/reset-password",
+    element: <ResetPasswordPageForUser />,
+  }
 ];
 
 function App() {

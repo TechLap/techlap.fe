@@ -8,14 +8,25 @@ import CustomToast from "../../components/common/toast.message";
 import { apiLoginForInternalUser } from "../../config/api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setUserLoginInfo } from "../../redux/slice/account.slice";
+import { forbiddenWords, sanitizeInput } from "../../components/common/forbiddenWord";
 
 const LoginInternalUserPage = () => {
   const createUserSchema = yup
     .object({
       username: yup
         .string()
+        .transform((value) => sanitizeInput(value))
         .email("Email không hợp lệ")
-        .required("Email không được để trống"),
+        .required("Email không được để trống")
+        .test(
+          "forbidden-words",
+          "Tên đăng nhập chứa từ khóa không hợp lệ",
+          (value) => {
+            if (!value) return false;
+            const lowerValue = value.toLowerCase();
+            return !forbiddenWords.some((word) => lowerValue.includes(word));
+          }
+        ),
 
       password: yup
         .string()
@@ -152,7 +163,7 @@ const LoginInternalUserPage = () => {
                     </label>
                     <a
                       className="inline-flex items-center gap-x-1 text-base text-red-500 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
-                      href="../examples/html/recover-account.html"
+                      href="/admin/forgot-password"
                       tabIndex={-1}
                     >
                       Quên mật khẩu?
