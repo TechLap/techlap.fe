@@ -1,165 +1,45 @@
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, CheckCircle, Clock, Eye, Package, Truck, XCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-
-export interface Order {
-    id: string;
-    orderNumber: string;
-    date: string;
-    status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-    total: number;
-    items: OrderItem[];
-    customerInfo: {
-        fullName: string;
-        email: string;
-        phone: string;
-    };
-    shippingInfo: {
-        receiverName: string;
-        receiverPhone: string;
-        city: string;
-        address: string;
-    };
-    paymentMethod: string;
-    trackingNumber?: string;
-}
-
-export interface OrderItem {
-    id: number;
-    name: string;
-    price: number;
-    originalPrice?: number;
-    image: string;
-    quantity: number;
-    specs: string;
-}
-
-const mockOrders: Order[] = [
-    {
-        id: '1',
-        orderNumber: 'TL2024001',
-        date: '2024-01-15',
-        status: 'delivered',
-        total: 66490000,
-        items: [
-            {
-                id: 1,
-                name: "MacBook Pro 16-inch M3 Max",
-                price: 65990000,
-                originalPrice: 69990000,
-                image: "https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400",
-                quantity: 1,
-                specs: "M3 Max, 32GB RAM, 1TB SSD"
-            }
-        ],
-        customerInfo: {
-            fullName: 'Nguyễn Văn A',
-            email: 'nguyenvana@email.com',
-            phone: '0901234567'
-        },
-        shippingInfo: {
-            receiverName: 'Nguyễn Văn A',
-            receiverPhone: '0901234567',
-            city: 'hanoi',
-            address: '123 Đường ABC, Phường XYZ, Quận 1'
-        },
-        paymentMethod: 'credit-card',
-        trackingNumber: 'TL123456789'
-    },
-    {
-        id: '2',
-        orderNumber: 'TL2024002',
-        date: '2024-01-20',
-        status: 'shipped',
-        total: 66480000,
-        items: [
-            {
-                id: 2,
-                name: "Dell XPS 13 Plus",
-                price: 32990000,
-                image: "https://images.pexels.com/photos/205421/pexels-photo-205421.jpeg?auto=compress&cs=tinysrgb&w=400",
-                quantity: 2,
-                specs: "Intel i7-13700H, 16GB RAM, 512GB SSD"
-            }
-        ],
-        customerInfo: {
-            fullName: 'Trần Thị B',
-            email: 'tranthib@email.com',
-            phone: '0912345678'
-        },
-        shippingInfo: {
-            receiverName: 'Trần Thị B',
-            receiverPhone: '0912345678',
-            city: 'hcm',
-            address: '456 Đường DEF, Phường UVW, Quận 3'
-        },
-        paymentMethod: 'cod',
-        trackingNumber: 'TL987654321'
-    },
-    {
-        id: '3',
-        orderNumber: 'TL2024003',
-        date: '2024-01-25',
-        status: 'processing',
-        total: 45990000,
-        items: [
-            {
-                id: 3,
-                name: "ASUS ROG Strix G15",
-                price: 45990000,
-                image: "https://images.pexels.com/photos/1029757/pexels-photo-1029757.jpeg?auto=compress&cs=tinysrgb&w=400",
-                quantity: 1,
-                specs: "AMD Ryzen 7, 16GB RAM, RTX 4060, 512GB SSD"
-            }
-        ],
-        customerInfo: {
-            fullName: 'Lê Văn C',
-            email: 'levanc@email.com',
-            phone: '0923456789'
-        },
-        shippingInfo: {
-            receiverName: 'Lê Văn C',
-            receiverPhone: '0923456789',
-            city: 'danang',
-            address: '789 Đường GHI, Phường RST, Quận Hải Châu'
-        },
-        paymentMethod: 'credit-card'
-    }
-];
+import { apiFetchOrderHistory } from "../../config/api";
+import React, { useEffect, useState } from "react";
+import { IOrder } from "../../types/backend";
+import dayjs from "dayjs";
+import { NumericFormat } from "react-number-format";
+import OrderDetailModal from "../../components/client/order.detail";
+import Pagination from "../../components/common/pagination";
 
 export const HistoryOrder = () => {
+    const MAX_ORDERS_PAGE = 5;
+    const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate();
+    const [selectedOrder, setSelectedOrder] = React.useState<IOrder | null>(null);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-    const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND'
-        }).format(price);
+    const handleViewOrder = (order: IOrder) => {
+        setSelectedOrder(order);
+        setIsModalOpen(true);
     };
 
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('vi-VN', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedOrder(null);
     };
 
-    const getStatusInfo = (status: Order['status']) => {
-        switch (status) {
-            case 'pending':
-                return { text: 'Chờ xử lý', color: 'text-yellow-600 bg-yellow-50', icon: Clock };
-            case 'processing':
-                return { text: 'Đang xử lý', color: 'text-blue-600 bg-blue-50', icon: Package };
-            case 'shipped':
-                return { text: 'Đang giao', color: 'text-purple-600 bg-purple-50', icon: Truck };
-            case 'delivered':
-                return { text: 'Đã giao', color: 'text-green-600 bg-green-50', icon: CheckCircle };
-            case 'cancelled':
-                return { text: 'Đã hủy', color: 'text-red-600 bg-red-50', icon: XCircle };
-            default:
-                return { text: 'Không xác định', color: 'text-gray-600 bg-gray-50', icon: Clock };
+    const { data: orders } = useQuery({
+        queryKey: ["fetchOrders"],
+        queryFn: () =>
+            apiFetchOrderHistory(`page=${currentPage}&size=${MAX_ORDERS_PAGE}`),
+    });
+
+    const [ordersData, setOrdersData] = useState<IOrder[] | null>(orders?.data.data?.result || []);
+
+    useEffect(() => {
+        if (orders) {
+            setOrdersData(orders.data.data?.result || []);
         }
-    };
+    }, [orders]);
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
@@ -197,12 +77,10 @@ export const HistoryOrder = () => {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-4">
 
                 <div className="space-y-4 sm:space-y-6">
-                    {mockOrders.map((order) => {
-                        const statusInfo = getStatusInfo(order.status);
-                        const StatusIcon = statusInfo.icon;
+                    {ordersData?.map((order) => {
 
                         return (
                             <div key={order.id} className="bg-white rounded-xl shadow-sm border hover:shadow-md transition-shadow">
@@ -210,16 +88,15 @@ export const HistoryOrder = () => {
                                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                                         <div className="mb-3 sm:mb-0">
                                             <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                                                Đơn hàng #{order.orderNumber}
+                                                Đơn hàng #{order.id}
                                             </h3>
                                             <p className="text-sm text-gray-500">
-                                                Đặt ngày: {formatDate(order.date)}
+                                                Đặt ngày: {order.createdAt ? dayjs(order.createdAt).format("DD/MM/YYYY") : ""}
                                             </p>
                                         </div>
                                         <div className="flex items-center space-x-3">
-                                            <div className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusInfo.color}`}>
-                                                <StatusIcon className="w-4 h-4 mr-1" />
-                                                {statusInfo.text}
+                                            <div className={`flex items-center px-3 py-1 rounded-full text-sm font-medium`}>
+                                                {order.status}
                                             </div>
                                         </div>
                                     </div>
@@ -227,40 +104,40 @@ export const HistoryOrder = () => {
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                                         <div>
                                             <p className="text-sm text-gray-500 mb-1">Tổng tiền</p>
-                                            <p className="font-semibold text-blue-600">{formatPrice(order.total)}</p>
+                                            <p className="font-semibold text-blue-600">
+                                                <NumericFormat
+                                                    value={order.totalPrice}
+                                                    displayType="text"
+                                                    thousandSeparator={true}
+                                                    suffix={"đ"}
+                                                /></p>
                                         </div>
                                         <div>
                                             <p className="text-sm text-gray-500 mb-1">Số sản phẩm</p>
-                                            <p className="font-semibold">{order.items.reduce((sum, item) => sum + item.quantity, 0)} sản phẩm</p>
+                                            <p className="font-semibold">{order.orderDetails.length} sản phẩm</p>
                                         </div>
                                         <div>
                                             <p className="text-sm text-gray-500 mb-1">Thanh toán</p>
                                             <p className="font-semibold">
-                                                {order.paymentMethod === 'credit-card' ? 'Thẻ tín dụng' : 'COD'}
+                                                {order.paymentMethod}
                                             </p>
                                         </div>
-                                        {order.trackingNumber && (
-                                            <div>
-                                                <p className="text-sm text-gray-500 mb-1">Mã vận đơn</p>
-                                                <p className="font-semibold text-purple-600">{order.trackingNumber}</p>
-                                            </div>
-                                        )}
                                     </div>
 
                                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t">
                                         <div className="mb-3 sm:mb-0">
                                             <p className="text-sm text-gray-600">
-                                                Giao đến: <span className="font-medium">{order.shippingInfo.receiverName}</span>
+                                                Giao đến: <span className="font-medium">{order.receiverName}</span>
                                             </p>
-                                            <p className="text-sm text-gray-500">{order.shippingInfo.address}</p>
+                                            <p className="text-sm text-gray-500">{order.receiverAddress}</p>
                                         </div>
-                                        <Link
-                                            to={`/order/${order.id}`}
+                                        <button
+                                            onClick={() => handleViewOrder(order)}
                                             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                                         >
                                             <Eye className="w-4 h-4 mr-2" />
                                             Xem chi tiết
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -268,7 +145,7 @@ export const HistoryOrder = () => {
                     })}
                 </div>
 
-                {mockOrders.length === 0 && (
+                {ordersData?.length === 0 && (
                     <div className="text-center py-12">
                         <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                         <h3 className="text-lg font-medium text-gray-900 mb-2">Chưa có đơn hàng nào</h3>
@@ -281,6 +158,22 @@ export const HistoryOrder = () => {
                         </Link>
                     </div>
                 )}
+                <div className="flex justify-center">
+                    <Pagination
+                        currentPage={currentPage}
+                        setCurrentPage={
+                            setCurrentPage
+                        }
+                        total={
+                            orders?.data.data?.meta.pages ?? 0
+                        }
+                    />
+                </div>
+                <OrderDetailModal
+                    order={selectedOrder}
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                />
             </div>
         </div>
     );
