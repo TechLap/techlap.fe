@@ -166,24 +166,6 @@ const SidebarFilter = ({
           </div>
         </div>
 
-        {/* product status*/}
-        <div className="mb-6">
-          <div className="font-medium text-gray-700 mb-2">Trạng thái</div>
-          <div className="space-y-2">
-            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white transition-colors">
-              Tất cả
-            </button>
-            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white transition-colors">
-              Sản phẩm nổi bật
-            </button>
-            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white transition-colors">
-              Sản phẩm mới nhất
-            </button>
-            <button className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white transition-color00s">
-              Sản phẩm bán chạy
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
