@@ -1,7 +1,6 @@
 import CategoryShowcase from "../../components/client/categories.showcase";
 import FeaturesSection from "../../components/client/features.section";
 import HeroBanner from "../../components/client/hero.banner";
-import NewsletterSection from "../../components/client/newsletter.section";
 import ProductSection from "../../components/client/product.section";
 
 const HomePage = () => {
@@ -22,7 +21,6 @@ const HomePage = () => {
         type="bestseller"
       />
       <FeaturesSection />
-      <NewsletterSection />
     </>
   );
 };

@@ -12,6 +12,7 @@ interface OrderDetailModalProps {
 
 const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpen, onClose }) => {
     const subtotal = order?.orderDetails.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    const discount = order?.orderDetails.reduce((sum, item) => sum + (item.product.price * (item.product.discount as number / 100)) * item.quantity, 0)
     if (!isOpen || !order) return null;
 
     return (
@@ -29,7 +30,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpen, onCl
                     <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between rounded-t-xl">
                         <div>
                             <h2 className="text-xl font-bold text-gray-900">
-                                Đơn hàng #{order.id}
+                                Đơn hàng #{order.orderCode}
                             </h2>
                             <p className="text-sm text-gray-600">
                                 Đặt ngày: {order.createdAt ? dayjs(order.createdAt).format("DD/MM/YYYY") : ""}
@@ -189,6 +190,17 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpen, onCl
                                             <span>Phí vận chuyển</span>
                                             <span>{0}</span>
                                         </div>
+                                        {discount && (
+                                            <div className="flex justify-between text-green-600 text-sm sm:text-base">
+                                                <span>Giảm giá</span>
+                                                <span>-<NumericFormat
+                                                    value={discount}
+                                                    displayType="text"
+                                                    thousandSeparator={true}
+                                                    suffix={"đ"}
+                                                /></span>
+                                            </div>
+                                        )}
                                         <div className="border-t pt-3">
                                             <div className="flex justify-between text-lg font-semibold text-gray-900">
                                                 <span>Tổng cộng</span>

@@ -51,7 +51,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const dispacth = useAppDispatch();
   const isAuthenticated = useAppSelector(
-    (state) => state.account.isAuthenticated
+    (state) => state.customer.isAuthenticated
   );
 
   useEffect(() => {

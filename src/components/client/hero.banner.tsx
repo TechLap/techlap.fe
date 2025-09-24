@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const HeroBanner = () => {
   useEffect(() => {
@@ -19,12 +20,12 @@ const HeroBanner = () => {
             Khám phá bộ sưu tập laptop gaming mới nhất với cấu hình mạnh mẽ, giá cả cạnh tranh và bảo hành chính hãng.
           </p>
           <div className="flex flex-col md:flex-row gap-4 mt-8">
-            <button className="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600">
+            <Link className="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600" to="/products">
               Xem sản phẩm
-            </button>
-            <button className="bg-blue-600 text-white border border-white px-4 py-2 rounded-md hover:bg-white hover:text-blue-600">
+            </Link>
+            <Link className="bg-blue-600 text-white border border-white px-4 py-2 rounded-md hover:bg-white hover:text-blue-600" to="/products">
               Đặt hàng ngay
-            </button>
+            </Link>
           </div>
           <div className="flex gap-6 items-center mt-8">
             <div className="text-center">

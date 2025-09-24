@@ -334,3 +334,8 @@ export interface IResOrderDTO {
     note?: string;
     paymentUrl?: string;
 }
+
+export interface IDashboard {
+    totalCustomer: number
+    totalIncome: number
+}
