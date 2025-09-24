@@ -23,9 +23,9 @@ const SideBar = () => {
             to={"/admin/dashboard"}
           >
             <img
-              src="/images/Group.svg"
+              src="/images/techlap_logo.png"
               alt="Tân Xuân Food Logo"
-              className="w-32 max-w-full h-auto mx-auto transition-transform duration-200 hover:scale-105"
+              className="w-32 max-w-full mx-auto transition-transform duration-200 hover:scale-105"
             />
           </NavLink>
         </div>

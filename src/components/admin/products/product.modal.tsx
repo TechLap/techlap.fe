@@ -74,6 +74,7 @@ const ProductModal = (props: IProps) => {
     stock: yup.number().required("Số lượng không được để trống"),
     status: yup.string().required("Trạng thái không được để trống"),
     price: yup.number().required("Giá bán không được để trống"),
+    discount: yup.number().required("Giảm giá không được để trống"),
     category: yup.object({
       id: yup.string().required("Danh mục không được để trống"),
     }),
@@ -99,6 +100,7 @@ const ProductModal = (props: IProps) => {
       stock: (dataInit?.stock as any) ?? (undefined as any),
       status: dataInit?.status ?? "",
       price: dataInit?.price ?? 0,
+      discount: dataInit?.discount ?? 0,
       category: {
         id: dataInit?.category?.id ?? "",
       },
@@ -133,6 +135,7 @@ const ProductModal = (props: IProps) => {
       stock: (dataInit?.stock as any) ?? (undefined as any),
       status: dataInit?.status ?? "",
       price: dataInit?.price ?? 0,
+      discount: dataInit?.discount ?? 0,
       category: {
         id: dataInit?.category?.id ?? "",
       },
@@ -167,26 +170,26 @@ const ProductModal = (props: IProps) => {
 
         const productData = dataInit?.id
           ? {
-              id: dataInit.id,
-              ...valuesForm,
-              image: productUploadedImage || dataInit.image,
-              brand: {
-                id: valuesForm.brand.id,
-              },
-              category: {
-                id: valuesForm.category.id,
-              },
-            }
+            id: dataInit.id,
+            ...valuesForm,
+            image: productUploadedImage || dataInit.image,
+            brand: {
+              id: valuesForm.brand.id,
+            },
+            category: {
+              id: valuesForm.category.id,
+            },
+          }
           : {
-              ...valuesForm,
-              brand: {
-                id: valuesForm.brand.id,
-              },
-              category: {
-                id: valuesForm.category.id,
-              },
-              image: productUploadedImage,
-            };
+            ...valuesForm,
+            brand: {
+              id: valuesForm.brand.id,
+            },
+            category: {
+              id: valuesForm.category.id,
+            },
+            image: productUploadedImage,
+          };
 
         const result = dataInit?.id
           ? await apiUpdateProduct(productData)
@@ -225,9 +228,8 @@ const ProductModal = (props: IProps) => {
   return (
     <div
       id="hs-large-modal"
-      className={`hs-overlay ${
-        isOpenActionModal ? "open opened" : "hidden"
-      } size-full fixed top-0 start-0 z-50 overflow-x-hidden pointer-events-none`}
+      className={`hs-overlay ${isOpenActionModal ? "open opened" : "hidden"
+        } size-full fixed top-0 start-0 z-50 overflow-x-hidden pointer-events-none`}
       aria-labelledby="hs-large-modal-label"
     >
       {isOpenActionModal && (
@@ -319,7 +321,6 @@ const ProductModal = (props: IProps) => {
                     </div>
                   )}
                 </div>
-
                 <div>
                   <label
                     className="block text-sm font-medium text-gray-700 mb-2"
@@ -429,8 +430,25 @@ const ProductModal = (props: IProps) => {
                     ))}
                   </select>
                 </div>
-
-                <div className="sm:col-span-2">
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="discount"
+                  >
+                    Giảm giá
+                  </label>
+                  <input
+                    id="discount"
+                    type="text"
+                    className="block border-1 w-full px-4 py-3 text-xs text-gray-800 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                    {...register("discount")}
+                    placeholder="Nhập phần trăm giảm giá"
+                  />
+                  {errors.discount && (
+                    <p className="text-red-500">{errors.discount.message}</p>
+                  )}
+                </div>
+                <div>
                   <label
                     className="block text-sm font-medium text-gray-700 mb-2"
                     htmlFor="description"

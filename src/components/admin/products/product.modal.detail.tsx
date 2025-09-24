@@ -17,9 +17,8 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
   return (
     <div
       id="hs-large-modal-view"
-      className={`hs-overlay ${
-        isOpenViewModal ? "open opened" : "hidden"
-      } hs-overlay-open:opacity-100 hs-overlay-open:duration-500 size-full fixed top-0 start-0 z-50 opacity-0 overflow-x-hidden transition-all pointer-events-none`}
+      className={`hs-overlay ${isOpenViewModal ? "open opened" : "hidden"
+        } hs-overlay-open:opacity-100 hs-overlay-open:duration-500 size-full fixed top-0 start-0 z-50 opacity-0 overflow-x-hidden transition-all pointer-events-none`}
       aria-labelledby="hs-large-modal-label-view"
     >
       {isOpenViewModal && (
@@ -87,6 +86,14 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                         thousandSeparator={true}
                         suffix={"đ"}
                       />
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600 font-medium text-sm">
+                      Giảm giá:
+                    </span>
+                    <span className="text-gray-600 font-medium text-sm">
+                      {dataInit?.discount}%
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">

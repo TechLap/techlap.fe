@@ -8,7 +8,7 @@ import * as yup from "yup";
 import ProductItem from '../../components/client/card/product.item';
 import { apiAddToCart, apiCreateOrder, apiFetchCart, apiRemoveCartDetail } from '../../config/api';
 import { useAppDispatch } from '../../redux/hooks';
-import { setCustomerRemoveFromCart } from '../../redux/slice/customer.slide';
+import { setCheckout, setCustomerRemoveFromCart } from '../../redux/slice/customer.slide';
 import { ICart, IResOrderDTO } from '../../types/backend';
 import { toast } from 'react-toastify';
 
@@ -73,7 +73,7 @@ function CartPage() {
         },
     });
     // Submit form
-    
+
     // Lấy thông tin giỏ hàng từ API
     const getCart = async () => {
         try {
@@ -87,7 +87,6 @@ function CartPage() {
         }
     };
 
-    const [currentStep, setCurrentStep] = useState(1);
     const navigate = useNavigate();
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     const updateQuantity = async (id: number, change: number) => {
@@ -136,12 +135,7 @@ function CartPage() {
     // Tính toán các khoản tiền
     const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
     const shipping = 0; // Giả sử phí vận chuyển là 0
-    const discount = cartItems.reduce((sum, item) => sum + (item.product.price * (item.product.discount as number / 100)) * item.quantity, 0);
-
-    const steps = [
-        { id: 1, title: 'Giỏ hàng', icon: ShoppingCart },
-        { id: 2, title: 'Thanh toán', icon: CreditCard }
-    ];
+    const discount = cartItems.reduce((sum, item) => sum + (item.product.price * (item.product.discount as number / 100)) * item.quantity, 0)
 
     React.useEffect(() => {
         getCart();
@@ -165,10 +159,12 @@ function CartPage() {
         if (paymentMethod === "vnpay") {
             console.log("paymentUrl", paymentUrl);
             window.location.href = paymentUrl;
+            dispath(setCheckout())
             return;
         } else {
             toast.success("Đặt hàng thành công!");
-            navigate(`/order/${orderCode}`);
+            dispath(setCheckout())
+            navigate(`/history-order`);
         }
     });
 
@@ -189,30 +185,19 @@ function CartPage() {
 
                         {/* Steps */}
                         <div className="flex items-center space-x-8 sm:space-x-16">
-                            {steps.map((step, index) => (
-                                <div key={step.id} className="flex items-center">
-                                    <div
-                                        className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 transition-all duration-300 ${currentStep >= step.id
-                                            ? "bg-blue-600 border-blue-600 text-white shadow-lg"
-                                            : "border-gray-300 text-gray-400"
-                                            }`}
-                                    >
-                                        <step.icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                                    </div>
-                                    <span
-                                        className={`ml-2 sm:ml-3 text-sm sm:text-base font-medium transition-colors ${currentStep >= step.id ? "text-blue-600" : "text-gray-400"
-                                            }`}
-                                    >
-                                        {step.title}
-                                    </span>
-                                    {index < steps.length - 1 && (
-                                        <div
-                                            className={`w-12 sm:w-20 h-0.5 mx-4 sm:mx-6 transition-colors ${currentStep > step.id ? "bg-blue-600" : "bg-gray-300"
-                                                }`}
-                                        />
-                                    )}
+                            <div className="flex items-center">
+                                <div
+                                    className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 transition-all duration-300 bg-blue-600 border-blue-600 text-white shadow-lg`}
+                                >
+                                    <ShoppingCart />
                                 </div>
-                            ))}
+                                <span
+                                    className={`ml-2 sm:ml-3 text-sm sm:text-base font-medium transition-colors text-blue-600`}
+                                >
+                                    Giỏ hàng
+                                </span>
+
+                            </div>
                         </div>
                         <div className="w-10 h-10" />
                     </div>

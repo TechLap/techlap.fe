@@ -21,7 +21,7 @@ export const useFilterProduct = (
     searchCurrentPage = 1,
     searchPageSize = 10,
     isSearching = false,
-    setIsSearching = () => {},
+    setIsSearching = () => { },
     priceRange = { min: 0, max: 0 },
   }: UseFilterProductProps = {}
 ) => {
@@ -62,11 +62,11 @@ export const useFilterProduct = (
         //   : {}),
         ...(debouncedFilters.priceRange?.min
           ? {
-              priceRange: {
-                min: debouncedFilters.priceRange.min,
-                max: priceRange.max,
-              },
-            }
+            priceRange: {
+              min: debouncedFilters.priceRange.min,
+              max: debouncedFilters.priceRange.max,
+            },
+          }
           : {}),
       }),
     enabled: Object.values(debouncedFilters).some(
@@ -74,14 +74,16 @@ export const useFilterProduct = (
     ),
   });
 
-  const updateFilter = (key: keyof IProductFilter, value: string | number) => {
+  const updateFilter = (key: keyof IProductFilter, value: string | number | { min: number; max: number }) => {
     let newValue: Partial<IProductFilter> = {};
     if (key === "category") {
       newValue = { category: { id: value as string } };
-    // } else if (key === "supplier") {
-    //   newValue = { supplier: { id: value as string } };
+      // } else if (key === "supplier") {
+      //   newValue = { supplier: { id: value as string } };
     } else if (key === "priceRange") {
-      newValue = { priceRange: { min: value as number, max: filters.priceRange?.max || 0 } };
+      if (typeof value === "object" && "min" in value && "max" in value) {
+        newValue = { priceRange: value };
+      }
     } else {
       newValue = { [key]: value };
     }

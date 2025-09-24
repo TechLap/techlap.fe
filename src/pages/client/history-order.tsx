@@ -31,7 +31,6 @@ export const HistoryOrder = () => {
         queryFn: () =>
             apiFetchOrderHistory(`page=${currentPage}&size=${MAX_ORDERS_PAGE}`),
     });
-
     const [ordersData, setOrdersData] = useState<IOrder[] | null>(orders?.data.data?.result || []);
 
     useEffect(() => {
@@ -88,7 +87,7 @@ export const HistoryOrder = () => {
                                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                                         <div className="mb-3 sm:mb-0">
                                             <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                                                Đơn hàng #{order.id}
+                                                Đơn hàng #{order.orderCode}
                                             </h3>
                                             <p className="text-sm text-gray-500">
                                                 Đặt ngày: {order.createdAt ? dayjs(order.createdAt).format("DD/MM/YYYY") : ""}

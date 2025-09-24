@@ -78,6 +78,10 @@ export const apiResetPasswordForUser = (data: { token: string; newPassword: stri
     return axiosClient.post<IBackendResponse<string>>(`/user/change-password`, data)
 }
 
+export const apiGetDashboard = () => {
+    return axiosClient.get<IBackendResponse<IDashboard>>('/user/dashboard')
+}
+
 /* Module Customer */
 export const apiFetchAllCustomer = ( query: string ) => {
     return axiosClient.get<IBackendResponse<IModelPagination<ICustomer>>>(`/customers?${query}`)

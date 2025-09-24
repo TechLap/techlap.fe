@@ -344,3 +344,9 @@ export interface IOrderFilter {
     };
     createdAt?: string | null;
 }
+
+export interface IDashboard {
+    totalCustomer: number
+    totalIncome: number
+}
+

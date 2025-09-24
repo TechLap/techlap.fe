@@ -1,4 +1,23 @@
+import { useEffect, useState } from "react";
+import { IDashboard } from "../../types/backend";
+import { useQuery } from "@tanstack/react-query";
+import { apiGetDashboard } from "../../config/api";
+import { NumericFormat } from "react-number-format";
+
 const HomePage = () => {
+  const [dashboardInfo, setDashboardInfo] = useState<IDashboard | null>();
+
+  const { data: info } = useQuery({
+    queryKey: ["fetchDashboardInfo"],
+    queryFn: () =>
+      apiGetDashboard(),
+  });
+
+  useEffect(() => {
+    if (info) {
+      setDashboardInfo(info.data.data);
+    }
+  }, [info]);
   return (
     <div className="w-full">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
@@ -6,7 +25,7 @@ const HomePage = () => {
           <div className="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl">
             <div className="p-4 md:p-5">
               <div className="flex items-center gap-x-2">
-                <p className="text-xs uppercase text-gray-500">Total users</p>
+                <p className="text-xs uppercase text-gray-500">Total customers</p>
                 <div className="hs-tooltip">
                   <div className="hs-tooltip-toggle">
                     <svg
@@ -37,7 +56,7 @@ const HomePage = () => {
 
               <div className="mt-1 flex items-center gap-x-2">
                 <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                  72,540
+                  {dashboardInfo?.totalCustomer}
                 </h3>
                 <span className="flex items-center gap-x-1 text-green-600">
                   <svg
@@ -130,7 +149,12 @@ const HomePage = () => {
               <div>
                 <h2 className="text-sm text-gray-500">Income</h2>
                 <p className="text-xl sm:text-2xl font-medium text-gray-800">
-                  $126,238.49
+                  <NumericFormat
+                    value={dashboardInfo?.totalIncome}
+                    displayType="text"
+                    thousandSeparator={true}
+                    suffix={"đ"}
+                  />
                 </p>
               </div>
 
