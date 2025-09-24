@@ -39,6 +39,7 @@ const ProductDetailPage = () => {
   });
   const [loading, setLoading] = useState(false);
   // Redux
+  console.log("Product detail:", `${process.env.REACT_APP_URL_STORAGE_FILE}/${product?.data.data?.image}`);
   const dispatch = useAppDispatch();
   const totalCart = useAppSelector((state) => state.customer.customer.totalCart);
   const addToCart = async () => {

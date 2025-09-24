@@ -126,7 +126,7 @@ const ProductTable = (props: IProps) => {
       header: "Thao tác",
       render: (row: IProduct) => (
         <>
-          <Access permission={{ name: "View a product" }} hideChildren>
+          <Access permission={{ name: "Get a product by id" }} hideChildren>
             <button
               type="button"
               className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
