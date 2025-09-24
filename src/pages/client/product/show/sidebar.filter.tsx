@@ -9,7 +9,7 @@ interface SidebarFilterProps {
   isPending: boolean;
   isError: boolean;
   filters: IProductFilter;
-  updateFilter: (key: keyof IProductFilter, value: string | number) => void;
+  updateFilter: (key: keyof IProductFilter, value: string | number | { min: number; max: number }) => void;
   resetFilters: () => void;
   isSearching: boolean;
   priceRange: {
@@ -88,30 +88,28 @@ const SidebarFilter = ({
           <div className="font-medium text-gray-700 mb-2">Danh mục</div>
           <div className="space-y-2">
             <button
-              className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-500 hover:text-white ${
-                filters.category?.id === ""
-                  ? "bg-red-600 text-white"
-                  : "text-gray-700"
-              } transition-colors`}
+              className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-500 hover:text-white ${filters.category?.id === ""
+                ? "bg-red-600 text-white"
+                : "text-gray-700"
+                } transition-colors`}
               onClick={() => updateFilter("category", "")}
             >
               Tất cả
             </button>
             {categories.map(
               (category) =>
-                (
-                  <button
-                    key={category.id}
-                    className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-500 hover:text-white ${
-                      filters.category?.id === category.id
-                        ? "bg-red-600 text-white"
-                        : "text-gray-700"
+              (
+                <button
+                  key={category.id}
+                  className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-500 hover:text-white ${filters.category?.id === category.id
+                    ? "bg-red-600 text-white"
+                    : "text-gray-700"
                     } transition-colors`}
-                    onClick={() => updateFilter("category", category.id || "")}
-                  >
-                    {category.name}
-                  </button>
-                )
+                  onClick={() => updateFilter("category", category.id || "")}
+                >
+                  {category.name}
+                </button>
+              )
             )}
             {isPending && (
               <div className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-amber-700">
@@ -133,13 +131,13 @@ const SidebarFilter = ({
               className="w-full"
               value={[
                 filters.priceRange?.min || priceRange.min,
-                priceRange.max,
+                filters.priceRange?.max || priceRange.max,
               ]}
               min={priceRange.min}
               max={priceRange.max}
               step={5000}
               onValueChange={(value) => {
-                updateFilter("priceRange", value[0] || 0);
+                updateFilter("priceRange", { min: value[0], max: value[1] } as any);
                 console.log(value);
               }}
             />
