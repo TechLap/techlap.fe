@@ -1,5 +1,5 @@
 import axiosClient from "./axios-customize"
-import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IOrder, IPermission, IPermissionFilter, IProduct, IProductFilter, IRequestCreateOrder, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
+import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IModelPagination, IOrder, IOrderFilter, IPermission, IPermissionFilter, IProduct, IProductFilter, IRequestCreateOrder, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
 
 /* Module Auth */
 export const apiLoginForCustomer = (username: string, password: string) => {
@@ -235,6 +235,10 @@ export const apiSearchCustomer = ( query: string, customerFilter: ICustomerFilte
     return axiosClient.post<IBackendResponse<IModelPagination<ICustomer>>>(`/customers/filter?${query}`, {...customerFilter})
 }
 
+export const apiSearchOrder = ( query: string, orderFilter: IOrderFilter ) => {
+    return axiosClient.post<IBackendResponse<IModelPagination<IOrder>>>(`/orders/filter?${query}`, {...orderFilter})
+}
+
 /* Module Category */
 export const apiFetchAllCategory = ( query: string ) => {
     return axiosClient.get<IBackendResponse<IModelPagination<ICategory>>>(`/categories?${query}`)
@@ -323,5 +327,9 @@ export const apiVerifyVnpayReturn = ( params: Record<string, string> ) => {
 /* Module Order */
 export const apiFetchAllOrder = ( query: string ) => {
     return axiosClient.get<IBackendResponse<IModelPagination<IOrder>>>(`/orders?${query}`)
+}
+
+export const apiUpdateOrderInfo = ( order: IOrder ) => {
+    return axiosClient.put<IBackendResponse<IOrder>>(`/orders`, {...order})
 }
 

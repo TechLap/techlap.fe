@@ -9,6 +9,7 @@ import DataTable from "../../common/data.table";
 import ButtonFilter from "../../common/button.filter";
 import SelectFilter from "../../common/select.filter";
 import dayjs from "dayjs";
+import { useEffect } from "react";
 
 interface IProps {
   userData?: IUser[] | null;
@@ -26,6 +27,12 @@ const UserTable = (props: IProps) => {
     queryKey: ["fetchAllRoles"],
     queryFn: () => apiFetchAllRole(`page=1&size=20`),
   });
+
+  useEffect(() => {
+    if (roles) {
+      window.HSStaticMethods.autoInit(["select", "dropdown"]);
+    }
+  }, [roles]);
 
   const columns = [
     {

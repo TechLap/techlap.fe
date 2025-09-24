@@ -10,7 +10,6 @@ export default function ErrorPage() {
       ? (rawError as IBackendResponse<unknown>)
       : { statusCode: 500, error: "Unknown error", message: "Something went wrong" };
 
-  console.log(error);
   return (
     <div className="max-w-3xl flex flex-col mx-auto size-full">
       {/* ========== HEADER ========== */}
@@ -42,7 +41,7 @@ export default function ErrorPage() {
       {/* ========== FOOTER ========== */}
       <footer className="mt-auto text-center py-5">
         <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-sm text-gray-500">© All Rights Reserved. 2022.</p>
+          <p className="text-sm text-gray-500">© All Rights Reserved. 2025.</p>
         </div>
       </footer>
       {/* ========== END FOOTER ========== */}

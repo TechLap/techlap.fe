@@ -19,7 +19,7 @@ import { IPermission, IPermissionFilter } from "../../types/backend";
 import Access from "../auth/route/access";
 
 const PermissionPage = () => {
-  const MAX_PERMISSIONS_PAGE = 5;
+  const MAX_PERMISSIONS_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const [totalSearchPage, setTotalSearchPage] = useState(0);
@@ -67,7 +67,7 @@ const PermissionPage = () => {
           name: debouncedFilters.name,
           module: debouncedFilters.module,
           method: debouncedFilters.method,
-          apiPath: (debouncedFilters as any).apiPath ?? (debouncedFilters as any).route,
+          apiPath: debouncedFilters.apiPath,
           createdAt: debouncedFilters.createdAt,
         }
       ),

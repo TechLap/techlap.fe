@@ -67,7 +67,7 @@ const SideBar = () => {
                 Account
               </span>
 
-              <Access permission={{ name: "Fetch all users" }} hideChildren>
+              <Access permission={{ name: "Get users with pagination" }} hideChildren>
                 <li>
                   <NavLink
                     className={({ isActive }) =>
@@ -98,7 +98,7 @@ const SideBar = () => {
                 </li>
               </Access>
 
-              <Access permission={{ name: "Fetch all customers" }} hideChildren>
+              <Access permission={{ name: "Get customers with pagination" }} hideChildren>
                 <li>
                   <NavLink
                     className={({ isActive }) =>
@@ -130,7 +130,7 @@ const SideBar = () => {
                 Overview
               </span>
 
-              <Access permission={{ name: "Fetch all products" }} hideChildren>
+              <Access permission={{ name: "Get products with pagination" }} hideChildren>
                 <li>
                   <NavLink
                     className={({ isActive }) =>
@@ -158,7 +158,7 @@ const SideBar = () => {
                 </li>
               </Access>
 
-              <Access permission={{ name: "Fetch all orders" }} hideChildren>
+              <Access permission={{ name: "Get orders with pagination" }} hideChildren>
                 <li>
                   <NavLink
                     className={({ isActive }) =>
@@ -188,7 +188,7 @@ const SideBar = () => {
                 </li>
               </Access>
 
-              <Access permission={{ name: "Fetch all brands" }} hideChildren>
+              <Access permission={{ name: "Get brands with pagination" }} hideChildren>
                 <li>
                   <NavLink
                     className={({ isActive }) =>
@@ -217,7 +217,7 @@ const SideBar = () => {
               </Access>
 
               <Access
-                permission={{ name: "Fetch all categories" }}
+                permission={{ name: "Get categories with pagination" }}
                 hideChildren
               >
                 <li>
@@ -253,7 +253,7 @@ const SideBar = () => {
               </Access>
 
               <Access
-                permission={{ name: "Fetch all permissions" }}
+                permission={{ name: "Get permissions with pagination" }}
                 hideChildren
               >
                 <li>
@@ -283,7 +283,7 @@ const SideBar = () => {
                 </li>
               </Access>
 
-              <Access permission={{ name: "Fetch all roles" }} hideChildren>
+              <Access permission={{ name: "Get roles with pagination" }} hideChildren>
                 <li>
                   <NavLink
                     className={({ isActive }) =>

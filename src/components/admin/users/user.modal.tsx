@@ -197,7 +197,12 @@ const UserModal = (props: IProps) => {
                     defaultValue={dataInit?.fullName}
                   />
                   {errors.fullName && (
-                    <p className="text-red-500">{errors.fullName.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.fullName.message}</p>
+                    </div>
                   )}
                 </div>
 
@@ -223,7 +228,12 @@ const UserModal = (props: IProps) => {
                     disabled={!!dataInit}
                   />
                   {errors.email && (
-                    <p className="text-red-500">{errors.email.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.email.message}</p>
+                    </div>
                   )}
                 </div>
 
@@ -244,7 +254,12 @@ const UserModal = (props: IProps) => {
                       {...register("password")}
                     />
                     {errors.password && (
-                      <p className="text-red-500">{errors.password.message}</p>
+                      <div className="flex items-center gap-1 mt-1">
+                        <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                        <p className="text-sm text-red-600 font-medium">{errors.password.message}</p>
+                      </div>
                     )}
                   </div>
                 )}
@@ -281,8 +296,13 @@ const UserModal = (props: IProps) => {
                       </option>
                     ))}
                   </select>
-                  {errors.role && (
-                    <p className="text-red-500">{errors.role.message}</p>
+                  {errors.role?.id && (
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.role.id.message}</p>
+                    </div>
                   )}
                 </div>
 
@@ -303,7 +323,12 @@ const UserModal = (props: IProps) => {
                     defaultValue={dataInit?.phone}
                   />
                   {errors.phone && (
-                    <p className="text-red-500">{errors.phone.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.phone.message}</p>
+                    </div>
                   )}
                 </div>
 
@@ -324,7 +349,12 @@ const UserModal = (props: IProps) => {
                     defaultValue={dataInit?.address}
                   />
                   {errors.address && (
-                    <p className="text-red-500">{errors.address.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.address.message}</p>
+                    </div>
                   )}
                 </div>
               </div>

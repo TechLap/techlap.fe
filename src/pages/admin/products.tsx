@@ -11,7 +11,11 @@ import ProductTable from "../../components/admin/products/product.table";
 import CreateModalButton from "../../components/common/create.modal.button";
 import ModalDelete from "../../components/common/modal.delete";
 import CustomToast from "../../components/common/toast.message";
-import { apiDeleteProduct, apiFetchAllProduct, apiSearchProduct } from "../../config/api";
+import {
+  apiDeleteProduct,
+  apiFetchAllProduct,
+  apiSearchProduct,
+} from "../../config/api";
 import { IProduct, IProductFilter } from "../../types/backend";
 import Access from "../auth/route/access";
 
@@ -31,7 +35,11 @@ const ProductPage = () => {
     price: 0,
     category: {
       id: "",
-    },  
+    },
+    brand: {
+      id: "",
+    },
+    status: "",
   });
   const [debouncedFilters] = useDebounce(filters, 500);
 
@@ -48,13 +56,6 @@ const ProductPage = () => {
   const [displayData, setDisplayData] = useState<IProduct[] | null>(
     products?.data.data?.result ?? null
   );
-
-  useEffect(() => {
-    if (products) {
-      window.HSStaticMethods.autoInit(["select", "dropdown"]);
-    }
-  }, [products]);
-
   // Search products
   const { data: searchData, error: searchError } = useQuery({
     queryKey: ["searchProducts", debouncedFilters, searchCurrentPage],
@@ -63,6 +64,7 @@ const ProductPage = () => {
         name: debouncedFilters.name,
         quantity: debouncedFilters.quantity,
         price: debouncedFilters.price,
+        status: debouncedFilters.status,
         ...(debouncedFilters.category?.id
           ? { category: { id: debouncedFilters.category.id } }
           : {}),
@@ -129,9 +131,19 @@ const ProductPage = () => {
     const res = await apiDeleteProduct(selectedProduct?.id ?? "");
     if (res?.data?.statusCode === 200) {
       reloadTable();
-      toast.success(<CustomToast message="Xóa sản phẩm thành công!" className="text-green-600" />);
+      toast.success(
+        <CustomToast
+          message="Xóa sản phẩm thành công!"
+          className="text-green-600"
+        />
+      );
     } else {
-      toast.error(<CustomToast message="Xóa sản phẩm thất bại!" className="text-red-600" />);
+      toast.error(
+        <CustomToast
+          message="Xóa sản phẩm thất bại!"
+          className="text-red-600"
+        />
+      );
     }
     setSelectedProduct(null);
     setIsOpenDeleteModal(false);

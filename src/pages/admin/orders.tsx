@@ -1,19 +1,40 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 import LoadingSpinner from "../../components/common/loading.spinner";
 import Pagination from "../../components/common/pagination";
 import OrderTable from "../../components/admin/orders/order.table";
 import OrderModalDetail from "../../components/admin/orders/order.modal.detail";
-import { apiFetchAllOrder } from "../../config/api";
-import { IOrder } from "../../types/backend";
+import OrderModal from "../../components/admin/orders/order.modal";
+import { apiFetchAllOrder, apiSearchOrder } from "../../config/api";
+import { IOrder, IOrderFilter } from "../../types/backend";
 
 const OrderPage = () => {
   const MAX_ORDERS_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchCurrentPage, setSearchCurrentPage] = useState(1);
+  const [totalSearchPage, setTotalSearchPage] = useState(1);
+  const [isSearching, setIsSearching] = useState(false);
 
-  const { isPending, data: orders, error } = useQuery({
+  const [isOpenViewModal, setIsOpenViewModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
+  const [isOpenActionModal, setIsOpenActionModal] = useState(false);
+  const [filters, setFilters] = useState<IOrderFilter & { customerName?: string }>({
+    orderCode: "",
+    status: "",
+    customerName: "",
+    createdAt: null,
+  });
+  const [debouncedFilters] = useDebounce(filters, 500);
+
+  const {
+    isPending,
+    data: orders,
+    error,
+  } = useQuery({
     queryKey: [["fetchAllOrders"], currentPage],
-    queryFn: () => apiFetchAllOrder(`page=${currentPage}&size=${MAX_ORDERS_PAGE}`),
+    queryFn: () =>
+      apiFetchAllOrder(`page=${currentPage}&size=${MAX_ORDERS_PAGE}`),
   });
 
   const [displayData, setDisplayData] = useState<IOrder[] | null>(
@@ -26,15 +47,60 @@ const OrderPage = () => {
     }
   }, [orders]);
 
-  const [isOpenViewModal, setIsOpenViewModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
+  // Search orders
+  const { data: searchData, error: searchError } = useQuery({
+    queryKey: ["searchOrders", debouncedFilters, searchCurrentPage],
+    queryFn: () =>
+      apiSearchOrder(`page=${searchCurrentPage}&size=${MAX_ORDERS_PAGE}`, {
+        orderCode: debouncedFilters.orderCode,
+        status: debouncedFilters.status,
+        createdAt: debouncedFilters.createdAt,
+        ...(debouncedFilters.customerName
+          ? { customer: { fullName: debouncedFilters.customerName } }
+          : {}),
+      }),
+    enabled: Object.values(debouncedFilters).some(
+      (value) => value !== "" || value !== null
+    ),
+  });
+
+  useEffect(() => {
+    if (searchData) {
+      setTotalSearchPage(searchData?.data?.data?.meta?.pages ?? 0);
+      setDisplayData(searchData?.data?.data?.result ?? []);
+    }
+  }, [searchData]);
+
+  useEffect(() => {
+    if (!isSearching && orders) {
+      setDisplayData(orders?.data.data?.result ?? []);
+    }
+  }, [orders, isSearching]);
+
+  const handleFilterChange = (key: string, value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...(key === "createdAt" ? { createdAt: value } : { [key]: value }),
+    }));
+    setIsSearching(!!value);
+  };
 
   const handleOpenViewModal = (order: IOrder) => {
     setSelectedOrder(order);
     setIsOpenViewModal(true);
   };
 
-  if (error) {
+  const handleOpenEditModal = (order: IOrder) => {
+    setSelectedOrder(order);
+    setIsOpenActionModal(true);
+  };
+
+  const queryClient = useQueryClient();
+  const reloadTable = () => {
+    queryClient.invalidateQueries({ queryKey: [["fetchAllOrders"]] });
+  };
+
+  if (error || searchError) {
     return (
       <div>
         <p>Something went wrong!</p>
@@ -48,19 +114,31 @@ const OrderPage = () => {
         <h1 className="text-lg font-semibold">Quản lý đơn hàng</h1>
       </div>
 
-      {isPending ? (
+      {isPending ?(
         <LoadingSpinner />
       ) : (
         <>
           <div className="mb-6">
-            <OrderTable orderData={displayData} onViewClick={handleOpenViewModal} />
+            <OrderTable
+              orderData={displayData}
+              onViewClick={handleOpenViewModal}
+              onEditClick={handleOpenEditModal}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+            />
           </div>
 
           <div className="flex justify-center">
             <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              total={orders?.data.data?.meta.pages ?? 0}
+              currentPage={isSearching ? searchCurrentPage : currentPage}
+              setCurrentPage={
+                isSearching ? setSearchCurrentPage : setCurrentPage
+              }
+              total={
+                isSearching
+                  ? totalSearchPage
+                  : orders?.data.data?.meta.pages ?? 0
+              }
             />
           </div>
         </>
@@ -73,6 +151,17 @@ const OrderPage = () => {
           setSelectedOrder(null);
           setIsOpenViewModal(false);
         }}
+      />
+
+      <OrderModal
+        isOpenActionModal={isOpenActionModal}
+        dataInit={selectedOrder}
+        setDataInit={setSelectedOrder}
+        onClose={() => {
+          setSelectedOrder(null);
+          setIsOpenActionModal(false);
+        }}
+        reloadTable={reloadTable}
       />
     </div>
   );
