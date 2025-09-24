@@ -40,7 +40,7 @@ const RolePage = () => {
   });
 
   const [displayData, setDisplayData] = useState<IRole[] | null>(
-    roles?.data.data?.result ?? null
+    roles?.data?.data?.result ?? null
   );
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const RolePage = () => {
         createdAt: debouncedFilters.createdAt,
       }),
     enabled: Object.values(debouncedFilters).some(
-      (value) => value !== "" || value !== null
+      (value) => value !== "" && value !== null
     ),
   });
 
@@ -73,7 +73,7 @@ const RolePage = () => {
   // Set display data
   useEffect(() => {
     if (!isSearching && roles) {
-      setDisplayData(roles?.data.data?.result ?? []);
+      setDisplayData(roles?.data?.data?.result ?? []);
     }
   }, [roles, isSearching]);
 
@@ -162,7 +162,7 @@ const RolePage = () => {
               total={
                 isSearching
                   ? totalSearchPage
-                  : roles?.data.data?.meta.pages ?? 0
+                  : roles?.data?.data?.meta.pages ?? 0
               }
             />
           </div>

@@ -33,6 +33,7 @@ const CustomerPage = () => {
     email: "",
     fullName: "",
     phone: "",
+    address: "",
     createdAt: null,
   });
   const [debouncedFilters] = useDebounce(filters, 500);
@@ -66,6 +67,7 @@ const CustomerPage = () => {
           email: debouncedFilters.email,
           fullName: debouncedFilters.fullName,
           phone: debouncedFilters.phone,
+          address: debouncedFilters.address,
           createdAt: debouncedFilters.createdAt,
         }
       ),

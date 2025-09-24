@@ -9,6 +9,7 @@ import Access from "../../../pages/auth/route/access";
 import { Delete, Edit, View } from "../../common/icons";
 import SelectFilter from "../../common/select.filter";
 import ProductStatusBadge from "../../common/product.status.badge";
+import { useEffect } from "react";
 interface IProps {
   productData?: IProduct[] | null;
   onEditClick: (product: IProduct) => void;
@@ -28,154 +29,155 @@ const ProductTable = (props: IProps) => {
     onFilterChange,
   } = props;
 
-
   const { data: brands } = useQuery({
     queryKey: ["fetchAllBrands"],
     queryFn: () => apiFetchAllBrand(`page=1&size=20`),
   });
 
-    const columns = [
-      {
-        key: "name",
-        header: (
-          <div className="flex flex-nowrap items-center gap-x-1">
-            Tên sản phẩm
-            <ButtonFilter
-              id="name"
-              filters={filters}
-              onFilterChange={onFilterChange}
-              placeholder="tên sản phẩm"
-            />
-          </div>
-        ),
-        render: (row: IProduct) => row.name,
-        headerRowclassName: "font-semibold",
-      },
-      {
-        key: "brand",
-        header: (
-          <div className="flex flex-nowrap items-center gap-x-1">
-            Thương hiệu
-            <SelectFilter
-              id="brand"
-              onFilterChange={onFilterChange}
-              defaultOption="thương hiệu"
-              data={brands}
-            />
-          </div>
-        ),
-        render: (row: IProduct) => row.brand?.name,
-      },
-      {
-        key: "price",
-        header: (
-          <div className="flex flex-nowrap items-center gap-x-1">
-            Giá
-            <ButtonFilter
-              id="price"
-              filters={filters}
-              onFilterChange={onFilterChange}
-              placeholder="price"
-            />
-          </div>
-        ),
-        render: (row: IProduct) => <NumericFormat
-        value={row.price}
-        displayType="text"
-        allowLeadingZeros
-        thousandSeparator={true}
-        suffix={"đ"}
-      />,
-      },
-      {
-        key: "stock",
-        header: (
-          <div className="flex flex-nowrap items-center gap-x-1">
-            Số lượng
-            <ButtonFilter
-              id="stock"
-              filters={filters}
-              onFilterChange={onFilterChange}
-              placeholder="stock"
-            />
-          </div>
-        ),
-        render: (row: IProduct) => row.stock,
-      },
-      {
-        key: "status",
-        header: (
-          <div className="flex flex-nowrap items-center gap-x-1">
-            Trạng thái
-            <ButtonFilter
-              id="status"
-              filters={filters}
-              onFilterChange={onFilterChange}
-              placeholder="status"
-            />
-          </div>
-        ),
-        render: (row: IProduct) => (
-          <ProductStatusBadge status={row.status} />
-        ),
-      },
-      {
-        key: "actions",
-        header: "Thao tác",
-        render: (row: IProduct) => (
-          <>
-          <Access permission={{ name: "View a product" }} hideChildren>
-              <button
-                type="button"
-                className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
-                onClick={() => onViewClick(row)}
-              >
-                <View
-                  size={16}
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 focus:bg-blue-100 rounded-lg"
-                />
-              </button>
-            </Access>
+  useEffect(() => {
+    if (brands) {
+      window.HSStaticMethods.autoInit(["select", "dropdown"]);
+    }
+  }, [brands]);
 
-            <Access permission={{ name: "Update a product" }} hideChildren>
-              <button
-                type="button"
-                className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
-                onClick={() => onEditClick(row)}
-              >
-                <Edit
-                  size={16}
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 focus:bg-blue-100 rounded-lg"
-                />
-              </button>
-            </Access>
-  
-            <Access permission={{ name: "Delete a product" }} hideChildren>
-              <button
-                type="button"
-                className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
-                onClick={() => onDeleteClick(row)}
-              >
-                <Delete
-                  size={16}
-                  className="text-red-600 hover:text-red-800 hover:bg-red-100 focus:bg-red-100 rounded-lg"
-                />
-              </button>
-            </Access>
-          </>
-        ),
-        headerRowclassName: "text-end",
-        rowClassName: "text-end",
-      },
-    ];
-  
-    return (
-      <DataTable
-        data={productData ?? []}
-        columns={columns}
-        rowKey={(row: IProduct, index: number) => row.id ?? `product-${index}`}
-      />
-    );
+  const statusOptions = [
+    {
+      label: "ACTIVE",
+      value: "ACTIVE",
+    },
+
+    {
+      label: "INACTIVE",
+      value: "INACTIVE",
+    },
+
+    {
+      label: "OUT_OF_STOCK",
+      value: "OUT_OF_STOCK",
+    },
+
+    {
+      label: "DISCONTINUED",
+      value: "DISCONTINUED",
+    },
+  ];
+
+  const columns = [
+    {
+      key: "name",
+      header: (
+        <div className="flex flex-nowrap items-center gap-x-1">
+          Tên sản phẩm
+          <ButtonFilter
+            id="name"
+            filters={filters}
+            onFilterChange={onFilterChange}
+            placeholder="tên sản phẩm"
+          />
+        </div>
+      ),
+      render: (row: IProduct) => row.name,
+      headerRowclassName: "font-semibold",
+    },
+    {
+      key: "brand",
+      header: (
+        <div className="flex flex-nowrap items-center gap-x-1">Thương hiệu</div>
+      ),
+      render: (row: IProduct) => row.brand?.name,
+    },
+    {
+      key: "price",
+      header: <div className="flex flex-nowrap items-center gap-x-1">Giá</div>,
+      render: (row: IProduct) => (
+        <NumericFormat
+          value={row.price}
+          displayType="text"
+          allowLeadingZeros
+          thousandSeparator={true}
+          suffix={"đ"}
+        />
+      ),
+    },
+    {
+      key: "stock",
+      header: (
+        <div className="flex flex-nowrap items-center gap-x-1">Số lượng</div>
+      ),
+      render: (row: IProduct) => row.stock,
+    },
+    {
+      key: "status",
+      header: (
+        <div className="flex flex-nowrap items-center gap-x-1">
+          Trạng thái
+          <SelectFilter
+            id="status"
+            onFilterChange={onFilterChange}
+            defaultOption="trạng thái"
+            enumOptions={statusOptions}
+          />
+        </div>
+      ),
+      render: (row: IProduct) => <ProductStatusBadge status={row.status} />,
+    },
+    {
+      key: "actions",
+      header: "Thao tác",
+      render: (row: IProduct) => (
+        <>
+          <Access permission={{ name: "View a product" }} hideChildren>
+            <button
+              type="button"
+              className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => onViewClick(row)}
+            >
+              <View
+                size={16}
+                className="text-green-600 hover:text-green-800 hover:bg-green-100 focus:bg-green-100 rounded-lg"
+              />
+            </button>
+          </Access>
+
+          <Access permission={{ name: "Update a product" }} hideChildren>
+            <button
+              type="button"
+              className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => onEditClick(row)}
+            >
+              <Edit
+                size={16}
+                className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 focus:bg-blue-100 rounded-lg"
+              />
+            </button>
+          </Access>
+
+          <Access permission={{ name: "Delete a product" }} hideChildren>
+            <button
+              type="button"
+              className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => onDeleteClick(row)}
+            >
+              <Delete
+                size={16}
+                className="text-red-600 hover:text-red-800 hover:bg-red-100 focus:bg-red-100 rounded-lg"
+              />
+            </button>
+          </Access>
+        </>
+      ),
+      headerRowclassName: "text-end",
+      rowClassName: "text-end",
+    },
+  ];
+
+  return (
+    <DataTable
+      data={productData ?? []}
+      columns={columns}
+      rowKey={(row: IProduct, index: number) => row.id ?? `product-${index}`}
+    />
+  );
 };
 
 export default ProductTable;

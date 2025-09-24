@@ -4,14 +4,15 @@ interface SelectFilterProps {
     id: string;
     onFilterChange: (key: string, value: string) => void;
     defaultOption: string;
-    data: any;
+    data?: any;
+    enumOptions?: any;
 }
 
 
 const SelectFilter = (props: SelectFilterProps) => {
-    const { id, onFilterChange, defaultOption, data } = props;
+    const { id, onFilterChange, defaultOption, data, enumOptions } = props;
     return (
-        <div className="hs-dropdown [--auto-close:inside] [--placement:bottom-left] [--strategy:absolute] relative inline-flex">
+        <div className="hs-dropdown [--auto-close:inside] [--placement:bottom-left] [--strategy:fixed] relative inline-flex">
             <button
               id={`hs-dropdown-filter-${id}`}
               type="button"
@@ -39,8 +40,8 @@ const SelectFilter = (props: SelectFilterProps) => {
               "optionAllowEmptyOption": true,
 "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
 "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-blue-500 rounded-lg text-start text-xs focus:outline-hidden",
-"dropdownClasses": "mt-2 w-full max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto",
-"optionClasses": "py-2 px-4 w-full text-xs text-gray-800 cursor-pointer hover:bg-blue-50 rounded-lg focus:outline-hidden focus:bg-blue-50",
+"dropdownClasses": "mt-2 w-full max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto z-[9999]",
+"optionClasses": "py-2 px-4 w-full text-xs text-nowrap text-gray-800 cursor-pointer hover:bg-blue-50 rounded-lg focus:outline-hidden focus:bg-blue-50",
 "optionTemplate": "<div className=\"flex justify-between items-center w-full\"><span data-title></span><span className=\"hidden hs-selected:block\"></span></div>"
 }'
                   onChange={(e) => {
@@ -51,6 +52,11 @@ const SelectFilter = (props: SelectFilterProps) => {
                   {data?.data?.data?.result?.map((item: any) => (
                     <option value={item.id} key={item.id}>
                       {item.name}
+                    </option>
+                  ))}
+                  {enumOptions?.map((item: any) => (
+                    <option value={item.value} key={item.value}>
+                      {item.label}
                     </option>
                   ))}
                 </select>

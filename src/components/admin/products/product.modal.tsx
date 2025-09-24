@@ -289,7 +289,12 @@ const ProductModal = (props: IProps) => {
                     defaultValue={dataInit?.name}
                   />
                   {errors.name && (
-                    <p className="text-red-500">{errors.name.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.name.message}</p>
+                    </div>
                   )}
                 </div>
 
@@ -308,7 +313,12 @@ const ProductModal = (props: IProps) => {
                     placeholder="Nhập số lượng"
                   />
                   {errors.stock && (
-                    <p className="text-red-500">{errors.stock.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.stock.message}</p>
+                    </div>
                   )}
                 </div>
                 <div>
@@ -333,7 +343,12 @@ const ProductModal = (props: IProps) => {
                     <option className="bg-gray-200 text-gray-800" value="DISCONTINUED">DISCONTINUED</option>
                   </select>
                   {errors.status && (
-                    <p className="text-red-500">{errors.status.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.status.message}</p>
+                    </div>
                   )}
                 </div>
 
@@ -351,7 +366,12 @@ const ProductModal = (props: IProps) => {
                     defaultNumber={dataInit?.price}
                   />
                   {errors.price && (
-                    <p className="text-red-500">{errors.price.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.price.message}</p>
+                    </div>
                   )}
                 </div>
 
@@ -444,7 +464,12 @@ const ProductModal = (props: IProps) => {
                     defaultValue={dataInit?.description}
                   ></textarea>
                   {errors.description && (
-                    <p className="text-red-500">{errors.description.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-red-600 font-medium">{errors.description.message}</p>
+                    </div>
                   )}
                 </div>
 

@@ -237,6 +237,7 @@ export interface ICustomerFilter {
     fullName?: string;
     email?: string;
     phone?: string;
+    address?: string;
     createdAt?: string | null;
 }
 
@@ -335,7 +336,17 @@ export interface IResOrderDTO {
     paymentUrl?: string;
 }
 
+export interface IOrderFilter {
+    orderCode?: string;
+    status?: string;
+    customer?: {
+        fullName?: string;
+    };
+    createdAt?: string | null;
+}
+
 export interface IDashboard {
     totalCustomer: number
     totalIncome: number
 }
+

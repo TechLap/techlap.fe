@@ -66,9 +66,9 @@ const OrderModalDetail = (props: IOrderModalDetailProps) => {
             </button>
           </div>
 
-          <div className="p-4 overflow-y-auto grid gap-4 max-h-80vh">
+          <div className="p-4 overflow-y-auto grid gap-4 h-[80vh]">
             <div className="flex flex-col gap-3">
-              <div className="text-gray-600 text-sm">Đơn hàng</div>
+              <div className="text-gray-800 text-base font-semibold">Đơn hàng</div>
               <div className="text-xl font-semibold text-blue-600 break-all">#{dataInit?.orderCode}</div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-gray-600">Tổng tiền</span>
@@ -81,7 +81,7 @@ const OrderModalDetail = (props: IOrderModalDetailProps) => {
                 <span className="text-gray-800">{dataInit?.createdAt ? dayjs(dataInit.createdAt).format("DD/MM/YYYY HH:mm") : ""}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-600">Trạng thái</span>
+                <span className="text-gray-600">Trạng thái đơn hàng</span>
                 <span>
                   <Badge variant="outline" color={getStatusColor(dataInit?.status)} content={dataInit?.status ?? ""} />
                 </span>
@@ -89,7 +89,7 @@ const OrderModalDetail = (props: IOrderModalDetailProps) => {
             </div>
 
             <div className="flex flex-col gap-2 mt-4">
-              <div className="text-gray-600 text-sm">Thông tin khách hàng</div>
+              <div className="text-gray-800 text-base font-semibold">Thông tin khách hàng</div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-gray-600">Tên</span>
                 <span className="text-gray-800">{dataInit?.customer?.fullName ?? dataInit?.receiverName}</span>
@@ -105,26 +105,26 @@ const OrderModalDetail = (props: IOrderModalDetailProps) => {
             </div>
 
             <div className="rounded-lg block p-4 border border-gray-200">
-              <h3 className="text-sm font-medium mb-3">Sản phẩm đã đặt</h3>
+              <h3 className="text-base font-semibold mb-3 text-gray-800">Sản phẩm đã đặt</h3>
               <div className="flex flex-col divide-y divide-gray-200">
                 {(dataInit?.orderDetails ?? []).map((od) => (
-                  <div key={`${od.product.id}-${od.id ?? Math.random()}`} className="py-3 grid grid-cols-12 gap-3 items-center">
-                    <div className="col-span-1">
+                  <div key={`${od.product.id}-${od.id ?? Math.random()}`} className="py-3 grid grid-cols-[96px_1fr_80px_minmax(120px,auto)] gap-5 items-center">
+                    <div className="w-24 h-24 rounded-md overflow-hidden bg-gray-100">
                       {od.product.image ? (
                         <img
                           src={`${process.env.REACT_APP_URL_STORAGE_FILE}/${od.product.image}`}
                           alt={od.product.name}
-                          className="w-16 h-16 object-cover rounded-md"
+                          className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-16 h-16 bg-gray-100 rounded-md" />
+                        <div className="w-full h-full" />
                       )}
                     </div>
-                    <div className="col-span-7">
-                      <div className="text-sm font-medium text-gray-800 line-clamp-2">{od.product.name}</div>
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium text-gray-800 whitespace-normal break-words">{od.product.name}</div>
                     </div>
-                    <div className="col-span-2 text-sm text-gray-600">SL: {od.quantity}</div>
-                    <div className="col-span-2 text-right text-sm text-blue-600">
+                    <div className="text-sm text-gray-600 whitespace-nowrap text-center">SL: {od.quantity}</div>
+                    <div className="text-right text-sm text-blue-600 whitespace-nowrap">
                       <NumericFormat value={od.price} displayType="text" allowLeadingZeros thousandSeparator suffix="đ" />
                     </div>
                   </div>
@@ -133,15 +133,27 @@ const OrderModalDetail = (props: IOrderModalDetailProps) => {
             </div>
 
             <div className="rounded-lg block p-4 border border-gray-200">
-              <h3 className="text-sm font-medium mb-2">Ghi chú</h3>
+              <h3 className="text-base font-semibold mb-2 text-gray-800">Ghi chú</h3>
               <p className="text-gray-600 text-sm whitespace-pre-line">{dataInit?.note || ""}</p>
             </div>
 
             <div className="rounded-lg block p-4 border border-gray-200">
-              <h3 className="text-sm font-medium mb-2">Thông tin thanh toán</h3>
+              <h3 className="text-base font-semibold mb-2 text-gray-800">Thông tin thanh toán</h3>
               <div className="flex flex-col gap-1 text-sm">
-                <div className="flex justify-between"><span className="text-gray-600">Phương thức</span><span className="text-gray-800">{dataInit?.paymentMethod}</span></div>
-                <div className="flex justify-between"><span className="text-gray-600">Trạng thái</span><span className="text-gray-800">{dataInit?.paymentStatus}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600">Phương thức</span><span className="text-gray-800">{dataInit?.paymentMethod?.toUpperCase()}</span></div>
+                <div className="flex justify-between items-center"><span className="text-gray-600">Trạng thái</span><span>
+                  {(() => {
+                    const key = (dataInit?.paymentStatus || "").toLowerCase();
+                    const map: Record<string, "green" | "amber" | "red" | "gray"> = {
+                      success: "green",
+                      pending: "amber",
+                      failed: "red",
+                      cancelled: "red",
+                    };
+                    const color = map[key] ?? "gray";
+                    return <Badge variant="solid" color={color as any} content={dataInit?.paymentStatus ?? ""} />;
+                  })()}
+                </span></div>
               </div>
             </div>
           </div>

@@ -32,6 +32,13 @@ const PermissionTable = (props: IProps) => {
     }
   };
 
+  const methodOptions = [
+    { value: "GET", label: "GET" },
+    { value: "POST", label: "POST" },
+    { value: "PUT", label: "PUT" },
+    { value: "DELETE", label: "DELETE" },
+  ];
+
   const columns = [
     {
       key: "name",
@@ -73,12 +80,7 @@ const PermissionTable = (props: IProps) => {
             id="method"
             onFilterChange={onFilterChange}
             defaultOption="phương thức"
-            data={[
-              { id: "GET", name: "GET" },
-              { id: "POST", name: "POST" },
-              { id: "PUT", name: "PUT" },
-              { id: "DELETE", name: "DELETE" },
-            ]}
+            enumOptions={methodOptions}
           />
         </div>
       ),
@@ -93,13 +95,13 @@ const PermissionTable = (props: IProps) => {
           Đường dẫn
           <ButtonFilter
             id="apiPath"
-            filters={filters as any}
+            filters={filters}
             onFilterChange={onFilterChange}
             placeholder="đường dẫn"
           />
         </div>
       ),
-      render: (row: IPermission) => (row as any).apiPath,
+      render: (row: IPermission) => row.apiPath,
     },
     {
       key: "createdAt",
