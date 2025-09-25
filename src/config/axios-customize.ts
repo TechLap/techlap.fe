@@ -13,7 +13,7 @@ interface AccessTokenResponse {
 }
 
 const instance = axiosClient.create({
-    baseURL: process.env.REACT_APP_TANXUAN_BACKEND_URL as string,
+    baseURL: process.env.REACT_APP_TECHLAP_BACKEND_URL as string,
     withCredentials: true,
 });
 

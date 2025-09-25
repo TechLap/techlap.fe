@@ -136,14 +136,14 @@ const ProductModalDetail = (props: IProductModalDetailProps) => {
                     {dataInit?.createdAt ? dayjs(dataInit?.createdAt).format("DD/MM/YYYY") : ""}
                   </p>
                 </div>
-                <div className="flex justify-between items-center">
+                {/* <div className="flex justify-between items-center">
                   <span className="text-gray-600 font-medium text-xs">
                     Người tạo:
                   </span>
                   <p className="text-gray-600 font-medium text-xs">
                     {dataInit?.createdBy ? dataInit?.createdBy : ""}
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
