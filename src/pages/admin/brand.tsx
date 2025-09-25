@@ -15,7 +15,7 @@ import ModalDelete from "../../components/common/modal.delete";
 import CustomToast from "../../components/common/toast.message";
 
 const BrandPage = () => {
-  const MAX_BRANDS_PAGE = 5;
+  const MAX_BRANDS_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const [totalSearchPage, setTotalSearchPage] = useState(1);

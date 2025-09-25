@@ -8,6 +8,7 @@ import ButtonFilter from "../../common/button.filter";
 import SelectFilter from "../../common/select.filter";
 import DateFilter from "../../common/date.picker";
 import { useEffect } from "react";
+import Access from "../../../pages/auth/route/access";
 
 interface IProps {
   orderData?: IOrder[] | null;
@@ -171,6 +172,7 @@ const OrderTable = (props: IProps) => {
       header: "Thao tác",
       render: (row: IOrder) => (
         <div className="flex justify-end gap-1">
+          <Access permission={{ name: "Get a order by id" }} hideChildren>
           <button
             type="button"
             className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
@@ -181,6 +183,8 @@ const OrderTable = (props: IProps) => {
               className="text-green-600 hover:text-green-800 hover:bg-green-100 focus:bg-green-100 rounded-lg"
             />
           </button>
+          </Access>
+          <Access permission={{ name: "Update a order" }} hideChildren>
           <button
             type="button"
             className="inline-flex items-center gap-x-2 px-1 rounded-lg border border-transparent text-gray-800 hover:text-gray-900 hover:bg-gray-50 focus:outline-hidden focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none"
@@ -191,6 +195,7 @@ const OrderTable = (props: IProps) => {
               className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 focus:bg-blue-100 rounded-lg"
             />
           </button>
+          </Access>
         </div>
       ),
       headerRowclassName: "text-end",

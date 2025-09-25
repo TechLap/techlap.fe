@@ -154,7 +154,7 @@ export interface IProductFilter {
         id: string;
     };
     brand?: {
-        id: string;
+        name?: string;
     };
     priceRange?: {
         min: number;

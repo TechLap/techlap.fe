@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, CheckCircle, Clock, Eye, Package, Truck, XCircle } from "lucide-react";
+import { ArrowLeft, Clock, Eye, Package } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiFetchOrderHistory } from "../../config/api";
 import React, { useEffect, useState } from "react";
@@ -8,6 +8,8 @@ import dayjs from "dayjs";
 import { NumericFormat } from "react-number-format";
 import OrderDetailModal from "../../components/client/order.detail";
 import Pagination from "../../components/common/pagination";
+import Badge from "../../components/ui/badge";
+import { getStatusOrderColor } from "../../utils/utils";
 
 export const HistoryOrder = () => {
     const MAX_ORDERS_PAGE = 5;
@@ -27,17 +29,22 @@ export const HistoryOrder = () => {
     };
 
     const { data: orders } = useQuery({
-        queryKey: ["fetchOrders"],
+        queryKey: [["fetchOrders"], currentPage],
         queryFn: () =>
             apiFetchOrderHistory(`page=${currentPage}&size=${MAX_ORDERS_PAGE}`),
     });
-    const [ordersData, setOrdersData] = useState<IOrder[] | null>(orders?.data.data?.result || []);
+    const [ordersData, setOrdersData] = useState<IOrder[] | null>(orders?.data?.data?.result || []);
 
     useEffect(() => {
         if (orders) {
-            setOrdersData(orders.data.data?.result || []);
+            setOrdersData(orders.data?.data?.result || []);
         }
     }, [orders]);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [currentPage]);
+
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -95,7 +102,7 @@ export const HistoryOrder = () => {
                                         </div>
                                         <div className="flex items-center space-x-3">
                                             <div className={`flex items-center px-3 py-1 rounded-full text-sm font-medium`}>
-                                                {order.status}
+                                                <Badge content={order.status} variant="solid" color={getStatusOrderColor(order.status)} />
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +125,7 @@ export const HistoryOrder = () => {
                                         <div>
                                             <p className="text-sm text-gray-500 mb-1">Thanh toán</p>
                                             <p className="font-semibold">
-                                                {order.paymentMethod}
+                                                {order.paymentMethod.toUpperCase()}
                                             </p>
                                         </div>
                                     </div>
@@ -164,7 +171,7 @@ export const HistoryOrder = () => {
                             setCurrentPage
                         }
                         total={
-                            orders?.data.data?.meta.pages ?? 0
+                            orders?.data?.data?.meta.pages ?? 0
                         }
                     />
                 </div>

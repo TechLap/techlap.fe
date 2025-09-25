@@ -10,7 +10,7 @@ import { apiFetchAllOrder, apiSearchOrder } from "../../config/api";
 import { IOrder, IOrderFilter } from "../../types/backend";
 
 const OrderPage = () => {
-  const MAX_ORDERS_PAGE = 5;
+  const MAX_ORDERS_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const [totalSearchPage, setTotalSearchPage] = useState(1);

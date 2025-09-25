@@ -15,7 +15,7 @@ interface IProps {
   onEditClick: (product: IProduct) => void;
   onDeleteClick: (product: IProduct) => void;
   onViewClick: (product: IProduct) => void;
-  filters: IProductFilter;
+  filters: IProductFilter & { brandName?: string };
   onFilterChange: (key: string, value: string) => void;
 }
 
@@ -80,9 +80,16 @@ const ProductTable = (props: IProps) => {
       headerRowclassName: "font-semibold",
     },
     {
-      key: "brand",
+      key: "brandName",
       header: (
-        <div className="flex flex-nowrap items-center gap-x-1">Thương hiệu</div>
+        <div className="flex flex-nowrap items-center gap-x-1">Thương hiệu
+        <ButtonFilter
+            id="brandName"
+            filters={filters}
+            onFilterChange={onFilterChange}
+            placeholder="thương hiệu"
+          />
+        </div>
       ),
       render: (row: IProduct) => row.brand?.name,
     },

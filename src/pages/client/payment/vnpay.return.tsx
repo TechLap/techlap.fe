@@ -42,7 +42,7 @@ function VnpayReturnPage() {
                         // ignore cart clear errors, still navigate
                     }
                     toast.success('Thanh toán thành công');
-                    navigate('/');
+                    navigate('/history-order');
                 } else {
                     toast.error((typeof res.data === 'string' ? res.data : '') || 'Xác thực thanh toán thất bại');
                     navigate('/cart');

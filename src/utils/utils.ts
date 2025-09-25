@@ -22,3 +22,20 @@ export function getProductStatusBadgeClass(status: string): string {
 
   return `${baseStyles} ${statusStyles[status as keyof typeof statusStyles] || statusStyles.INACTIVE}`;
 }
+
+export const getStatusOrderColor = (status: string) => {
+  switch (status) {
+      case "PENDING":
+          return "yellow";
+      case "PROCESSING":
+          return "purple";
+      case "SHIPPING":
+          return "blue";
+      case "PAID":
+          return "green";
+      case "DELIVERED":
+          return "gray";
+      case "CANCELLED":
+          return "red";
+  }
+}
