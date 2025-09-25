@@ -25,6 +25,8 @@ import {
 import { apiAddToCart, apiFetchProductById } from "../../../../config/api";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { setCustomerAddToCart } from "../../../../redux/slice/customer.slide";
+import CustomToast from "../../../../components/common/toast.message";
+import { toast } from "react-toastify";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -47,11 +49,13 @@ const ProductDetailPage = () => {
       setLoading(true);
       const res = await apiAddToCart({ productId: id as string, quantity: 1, update: false });
       const tolalCartAfter = res?.data?.data?.sum;
-      if (res.data.statusCode === 201 && tolalCartAfter !== undefined && tolalCartAfter > totalCart!) {
-        dispatch(setCustomerAddToCart({ quantity: 1 }));
+      if (res.data.statusCode === 201) {
+        toast.success(<CustomToast message='Thêm vào giỏ hàng thành công' className='text-green-600' />)
+        if (tolalCartAfter !== undefined && tolalCartAfter > totalCart!)
+          dispatch(setCustomerAddToCart({ quantity: 1 }));
       }
     } catch (err) {
-
+      toast.error(<CustomToast message='Thêm vào giỏ hàng không thành công' className='text-red-600' />)
     } finally {
       setLoading(false);
     }
@@ -395,7 +399,7 @@ const ProductDetailPage = () => {
                         <Cart size={16} className="text-white" />
                         {loading ? "Đang thêm..." : "Thêm vào giỏ"}
                       </button>
-                      
+
                     </div>
                   </div>
                 </div>
