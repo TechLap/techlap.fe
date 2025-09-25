@@ -64,7 +64,7 @@ export const apiForgotPasswordForUser = (email: string) => {
   formData.append("email", email);
 
   return axiosClient.post<IBackendResponse<string>>(
-    "/user/reset-password",
+    "/users/reset-password",
     formData,
     {
       headers: {
@@ -75,11 +75,11 @@ export const apiForgotPasswordForUser = (email: string) => {
 };
 
 export const apiResetPasswordForUser = (data: { token: string; newPassword: string; reNewPassword: string }) => {
-    return axiosClient.post<IBackendResponse<string>>(`/user/change-password`, data)
+    return axiosClient.post<IBackendResponse<string>>(`/users/change-password`, data)
 }
 
 export const apiGetDashboard = () => {
-    return axiosClient.get<IBackendResponse<IDashboard>>('/user/dashboard')
+    return axiosClient.get<IBackendResponse<IDashboard>>('/users/dashboard')
 }
 
 /* Module Customer */
@@ -124,7 +124,7 @@ export const apiForgotPasswordForCustomer = (email: string) => {
   formData.append("email", email);
 
   return axiosClient.post<IBackendResponse<string>>(
-    "/customer/reset-password",
+    "/customers/reset-password",
     formData,
     {
       headers: {
@@ -135,7 +135,7 @@ export const apiForgotPasswordForCustomer = (email: string) => {
 };
 
 export const apiResetPasswordForCustomer = (data: { token: string; newPassword: string; reNewPassword: string }) => {
-    return axiosClient.post<IBackendResponse<string>>(`/cusomter/change-password`, data)
+    return axiosClient.post<IBackendResponse<string>>(`/customers/change-password`, data)
 }
 
 export const apiFetchOrderHistory = ( query: string ) => {
