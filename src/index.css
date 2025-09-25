@@ -189,3 +189,28 @@ input[type="email"]:invalid:not(:placeholder-shown)::-webkit-validation-bubble-m
         opacity: 0.8;
     }
 }
+
+/* Hide native password reveal icons (Safari/WebKit & old Edge) */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-textfield-decoration-container {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Additional WebKit variations */
+input[type="password"]::-webkit-reveal-button,
+input[type="password"]::-webkit-clear-button,
+input[type="password"]::-webkit-password-toggle,
+input[type="password"]::-webkit-password-toggle-button {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}

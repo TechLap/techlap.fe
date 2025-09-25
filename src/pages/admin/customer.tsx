@@ -19,7 +19,7 @@ import CustomerModal from "../../components/admin/customers/customer.modal";
 import CreateModalButton from "../../components/common/create.modal.button";
 
 const CustomerPage = () => {
-  const MAX_CUSTOMERS_PAGE = 5;
+  const MAX_CUSTOMERS_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const [totalSearchPage, setTotalSearchPage] = useState(1);

@@ -11,15 +11,15 @@ import ModalDelete from "../../components/common/modal.delete";
 import CustomToast from "../../components/common/toast.message";
 import {
   apiDeleteCategory,
+  apiFetchAllCategory,
   apiSearchCategory
 } from "../../config/api";
-import { useCategories } from "../../hooks";
 import { ICategory, ICategoryFilter } from "../../types/backend";
 import Access from "../auth/route/access";
 import CreateModalButton from "../../components/common/create.modal.button";
 
 const CategoryPage = () => {
-  const CATEGORIES_PER_PAGE = 5;
+  const CATEGORIES_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const [totalSearchPage, setTotalSearchPage] = useState(0);
@@ -35,13 +35,13 @@ const CategoryPage = () => {
   });
   const [debouncedFilters] = useDebounce(filters, 500);
 
-  const { categories, isPending, isError } = useCategories({
-    currentPage: currentPage,
-    size: CATEGORIES_PER_PAGE,
-  });
+const { data: categories, isPending, isError } = useQuery({
+  queryKey: [["fetchAllCategories"], currentPage],
+  queryFn: () => apiFetchAllCategory(`page=${currentPage}&size=${CATEGORIES_PER_PAGE}`),
+});
 
   const [displayData, setDisplayData] = useState<ICategory[] | null>(
-    categories?.data.data?.result ?? null
+    categories?.data?.data?.result ?? null
   );
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const CategoryPage = () => {
   // Set display data
   useEffect(() => {
     if (!isSearching && categories) {
-      setDisplayData(categories?.data.data?.result ?? []);
+      setDisplayData(categories?.data?.data?.result ?? []);
     }
   }, [categories, isSearching]);
 
@@ -171,7 +171,7 @@ const CategoryPage = () => {
               total={
                 isSearching
                   ? totalSearchPage
-                  : categories?.data.data?.meta.pages ?? 0
+                  : categories?.data?.data?.meta.pages ?? 0
               }
             />
           </div>

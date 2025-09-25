@@ -20,7 +20,7 @@ import { IProduct, IProductFilter } from "../../types/backend";
 import Access from "../auth/route/access";
 
 const ProductPage = () => {
-  const MAX_PRODUCTS_PAGE = 5;
+  const MAX_PRODUCTS_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const [totalSearchPage, setTotalSearchPage] = useState(1);
@@ -29,16 +29,11 @@ const ProductPage = () => {
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
   const [isOpenActionModal, setIsOpenActionModal] = useState(false);
   const [isOpenViewModal, setIsOpenViewModal] = useState(false);
-  const [filters, setFilters] = useState<IProductFilter>({
+  const [filters, setFilters] = useState<IProductFilter & { brandName?: string }>({
     name: "",
     quantity: 0,
     price: 0,
-    category: {
-      id: "",
-    },
-    brand: {
-      id: "",
-    },
+    brandName: "",
     status: "",
   });
   const [debouncedFilters] = useDebounce(filters, 500);
@@ -54,7 +49,7 @@ const ProductPage = () => {
   });
 
   const [displayData, setDisplayData] = useState<IProduct[] | null>(
-    products?.data.data?.result ?? null
+    products?.data?.data?.result ?? null
   );
   // Search products
   const { data: searchData, error: searchError } = useQuery({
@@ -65,8 +60,8 @@ const ProductPage = () => {
         quantity: debouncedFilters.quantity,
         price: debouncedFilters.price,
         status: debouncedFilters.status,
-        ...(debouncedFilters.category?.id
-          ? { category: { id: debouncedFilters.category.id } }
+        ...(debouncedFilters.brandName
+          ? { brand: { name: debouncedFilters.brandName } }
           : {}),
       }),
     enabled: Object.values(debouncedFilters).some(
@@ -85,20 +80,12 @@ const ProductPage = () => {
   // Set display data
   useEffect(() => {
     if (!isSearching && products) {
-      setDisplayData(products?.data.data?.result ?? []);
+      setDisplayData(products?.data?.data?.result ?? []);
     }
   }, [products, isSearching]);
 
-  const handleFilterChange = (key: string, value: string | number) => {
-    setFilters((prev) => {
-      let newValue;
-      if (key === "category") {
-        newValue = { category: { id: value as string } };
-      } else {
-        newValue = { [key]: value };
-      }
-      return { ...prev, ...newValue };
-    });
+  const handleFilterChange = (key: string, value: string) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
     setIsSearching(!!value);
   };
 
@@ -193,7 +180,7 @@ const ProductPage = () => {
               total={
                 isSearching
                   ? totalSearchPage
-                  : products?.data.data?.meta.pages ?? 0
+                  : products?.data?.data?.meta.pages ?? 0
               }
             />
           </div>

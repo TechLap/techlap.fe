@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import CreateModalButton from "../../components/common/create.modal.button";
 
 const RolePage = () => {
-  const MAX_ROLES_PAGE = 5;
+  const MAX_ROLES_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const [totalSearchPage, setTotalSearchPage] = useState(0);

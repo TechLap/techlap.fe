@@ -20,7 +20,7 @@ import ModalDelete from "../../components/common/modal.delete";
 import CreateModalButton from "../../components/common/create.modal.button";
 
 const UserPage = () => {
-  const MAX_USERS_PAGE = 5;
+  const MAX_USERS_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const [totalSearchPage, setTotalSearchPage] = useState(1);
