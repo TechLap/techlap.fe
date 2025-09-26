@@ -347,6 +347,9 @@ export interface IOrderFilter {
 
 export interface IDashboard {
     totalCustomer: number
+    totalProduct: number
+    totalOrder: number
     totalIncome: number
+    totalBrand: number
 }
 

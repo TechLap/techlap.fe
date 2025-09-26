@@ -18,6 +18,9 @@ const HomePage = () => {
       setDashboardInfo(info.data.data);
     }
   }, [info]);
+
+
+  const avgOrderValue = dashboardInfo?.totalIncome ? Number((dashboardInfo.totalIncome / dashboardInfo.totalOrder).toFixed(0)) : 0;
   return (
     <div className="w-full">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
@@ -58,7 +61,7 @@ const HomePage = () => {
                 <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
                   {dashboardInfo?.totalCustomer}
                 </h3>
-                <span className="flex items-center gap-x-1 text-green-600">
+                {/* <span className="flex items-center gap-x-1 text-green-600">
                   <svg
                     className="inline-block size-4 self-center"
                     xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +78,7 @@ const HomePage = () => {
                     <polyline points="16 7 22 7 22 13" />
                   </svg>
                   <span className="inline-block text-sm">1.7%</span>
-                </span>
+                </span> */}
               </div>
             </div>
           </div>
@@ -83,12 +86,12 @@ const HomePage = () => {
           <div className="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl">
             <div className="p-4 md:p-5">
               <div className="flex items-center gap-x-2">
-                <p className="text-xs uppercase text-gray-500">Sessions</p>
+                <p className="text-xs uppercase text-gray-500">Total orders</p>
               </div>
 
               <div className="mt-1 flex items-center gap-x-2">
                 <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                  29.4%
+                  {dashboardInfo?.totalOrder}
                 </h3>
               </div>
             </div>
@@ -98,15 +101,15 @@ const HomePage = () => {
             <div className="p-4 md:p-5">
               <div className="flex items-center gap-x-2">
                 <p className="text-xs uppercase text-gray-500">
-                  Avg. Click Rate
+                  Total products
                 </p>
               </div>
 
               <div className="mt-1 flex items-center gap-x-2">
                 <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                  56.8%
+                  {dashboardInfo?.totalProduct}
                 </h3>
-                <span className="flex items-center gap-x-1 text-red-600">
+                {/* <span className="flex items-center gap-x-1 text-red-600">
                   <svg
                     className="inline-block size-4 self-center"
                     xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +126,7 @@ const HomePage = () => {
                     <polyline points="16 17 22 17 22 11" />
                   </svg>
                   <span className="inline-block text-sm">1.7%</span>
-                </span>
+                </span> */}
               </div>
             </div>
           </div>
@@ -131,12 +134,12 @@ const HomePage = () => {
           <div className="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl">
             <div className="p-4 md:p-5">
               <div className="flex items-center gap-x-2">
-                <p className="text-xs uppercase text-gray-500">Pageviews</p>
+                <p className="text-xs uppercase text-gray-500">Total brands</p>
               </div>
 
               <div className="mt-1 flex items-center gap-x-2">
                 <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                  92,913
+                  {dashboardInfo?.totalBrand}
                 </h3>
               </div>
             </div>
@@ -158,7 +161,7 @@ const HomePage = () => {
                 </p>
               </div>
 
-              <div>
+              {/* <div>
                 <span className="py-[5px] px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-md bg-teal-100 text-teal-800">
                   <svg
                     className="inline-block size-3.5"
@@ -177,7 +180,7 @@ const HomePage = () => {
                   </svg>
                   25%
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div id="hs-multiple-bar-charts"></div>
@@ -186,13 +189,18 @@ const HomePage = () => {
           <div className="p-4 md:p-5 min-h-102.5 flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl">
             <div className="flex flex-wrap justify-between items-center gap-2">
               <div>
-                <h2 className="text-sm text-gray-500">Visitors</h2>
+                <h2 className="text-sm text-gray-500">Avg.Order Value</h2>
                 <p className="text-xl sm:text-2xl font-medium text-gray-800">
-                  80.3k
+                <NumericFormat
+                    value={avgOrderValue}
+                    displayType="text"
+                    thousandSeparator={true}
+                    suffix={"đ"}
+                  />
                 </p>
               </div>
 
-              <div>
+              {/* <div>
                 <span className="py-[5px] px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-md bg-red-100 text-red-800">
                   <svg
                     className="inline-block size-3.5"
@@ -211,7 +219,7 @@ const HomePage = () => {
                   </svg>
                   2%
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div id="hs-single-area-chart"></div>
