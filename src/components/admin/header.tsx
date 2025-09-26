@@ -38,7 +38,7 @@ const Header = () => {
               className="size-9.5 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
             >
               <svg
-                className="shrink-0 size-4 text-green-800"
+                className="shrink-0 size-4 text-blue-800"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"

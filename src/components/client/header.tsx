@@ -54,7 +54,7 @@ const Header = () => {
               </NavLink>
             </div>
 
-            <div className="relative w-72 hidden md:block">
+            {/* <div className="relative w-72 hidden md:block">
               <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
                 <svg
                   className="shrink-0 size-4 text-gray-400"
@@ -78,7 +78,7 @@ const Header = () => {
                 id="search"
                 placeholder="Tìm kiếm sản phẩm..."
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="hidden md:flex flex-row items-center gap-4">
