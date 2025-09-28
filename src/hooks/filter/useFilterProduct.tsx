@@ -33,6 +33,9 @@ export const useFilterProduct = (
     category: {
       id: "",
     },
+    brand: {
+      name: "",
+    }
     // supplier: {
     //   id: "",
     // },
@@ -57,9 +60,9 @@ export const useFilterProduct = (
         ...(debouncedFilters.category?.id
           ? { category: { id: debouncedFilters.category.id } }
           : {}),
-        // ...(debouncedFilters.supplier?.id
-        //   ? { supplier: { id: debouncedFilters.supplier.id } }
-        //   : {}),
+        ...(debouncedFilters.brand?.name
+          ? { brand: { name: debouncedFilters.brand.name } }
+          : {}),
         ...(debouncedFilters.priceRange?.min
           ? {
             priceRange: {
@@ -78,8 +81,8 @@ export const useFilterProduct = (
     let newValue: Partial<IProductFilter> = {};
     if (key === "category") {
       newValue = { category: { id: value as string } };
-      // } else if (key === "supplier") {
-      //   newValue = { supplier: { id: value as string } };
+    } else if (key === "brand") {
+      newValue = { brand: { name: value as string } };
     } else if (key === "priceRange") {
       if (typeof value === "object" && "min" in value && "max" in value) {
         newValue = { priceRange: value };

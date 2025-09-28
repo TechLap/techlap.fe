@@ -13,6 +13,7 @@ interface ProductCardProps {
   image: string | null;
   name: string;
   price: number;
+  status: string;
   discount?: number;
   categoryName?: string;
   description?: string;
@@ -27,24 +28,14 @@ const ProductCard = ({
   name,
   price,
   discount,
+  status,
   categoryName,
   description,
   isBestSeller,
   isNew,
   isSale,
 }: ProductCardProps) => {
-  const status = (() => {
-    if (isNew) return "Mới";
-    if (isBestSeller) return "Bán chạy";
-    if (isSale) return "Giảm giá";
-    return null;
-  })();
-  const statusColor = (() => {
-    if (isNew) return "bg-blue-500";
-    if (isBestSeller) return "bg-amber-500";
-    if (isSale) return "bg-red-500";
-    return null;
-  })();
+
   const newPrice = price - (price * (discount as number / 100));
   const [loading, setLoading] = useState(false);
   // Redux
@@ -77,15 +68,7 @@ const ProductCard = ({
             alt={name}
             className="w-full h-44 object-cover rounded-t-xl hover:opacity-90 transition-opacity"
           />
-          {status && (
-            <div className="absolute top-2 right-2 left-2">
-              <span
-                className={`text-white px-2 py-1 rounded-md text-xs ${statusColor} font-medium`}
-              >
-                {status}
-              </span>
-            </div>
-          )}
+
         </div>
         <div className="flex flex-col gap-2 px-4 py-2 flex-1">
           <div className="text-xs text-gray-500 mb-1 line-clamp-1">
@@ -123,19 +106,39 @@ const ProductCard = ({
         </div>
       </NavLink>
       <div className="px-4 pb-2 mt-auto">
-        <button
-          className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 flex justify-center items-center gap-2 whitespace-nowrap font-medium text-sm"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            // TODO: Add to cart logic here
-            addToCart();
-          }}
-          disabled={loading}
-        >
-          <CartIcon size={16} color="white" className="size-4" />
-          {loading ? "Đang thêm..." : "Thêm vào giỏ"}
-        </button>
+        {status === "ACTIVE" ? (
+          // Nút đỏ cho sản phẩm còn bán
+          <button
+            className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 flex justify-center items-center gap-2 whitespace-nowrap font-medium text-sm"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              addToCart();
+            }}
+            disabled={loading}
+          >
+            <CartIcon size={16} color="white" className="size-4" />
+            {loading ? "Đang thêm..." : "Thêm vào giỏ"}
+          </button>
+        ) : status === "DISCONTINUED" ? (
+          // Nút xám cho sản phẩm ngừng sản xuất
+          <button
+            className="w-full bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed flex justify-center items-center gap-2 whitespace-nowrap font-medium text-sm"
+            disabled
+          >
+            <CartIcon size={16} color="white" className="size-4" />
+            Ngừng sản xuất
+          </button>
+        ) : (
+          // Nút xám mặc định cho các trạng thái khác (ví dụ hết hàng)
+          <button
+            className="w-full bg-gray-400 text-white px-4 py-2 rounded-md cursor-not-allowed flex justify-center items-center gap-2 whitespace-nowrap font-medium text-sm"
+            disabled
+          >
+            <CartIcon size={16} color="white" className="size-4" />
+            Hết hàng
+          </button>
+        )}
       </div>
     </div>
   );

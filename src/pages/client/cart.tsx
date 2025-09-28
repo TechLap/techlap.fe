@@ -24,6 +24,7 @@ interface CartItem {
         stock: number;
         description: string;
         image: string;
+        status: string;
         category: {
             id: number;
             name: string;
@@ -94,8 +95,18 @@ function CartPage() {
         const updatedItem = cartItems.find((item) => item.id === id);
         if (!updatedItem) return;
 
-        const newQuantity = Math.max(1, updatedItem.quantity + change);
+        const maxStock = updatedItem.product.stock;
+        let newQuantity = updatedItem.quantity + change;
 
+        // ✅ Không cho nhỏ hơn 1
+        if (newQuantity < 1) newQuantity = 1;
+
+        // ✅ Không cho vượt quá stock
+        if (newQuantity > maxStock) {
+            toast.warning(`Sản phẩm chỉ còn ${maxStock} trong kho`);
+            newQuantity = maxStock;
+        }
+        console.log(newQuantity)
         // Cập nhật UI ngay
         setCartItems((items) =>
             items.map((item) =>
@@ -132,10 +143,15 @@ function CartPage() {
         }
     };
 
+    // check toàn bộ giỏ hàng
+    const hasInvalidProduct = cartItems.some(
+        (ci) => ci.product.status !== "ACTIVE" || ci.product.stock <= 0
+    );
+
     // Tính toán các khoản tiền
     const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-    const shipping = 0; // Giả sử phí vận chuyển là 0
-    const discount = cartItems.reduce((sum, item) => sum + (item.product.price * (item.product.discount as number / 100)) * item.quantity, 0)
+    const discount = cartItems.reduce((sum, item) => sum + (item.product.price * (item.product.discount as number / 100)) * item.quantity, 0);
+    const shipping = (subtotal - discount) >= 20000000 ? 0 : 100000;
 
     React.useEffect(() => {
         getCart();
@@ -143,7 +159,7 @@ function CartPage() {
 
     React.useEffect(() => {
         setTotalPrice(subtotal - discount + shipping)
-    }, [subtotal, discount]);
+    }, [subtotal, discount, shipping]);
 
     // Logic submit order
     const handleSubmitForm = handleSubmit(async (valuesForm: CartFormValues) => {
@@ -448,9 +464,24 @@ function CartPage() {
                                 </div>
                             </div>
 
-                            <button type="submit" form='checkoutForm' className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold mt-4 sm:mt-6 hover:bg-blue-700 transition-colors focus:ring-4 focus:ring-blue-200 text-sm sm:text-base">
+                            <button
+                                type="submit"
+                                form="checkoutForm"
+                                disabled={hasInvalidProduct || cartItems.length === 0}
+                                className={`w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold mt-4 sm:mt-6 text-sm sm:text-base transition-colors focus:ring-4 focus:ring-blue-200
+    ${hasInvalidProduct || cartItems.length === 0
+                                        ? "opacity-50 cursor-not-allowed"
+                                        : "hover:bg-blue-700"}`}
+                            >
                                 Đặt hàng ngay
                             </button>
+
+                            {/* Thông báo trạng thái */}
+                            {hasInvalidProduct && (
+                                <p className="text-xs text-red-500 mt-1">
+                                    Có sản phẩm trong giỏ hàng đã hết hàng hoặc ngừng kinh doanh
+                                </p>
+                            )}
 
                             <div className="mt-4 sm:mt-6 space-y-2 sm:space-y-3 text-xs sm:text-sm">
                                 <div className="flex items-center text-gray-600">
@@ -459,7 +490,7 @@ function CartPage() {
                                 </div>
                                 <div className="flex items-center text-gray-600">
                                     <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-                                    <span>Miễn phí giao hàng cho đơn trên 50 triệu</span>
+                                    <span>Miễn phí giao hàng cho đơn trên 20 triệu</span>
                                 </div>
                                 <div className="flex items-center text-gray-600">
                                     <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
