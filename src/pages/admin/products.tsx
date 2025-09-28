@@ -29,7 +29,9 @@ const ProductPage = () => {
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
   const [isOpenActionModal, setIsOpenActionModal] = useState(false);
   const [isOpenViewModal, setIsOpenViewModal] = useState(false);
-  const [filters, setFilters] = useState<IProductFilter & { brandName?: string }>({
+  const [filters, setFilters] = useState<
+    IProductFilter & { brandName?: string }
+  >({
     name: "",
     quantity: 0,
     price: 0,
@@ -115,23 +117,37 @@ const ProductPage = () => {
   };
 
   const handleDeleteProduct = async () => {
-    const res = await apiDeleteProduct(selectedProduct?.id ?? "");
-    if (res?.data?.statusCode === 200) {
-      reloadTable();
-      toast.success(
-        <CustomToast
-          message="Xóa sản phẩm thành công!"
-          className="text-green-600"
-        />
-      );
-    } else {
+    try {
+      const res = await apiDeleteProduct(selectedProduct?.id ?? "");
+      // Kiểm tra cả res.data.statusCode và res.status
+      const statusCode = res?.data?.statusCode ?? res?.status;
+      const message = (res?.data as any)?.message ?? (res as any)?.message;
+      const error = (res?.data as any)?.error ?? (res as any)?.error;
+      if (statusCode === 200) {
+        reloadTable();
+        toast.success(
+          <CustomToast
+            message="Xóa sản phẩm thành công!"
+            className="text-green-600"
+          />
+        );
+      } else {
+        // Xử lý các trường hợp lỗi khác nhau (409, 400, etc.)
+        const errorMessage = message ?? error ?? "Xóa sản phẩm thất bại!";
+
+        toast.error(
+          <CustomToast message={errorMessage} className="text-red-600" />
+        );
+      }
+    } catch (error: any) {
+      // Xử lý lỗi network hoặc các lỗi khác
+      const errorMessage = error?.message ?? "Đã xảy ra lỗi không mong muốn!";
+
       toast.error(
-        <CustomToast
-          message="Xóa sản phẩm thất bại!"
-          className="text-red-600"
-        />
+        <CustomToast message={errorMessage} className="text-red-600" />
       );
     }
+
     setSelectedProduct(null);
     setIsOpenDeleteModal(false);
   };

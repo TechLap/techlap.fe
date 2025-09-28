@@ -118,23 +118,38 @@ const CustomerPage = () => {
   };
 
   const handleDeleteCustomer = async () => {
-    const res = await apiDeleteCustomer(selectedCustomer?.id ?? "");
-    if (res?.data?.statusCode === 200) {
-      reloadTable();
-      toast.success(
-        <CustomToast
-          message="Xóa khách hàng thành công!"
-          className="text-green-600"
-        />
-      );
-    } else {
+    try {
+      const res = await apiDeleteCustomer(selectedCustomer?.id ?? "");
+      // Kiểm tra cả res.data.statusCode và res.status
+      const statusCode = res?.data?.statusCode ?? res?.status;
+      const message = (res?.data as any)?.message ?? (res as any)?.message;
+      const error = (res?.data as any)?.error ?? (res as any)?.error;
+      
+      if (statusCode === 200) {
+        reloadTable();
+        toast.success(
+          <CustomToast
+            message="Xóa khách hàng thành công!"
+            className="text-green-600"
+          />
+        );
+      } else {
+        // Xử lý các trường hợp lỗi khác nhau (409, 400, etc.)
+        const errorMessage = message ?? error ?? "Xóa khách hàng thất bại!";
+
+        toast.error(
+          <CustomToast message={errorMessage} className="text-red-600" />
+        );
+      }
+    } catch (error: any) {
+      // Xử lý lỗi network hoặc các lỗi khác
+      const errorMessage = error?.message ?? "Đã xảy ra lỗi không mong muốn!";
+
       toast.error(
-        <CustomToast
-          message="Xóa khách hàng thất bại!"
-          className="text-red-600"
-        />
+        <CustomToast message={errorMessage} className="text-red-600" />
       );
     }
+    
     setSelectedCustomer(null);
     setIsOpenDeleteModal(false);
   };

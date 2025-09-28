@@ -114,6 +114,13 @@ const ProductTable = (props: IProps) => {
       render: (row: IProduct) => row.stock,
     },
     {
+      key: "sold",
+      header: (
+        <div className="flex flex-nowrap items-center gap-x-1">Đã bán</div>
+      ),
+      render: (row: IProduct) => row.sold,
+    },
+    {
       key: "status",
       header: (
         <div className="flex flex-nowrap items-center gap-x-1">
