@@ -1,5 +1,5 @@
 import axiosClient from "./axios-customize"
-import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IDashboard, IModelPagination, IOrder, IOrderFilter, IPermission, IPermissionFilter, IProduct, IProductFilter, IRequestCreateOrder, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
+import { GetAccount, GetCustomer, IAccount, IBackendResponse, IBrand, ICart, ICategory, ICategoryFilter, ICustomer, ICustomerAccount, ICustomerFilter, IDashboard, IModelPagination, IOrder, IOrderFilter, IOrderStatusAnalytics, IPermission, IPermissionFilter, IProduct, IProductFilter, IRequestCreateOrder, IRevenueAnalytics, IRole, IRoleFilter, IUser, IUserFilter } from "../types/backend"
 
 /* Module Auth */
 export const apiLoginForCustomer = (username: string, password: string) => {
@@ -335,5 +335,13 @@ export const apiFetchAllOrder = ( query: string ) => {
 
 export const apiUpdateOrderInfo = ( order: IOrder ) => {
     return axiosClient.put<IBackendResponse<IOrder>>(`/orders`, {...order})
+}
+
+export const apiGetRevenueAnalytics = (query: number) => {
+    return axiosClient.get<IBackendResponse<IRevenueAnalytics[]>>(`/orders/monthly-revenue`)
+}
+
+export const apiGetOrderStatusAnalytics = () => {
+    return axiosClient.get<IBackendResponse<IOrderStatusAnalytics[]>>(`/orders/status/count`)
 }
 

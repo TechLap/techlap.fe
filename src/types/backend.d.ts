@@ -125,6 +125,7 @@ export interface IProduct {
     sold?: number
     discount?: number;
     image?: string | null;
+    sold?: number;
     price: number;
     brand?: {
         id: string;
@@ -355,5 +356,20 @@ export interface IDashboard {
     totalOrder: number
     totalIncome: number
     totalBrand: number
+    totalOrderPaid: number
+}
+
+export interface IRevenueAnalytics {
+    month: string;
+    revenue: number;
+}
+
+export interface IOrderStatusAnalytics {
+    delivered: number;
+    processing: number;
+    pending: number;
+    cancelled: number;
+    shipping: number;
+    paid: number;
 }
 

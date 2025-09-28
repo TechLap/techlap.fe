@@ -11,36 +11,39 @@ const SideBar = () => {
     w-40 h-full
     hidden
     fixed inset-y-0 start-0 z-30
-    bg-white border-e border-gray-200
+    bg-gradient-to-b from-slate-50 to-slate-100 border-e border-slate-200 shadow-xl
     lg:block lg:translate-x-0 lg:end-auto lg:bottom-0"
       tabIndex={-1}
       aria-label="Sidebar"
     >
       <div className="relative flex flex-col h-full max-h-full">
-        <div className="px-2 pt-2 flex items-center">
+        <div className="px-3 pt-4 pb-2 flex items-center border-b border-slate-200 bg-gradient-to-r from-blue-50 to-indigo-50">
           <NavLink
-            className="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
+            className="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80 group"
             to={"/admin/dashboard"}
           >
-            <img
-              src="/images/techlap_logo.png"
-              alt="Tân Xuân Food Logo"
-              className="w-32 max-w-full mx-auto transition-transform duration-200 hover:scale-105"
-            />
+            <div className="relative">
+              <img
+                src="/images/techlap_logo.png"
+                alt="TechLap Logo"
+                className="w-32 max-w-full mx-auto transition-all duration-300 hover:scale-105 drop-shadow-sm"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-blue-100/20 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
           </NavLink>
         </div>
 
-        <div className="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+        <div className="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-slate-100 [&::-webkit-scrollbar-thumb]:bg-slate-300">
           <nav
             className="hs-accordion-group p-3 w-full flex flex-col flex-wrap"
             data-hs-accordion-always-open
           >
-            <ul className="flex flex-col gap-y-1">
+            <ul className="flex flex-col gap-y-1.5">
               <li>
                 <NavLink
                   className={({ isActive }) =>
-                    "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" +
-                    (isActive ? " bg-gray-100" : "")
+                    "w-full flex items-center gap-x-3.5 py-2.5 px-3 text-sm text-slate-700 rounded-xl font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:shadow-sm hover:scale-[1.02]" +
+                    (isActive ? " bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 shadow-md border border-blue-200" : "")
                   }
                   to="/admin/dashboard"
                 >
@@ -63,16 +66,22 @@ const SideBar = () => {
                 </NavLink>
               </li>
 
-              <span className="mt-4 text-sm font-semibold text-gray-800 px-2.5 py-2">
-                Account
-              </span>
+              <div className="mt-4 mb-2">
+                <div className="flex items-center px-3 py-2">
+                  <div className="h-0.5 flex-1 bg-gradient-to-r from-slate-200 to-slate-300 rounded"></div>
+                  <span className="mx-3 text-xs font-bold text-slate-600 uppercase tracking-wider bg-slate-100 px-2 py-1 rounded-full">
+                    Account
+                  </span>
+                  <div className="h-0.5 flex-1 bg-gradient-to-l from-slate-200 to-slate-300 rounded"></div>
+                </div>
+              </div>
 
               <Access permission={{ name: "Get users with pagination" }} hideChildren>
                 <li>
                   <NavLink
                     className={({ isActive }) =>
-                      "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" +
-                      (isActive ? " bg-gray-100" : "")
+                      "w-full flex items-center gap-x-3.5 py-2.5 px-3 text-sm text-slate-700 rounded-xl font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50 hover:text-emerald-700 hover:shadow-sm hover:scale-[1.02]" +
+                      (isActive ? " bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 shadow-md border border-emerald-200" : "")
                     }
                     to="/admin/users"
                   >
@@ -102,8 +111,8 @@ const SideBar = () => {
                 <li>
                   <NavLink
                     className={({ isActive }) =>
-                      "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" +
-                      (isActive ? " bg-gray-100" : "")
+                      "w-full flex items-center gap-x-3.5 py-2.5 px-3 text-sm text-slate-700 rounded-xl font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-700 hover:shadow-sm hover:scale-[1.02]" +
+                      (isActive ? " bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 shadow-md border border-purple-200" : "")
                     }
                     to="/admin/customers"
                   >
@@ -126,16 +135,22 @@ const SideBar = () => {
                 </li>
               </Access>
 
-              <span className="mt-4 text-sm font-semibold text-gray-800 px-2.5 py-2">
-                Overview
-              </span>
+              <div className="mt-4 mb-2">
+                <div className="flex items-center px-3 py-2">
+                  <div className="h-0.5 flex-1 bg-gradient-to-r from-slate-200 to-slate-300 rounded"></div>
+                  <span className="mx-3 text-xs font-bold text-slate-600 uppercase tracking-wider bg-slate-100 px-2 py-1 rounded-full">
+                    Menu
+                  </span>
+                  <div className="h-0.5 flex-1 bg-gradient-to-l from-slate-200 to-slate-300 rounded"></div>
+                </div>
+              </div>
 
               <Access permission={{ name: "Get products with pagination" }} hideChildren>
                 <li>
                   <NavLink
                     className={({ isActive }) =>
-                      "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" +
-                      (isActive ? " bg-gray-100" : "")
+                      "w-full flex items-center gap-x-3.5 py-2.5 px-3 text-sm text-slate-700 rounded-xl font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:text-orange-700 hover:shadow-sm hover:scale-[1.02]" +
+                      (isActive ? " bg-gradient-to-r from-orange-100 to-amber-100 text-orange-800 shadow-md border border-orange-200" : "")
                     }
                     to="/admin/products"
                   >
@@ -162,8 +177,8 @@ const SideBar = () => {
                 <li>
                   <NavLink
                     className={({ isActive }) =>
-                      "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" +
-                      (isActive ? " bg-gray-100" : "")
+                      "w-full flex items-center gap-x-3.5 py-2.5 px-3 text-sm text-slate-700 rounded-xl font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 hover:shadow-sm hover:scale-[1.02]" +
+                      (isActive ? " bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 shadow-md border border-green-200" : "")
                     }
                     to="/admin/orders"
                   >
@@ -192,8 +207,8 @@ const SideBar = () => {
                 <li>
                   <NavLink
                     className={({ isActive }) =>
-                      "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" +
-                      (isActive ? " bg-gray-100" : "")
+                      "w-full flex items-center gap-x-3.5 py-2.5 px-3 text-sm text-slate-700 rounded-xl font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 hover:text-red-700 hover:shadow-sm hover:scale-[1.02]" +
+                      (isActive ? " bg-gradient-to-r from-red-100 to-rose-100 text-red-800 shadow-md border border-red-200" : "")
                     }
                     to="/admin/brands"
                   >
@@ -223,8 +238,8 @@ const SideBar = () => {
                 <li>
                   <NavLink
                     className={({ isActive }) =>
-                      "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" +
-                      (isActive ? " bg-gray-100" : "")
+                      "w-full flex items-center gap-x-3.5 py-2.5 px-3 text-sm text-slate-700 rounded-xl font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-sky-50 hover:text-cyan-700 hover:shadow-sm hover:scale-[1.02]" +
+                      (isActive ? " bg-gradient-to-r from-cyan-100 to-sky-100 text-cyan-800 shadow-md border border-cyan-200" : "")
                     }
                     to="/admin/categories"
                   >
@@ -259,8 +274,8 @@ const SideBar = () => {
                 <li>
                   <NavLink
                     className={({ isActive }) =>
-                      "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" +
-                      (isActive ? " bg-gray-100" : "")
+                      "w-full flex items-center gap-x-3.5 py-2.5 px-3 text-sm text-slate-700 rounded-xl font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-indigo-50 hover:text-violet-700 hover:shadow-sm hover:scale-[1.02]" +
+                      (isActive ? " bg-gradient-to-r from-violet-100 to-indigo-100 text-violet-800 shadow-md border border-violet-200" : "")
                     }
                     to="/admin/permissions"
                   >
@@ -287,8 +302,8 @@ const SideBar = () => {
                 <li>
                   <NavLink
                     className={({ isActive }) =>
-                      "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" +
-                      (isActive ? " bg-gray-100" : "")
+                      "w-full flex items-center gap-x-3.5 py-2.5 px-3 text-sm text-slate-700 rounded-xl font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-teal-50 hover:to-green-50 hover:text-teal-700 hover:shadow-sm hover:scale-[1.02]" +
+                      (isActive ? " bg-gradient-to-r from-teal-100 to-green-100 text-teal-800 shadow-md border border-teal-200" : "")
                     }
                     to="/admin/roles"
                   >
