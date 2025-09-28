@@ -39,15 +39,16 @@ const ProductDetailPage = () => {
     queryFn: () => apiFetchProductById(id || ""),
     enabled: !!id,
   });
+  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   // Redux
   console.log("Product detail:", `${process.env.REACT_APP_URL_STORAGE_FILE}/${product?.data.data?.image}`);
   const dispatch = useAppDispatch();
   const totalCart = useAppSelector((state) => state.customer.customer.totalCart);
-  const addToCart = async () => {
+  const addToCart = async (quan: number) => {
     try {
       setLoading(true);
-      const res = await apiAddToCart({ productId: id as string, quantity: 1, update: false });
+      const res = await apiAddToCart({ productId: id as string, quantity: quan, update: false });
       const tolalCartAfter = res?.data?.data?.sum;
       if (res.data.statusCode === 201) {
         toast.success(<CustomToast message='Thêm vào giỏ hàng thành công' className='text-green-600' />)
@@ -115,14 +116,8 @@ const ProductDetailPage = () => {
                 <img
                   src={`${process.env.REACT_APP_URL_STORAGE_FILE}/${product.data.data?.image}`}
                   alt={product.data.data?.name}
-                  className="w-full h-[450px] object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                  className="w-full h-[600px] object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
                 />
-              </div>
-
-              <div className="absolute top-4 left-4 z-10">
-                <span className="text-white px-2 py-1 rounded-md text-sm bg-amber-500 font-medium backdrop-blur-sm">
-                  Bán chạy
-                </span>
               </div>
 
               <div className="absolute top-4 right-4 z-10">
@@ -154,10 +149,9 @@ const ProductDetailPage = () => {
           <Card className="border-none shadow-xl hover:shadow-md transition-shadow">
             <CardContent className="p-8">
               <Tabs className="w-full">
-                <TabsList className="grid grid-cols-4 w-full h-12 bg-gray-100 mb-8">
+                <TabsList className="grid grid-cols-3 w-full h-12 bg-gray-100 mb-8">
                   <TabsItem id="description" title="Mô tả" active />
                   <TabsItem id="parameter" title="Thông số" />
-                  <TabsItem id="review" title="Đánh giá" />
                   <TabsItem id="delivery" title="Vận chuyển" />
                 </TabsList>
                 <TabsContent id="description">
@@ -250,9 +244,7 @@ const ProductDetailPage = () => {
                     </div>
                   </div>
                 </TabsContent>
-                <TabsContent id="review" className="hidden">
-                  <div>Đánh giá</div>
-                </TabsContent>
+
                 <TabsContent id="delivery" className="hidden">
                   <div className="flex flex-col gap-4">
                     <h3 className="text-xl font-bold">Chính sách vận chuyển</h3>
@@ -266,8 +258,7 @@ const ProductDetailPage = () => {
                         </CardHeader>
                         <CardContent>
                           <p className="text-gray-600 text-base">
-                            Miễn phí vận chuyển cho đơn hàng từ 500.000₫ trong
-                            nội thành và từ 1.000.000₫ cho các tỉnh thành khác.
+                            Miễn phí vận chuyển cho đơn hàng từ 20 triệu
                           </p>
                         </CardContent>
                       </Card>
@@ -280,8 +271,8 @@ const ProductDetailPage = () => {
                         </CardHeader>
                         <CardContent>
                           <p className="text-gray-600 text-base">
-                            Sản phẩm được vận chuyển trong xe lạnh chuyên dụng,
-                            đảm bảo chuỗi lạnh không bị gián đoạn.
+                            Sản phẩm được vận chuyển trong xe chuyên dụng,
+                            đảm bảo sản phẩm toàn vẹn.
                           </p>
                         </CardContent>
                       </Card>
@@ -304,7 +295,7 @@ const ProductDetailPage = () => {
                           value: "1-2 ngày",
                         },
                         {
-                          label: "Các tỉnh thành khác (từ Nghệ An đổ vào):",
+                          label: "Các tỉnh thành khác:",
                           value: "2-3 ngày",
                         },
                       ].map((item) => (
@@ -387,21 +378,78 @@ const ProductDetailPage = () => {
                     </div>
                     <div className="flex items-center gap-2"></div>
                   </div>
+                  {/* Order Status */}
+                  <div className="mt-4 flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-700">Trạng thái:</span>
 
-                  <div className="space-y-2">
-                    <div className="flex flex-col gap-2">
-                      <button
-                        className="bg-red-600 text-white font-medium text-sm px-4 py-3 rounded-md flex items-center justify-center gap-2 hover:bg-red-700 transition-colors"
-                        onClick={addToCart}
-                        disabled={loading}
-                      >
+                    {product.data.data?.status === "ACTIVE" && (
+                      <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        Còn hàng
+                      </span>
+                    )}
 
-                        <Cart size={16} className="text-white" />
-                        {loading ? "Đang thêm..." : "Thêm vào giỏ"}
-                      </button>
+                    {product.data.data?.status === "INACTIVE" && (
+                      <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-700">
+                        <span className="w-2 h-2 rounded-full bg-gray-500"></span>
+                        Ngừng kinh doanh
+                      </span>
+                    )}
 
-                    </div>
+                    {product.data.data?.status === "OUT_OF_STOCK" && (
+                      <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
+                        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                        Hết hàng
+                      </span>
+                    )}
+
+                    {product.data.data?.status === "DISCONTINUED" && (
+                      <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700">
+                        <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
+                        Ngừng sản xuất
+                      </span>
+                    )}
                   </div>
+                  {/* Số lượng bán và còn lại */}
+                  <div className="flex justify-between items-center text-gray-700 mt-2">
+                    <span>Đã bán: <b>{product.data.data.stock}</b></span>
+                    <span>Còn lại: <b>{product.data.data.stock}</b></span>
+                  </div>
+                  {product.data.data.status === "ACTIVE" && (
+                    <div className="space-y-2">
+                      {/* Tăng giảm số lượng */}
+                      <div className="flex items-center gap-3">
+                        <button
+                          className="w-8 h-8 rounded-md border flex items-center justify-center hover:bg-gray-100"
+                          onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
+                        >
+                          -
+                        </button>
+                        <span className="text-lg font-medium">{quantity}</span>
+                        <button
+                          className="w-8 h-8 rounded-md border flex items-center justify-center hover:bg-gray-100"
+                          onClick={() => setQuantity((prev) =>
+                            prev < (product.data?.data?.stock ?? 0) ? prev + 1 : prev
+
+                          )}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <button
+                          className="bg-red-600 text-white font-medium text-sm px-4 py-3 rounded-md flex items-center justify-center gap-2 hover:bg-red-700 transition-colors"
+                          onClick={() => addToCart(quantity)}
+                          disabled={loading}
+                        >
+
+                          <Cart size={16} className="text-white" />
+                          {loading ? "Đang thêm..." : "Thêm vào giỏ"}
+                        </button>
+
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -417,7 +465,7 @@ const ProductDetailPage = () => {
                     <div className="text-gray-700 text-sm flex flex-col">
                       <span className="font-medium">Miễn phí vận chuyển</span>
                       <span className="text-gray-500 text-sm">
-                        Đơn từ 500.000đ
+                        Đơn từ 20 triệu
                       </span>
                     </div>
                   </div>

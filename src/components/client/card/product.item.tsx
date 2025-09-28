@@ -10,6 +10,7 @@ export interface ProductItemProps {
         stock: number;
         description: string;
         image: string;
+        status: string;
         category: {
             id: number;
             name: string;
@@ -40,7 +41,7 @@ export default function ProductItem({ item, customerId, updateQuantity, removeIt
                 <div className="flex items-center space-x-2 mt-2">
                     <span className="text-base sm:text-lg font-bold text-blue-600">
                         <NumericFormat
-                            value={item.price - (item.price*item.discount as number / 100)}
+                            value={item.price - (item.price * item.discount as number / 100)}
                             displayType="text"
                             thousandSeparator={true}
                             suffix={"đ"}
@@ -57,25 +58,42 @@ export default function ProductItem({ item, customerId, updateQuantity, removeIt
                         </span>
                     )}
                 </div>
+                <div className="mt-2">
+                    {item.stock > 0 && item.status === "ACTIVE" ? (
+                        <span className="inline-flex items-center gap-1 text-sm text-green-600">
+                            Còn hàng
+                        </span>
+                    ) : item.status === "OUT_OF_STOCK" ? (
+                        <span className="inline-flex items-center gap-1 text-sm text-red-600">
+                            Hết hàng
+                        </span>
+                    ) : item.status === "DISCONTINUED" ? (
+                        <span className="inline-flex items-center gap-1 text-sm text-gray-600">
+                            Ngừng sản xuất
+                        </span>
+                    ) : null}
+                </div>
             </div>
 
             {/* Nút tăng giảm + xóa */}
             <div className="flex items-center justify-between w-full sm:w-auto sm:flex-col sm:space-y-2">
-                <div className="flex items-center space-x-2">
-                    <button
-                        onClick={() => updateQuantity(item.id, -1)}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                    >
-                        <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="w-12 text-center font-medium">{item.quantity}</span>
-                    <button
-                        onClick={() => updateQuantity(item.id, 1)}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                    >
-                        <Plus className="w-4 h-4" />
-                    </button>
-                </div>
+                {item.status === "ACTIVE" && (
+                    <div className="flex items-center space-x-2">
+                        <button
+                            onClick={() => updateQuantity(item.id, -1)}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                        >
+                            <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="w-12 text-center font-medium">{item.quantity}</span>
+                        <button
+                            onClick={() => updateQuantity(item.id, 1)}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                        >
+                            <Plus className="w-4 h-4" />
+                        </button>
+                    </div>
+                )}
                 <button
                     onClick={() => removeItem(customerId as number, item.id)}
                     className="text-red-500 hover:text-red-700 p-2 transition-colors"

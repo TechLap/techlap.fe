@@ -1,11 +1,12 @@
 import SearchIcon from "../../../../components/common/icons/search";
 import SliderItem from "../../../../components/common/slider";
 import Badge from "../../../../components/ui/badge";
-import { ICategory, IProductFilter } from "../../../../types/backend";
+import { IBrand, ICategory, IProductFilter } from "../../../../types/backend";
 import { NumericFormat } from "react-number-format";
 
 interface SidebarFilterProps {
   categories: ICategory[];
+  brands: IBrand[];
   isPending: boolean;
   isError: boolean;
   filters: IProductFilter;
@@ -20,6 +21,7 @@ interface SidebarFilterProps {
 
 const SidebarFilter = ({
   categories,
+  brands,
   isPending,
   isError,
   filters,
@@ -74,6 +76,15 @@ const SidebarFilter = ({
                   }
                 />
               )}
+              {filters.brand && filters.brand?.name !== "" && (
+                <Badge
+                  content={
+                    brands.find(
+                      (brand) => brand.name === filters.brand?.name
+                    )?.name || ""
+                  }
+                />
+              )}
               {filters.priceRange?.min !== 0 && (
                 <Badge
                   content={`Giá: ${filters.priceRange?.min} - ${priceRange?.max}`}
@@ -111,6 +122,42 @@ const SidebarFilter = ({
                 </button>
               )
             )}
+            {isPending && (
+              <div className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-amber-700">
+                Đang tải...
+              </div>
+            )}
+            {isError && (
+              <div className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-red-700">
+                Lỗi khi tải danh mục
+              </div>
+            )}
+          </div>
+        </div>
+        {/* Brand filter */}
+        <div className="mb-6">
+          <div className="font-medium text-gray-700 mb-2">Thương hiệu</div>
+          <div className="space-y-2">
+            <button
+              className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-500 hover:text-white ${filters.brand?.name === "" ? "bg-red-600 text-white" : "text-gray-700"
+                } transition-colors`}
+              onClick={() => updateFilter("brand", "")}
+            >
+              Tất cả
+            </button>
+
+            {brands.map((brand) => (
+              <button
+                key={brand.id}
+                className={`w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-gray-700 hover:bg-red-500 hover:text-white ${filters.brand?.name === brand.name
+                  ? "bg-red-600 text-white"
+                  : "text-gray-700"
+                  } transition-colors`}
+                onClick={() => updateFilter("brand", brand.name || "")}
+              >
+                {brand.name}
+              </button>
+            ))}
             {isPending && (
               <div className="w-full py-2 px-4 rounded-lg text-left border border-gray-200 text-sm font-medium text-amber-700">
                 Đang tải...

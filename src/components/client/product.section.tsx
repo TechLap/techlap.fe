@@ -89,6 +89,7 @@ const ProductSection = ({ title, subtitle, type }: ProductSectionProps) => {
                 id={product.id}
                 image={product.image || null}
                 name={product.name}
+                status={product.status}
                 price={product.price}
                 discount={product.discount}
                 categoryName={product.category?.name || "Không có danh mục"}
@@ -102,19 +103,7 @@ const ProductSection = ({ title, subtitle, type }: ProductSectionProps) => {
                 id={product.id}
                 image={product.image || null}
                 name={product.name}
-                price={product.price}
-                discount={product.discount}
-                categoryName={product.category?.name || "Không có danh mục"}
-                description={product.description}
-              />
-            ))}
-          {featuredProductsShow !== undefined &&
-            featuredProductsShow.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                image={product.image || null}
-                name={product.name}
+                status={product.status}
                 price={product.price}
                 discount={product.discount}
                 categoryName={product.category?.name || "Không có danh mục"}

@@ -1,12 +1,14 @@
-import ProductCard from "../../../../components/client/card/product.card";
-import { useCategories } from "../../../../hooks/useCategories";
-import { useProducts } from "../../../../hooks/useProducts";
-import SidebarFilter from "./sidebar.filter";
-import ProductStats from "./product.stats";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import ProductCard from "../../../../components/client/card/product.card";
 import LoadingSpinner from "../../../../components/common/loading.spinner";
 import { useFilterProduct } from "../../../../hooks/filter/useFilterProduct";
+import { useCategories } from "../../../../hooks/useCategories";
+import { useProducts } from "../../../../hooks/useProducts";
 import { IProduct } from "../../../../types/backend";
+import ProductStats from "./product.stats";
+import SidebarFilter from "./sidebar.filter";
+import { useBrands } from "../../../../hooks/useBrands";
 
 const ProductShowPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +24,14 @@ const ProductShowPage = () => {
     currentPage: 1,
     size: 100,
   });
-
+  const {
+    brands,
+    isPending: isPendingBrands,
+    isError: isErrorBrands,
+  } = useBrands({
+    currentPage: 1,
+    size: 100,
+  });
   const {
     products,
     isPending: isPendingProducts,
@@ -49,6 +58,17 @@ const ProductShowPage = () => {
       setDisplayData(products.data.data?.result || []);
     }
   }, [products]);
+
+  const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get("categoryId");
+
+  // khi vừa vào nếu có categoryName thì update filter luôn
+  useEffect(() => {
+    if (categoryId) {
+      updateFilter("category", Number(categoryId)); // filter theo id
+      setIsSearching(true);
+    }
+  }, [categoryId]);
 
   const { filters, resetFilters, updateFilter, searchData, searchError } =
     useFilterProduct(undefined, {
@@ -84,6 +104,7 @@ const ProductShowPage = () => {
         {/* Left content*/}
         <SidebarFilter
           categories={categories?.data.data?.result || []}
+          brands={brands?.data.data?.result || []}
           isPending={isPendingCategories}
           isError={isErrorCategories}
           filters={filters}
@@ -118,6 +139,7 @@ const ProductShowPage = () => {
                 id={product.id}
                 image={product.image || null}
                 name={product.name}
+                status={product.status}
                 price={product.price}
                 discount={product.discount}
                 categoryName={product.category?.name || "Không có danh mục"}
