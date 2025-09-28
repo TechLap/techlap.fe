@@ -52,7 +52,6 @@ const WarrantyPage = () => {
 
   const tabs = [
     { id: "policy", label: "Chính Sách" },
-    { id: "lookup", label: "Tra Cứu" },
     { id: "process", label: "Quy Trình" },
     { id: "contact", label: "Liên Hệ" }
   ];

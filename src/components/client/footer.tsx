@@ -1,5 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { Facebook, Instagram, Youtube } from "../common/icons";
+import { useQuery } from "@tanstack/react-query";
+import { apiFetchAllCategory } from "../../config/api";
+import { useEffect, useState } from "react";
 
 type FooterAboutItem = {
   id: number;
@@ -10,19 +13,21 @@ const footerAboutItems: FooterAboutItem[] = [
   { id: 1, label: "Giới thiệu", path: "/about" },
   { id: 2, label: "Liên hệ", path: "/contact" },
   { id: 3, label: "Chính sách bảo mật", path: "/privacy-policy" },
-  { id: 4, label: "Điều khoản và điều kiện", path: "/terms-and-conditions" },
-  { id: 5, label: "Câu hỏi thường gặp", path: "/faq" },
 ];
 
-const categories = [
-  { id: 1, name: 'Laptop Gaming' },
-  { id: 2, name: 'Laptop Văn Phòng' },
-  { id: 3, name: 'Laptop Đồ Họa' },
-  { id: 4, name: 'Laptop Mỏng Nhẹ' },
-  { id: 5, name: 'Phụ Kiện Laptop' }
-]
-
 const Footer = () => {
+  const { data: categoriesQ } = useQuery({
+    queryKey: ["fetchAllCategories"],
+    queryFn: () => apiFetchAllCategory(`page=1&size=20`),
+  });
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    if (categoriesQ) {
+      setCategories(categoriesQ.data.data?.result as any)
+    }
+  })
   return (
     <footer className="pt-12 pb-8 border-t border-gray-200 bg-gray-900 text-white">
       <div className="container mx-auto px-4">
@@ -67,12 +72,12 @@ const Footer = () => {
               Danh mục sản phẩm
             </h3>
             <ul className="space-y-2">
-              {categories.map(
-                (category) =>
+              {categories?.map(
+                (category: any) =>
                   category && (
                     <li key={category.id}>
                       <NavLink
-                        to={`/products?category=${category.id}`}
+                        to={`/products?categoryId=${category.id}`}
                         className="hover:text-blue-400 hover:underline"
                       >
                         {category.name}

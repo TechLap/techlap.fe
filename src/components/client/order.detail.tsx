@@ -118,7 +118,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                                 value={
                                   item.product.price -
                                   (item.product.price * item.product.discount) /
-                                    100
+                                  100
                                 }
                                 displayType="text"
                                 thousandSeparator={true}
@@ -252,7 +252,12 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                     </div>
                     <div className="flex justify-between text-gray-600 text-sm">
                       <span>Phí vận chuyển</span>
-                      <span>{0}</span>
+                      <span><NumericFormat
+                        value={order.shipping}
+                        displayType="text"
+                        thousandSeparator={true}
+                        suffix={"đ"}
+                      /></span>
                     </div>
                     {discount && (
                       <div className="flex justify-between text-green-600 text-sm sm:text-base">

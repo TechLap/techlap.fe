@@ -122,6 +122,7 @@ export interface IProduct {
     description: string;
     status: string;
     stock: number;
+    sold?: number
     discount?: number;
     image?: string | null;
     price: number;
@@ -154,7 +155,7 @@ export interface IProductFilter {
         id: string;
     };
     brand?: {
-        name?: string;
+        name: string;
     };
     priceRange?: {
         min: number;
@@ -272,8 +273,10 @@ export interface ICart {
         price: number;
         discount: number;
         stock: number;
+        sold: number;
         description: string;
         image: string;
+        status: string;
         category: {
           id: number;
           name: string;
@@ -286,6 +289,7 @@ export interface IOrder {
     id: number;
     orderCode: string;
     totalPrice: number;
+    shipping: number;
     receiverName: string;
     receiverPhone: string;
     receiverAddress: string;
