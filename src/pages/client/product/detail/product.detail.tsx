@@ -277,46 +277,6 @@ const ProductDetailPage = () => {
                         </CardContent>
                       </Card>
                     </div>
-                    <span className="text-base font-medium">
-                      Thời gian giao hàng:
-                    </span>
-                    <div className="grid gap-4">
-                      {[
-                        {
-                          label: "Nội thành TP.HCM:",
-                          value: "1-2 giờ",
-                        },
-                        {
-                          label: "Các quận ngoại thành:",
-                          value: "4-6 giờ",
-                        },
-                        {
-                          label: "Các tỉnh thành lân cận (miền Tây):",
-                          value: "1-2 ngày",
-                        },
-                        {
-                          label: "Các tỉnh thành khác:",
-                          value: "2-3 ngày",
-                        },
-                      ].map((item) => (
-                        <div
-                          key={item.label}
-                          className="flex items-center justify-between border-b pb-3 border-b-gray-200"
-                        >
-                          <span className="text-gray-600 text-base">
-                            {item.label}
-                          </span>
-                          <span
-                            className={` text-base font-medium ${item.value === "1-2 giờ"
-                              ? "text-red-500"
-                              : "text-gray-600"
-                              }`}
-                          >
-                            {item.value}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
                   </div>
                 </TabsContent>
               </Tabs>
@@ -412,7 +372,7 @@ const ProductDetailPage = () => {
                   </div>
                   {/* Số lượng bán và còn lại */}
                   <div className="flex justify-between items-center text-gray-700 mt-2">
-                    <span>Đã bán: <b>{product.data.data.stock}</b></span>
+                    <span>Đã bán: <b>{product.data.data.sold}</b></span>
                     <span>Còn lại: <b>{product.data.data.stock}</b></span>
                   </div>
                   {product.data.data.status === "ACTIVE" && (

@@ -176,21 +176,11 @@ const WarrantyPage = () => {
               {/* Product Warranty Durations - 3 card ngang */}
               <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
                 <h3 className="text-2xl font-bold text-gray-800 text-center mb-8">Thời Gian Bảo Hành Theo Sản Phẩm</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
                   <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
-                    <div className="text-4xl font-bold text-blue-600 mb-2">36 tháng</div>
-                    <div className="text-lg font-semibold text-gray-800 mb-1">Laptop Gaming</div>
+                    <div className="text-4xl font-bold text-blue-600 mb-2">24 tháng</div>
+                    <div className="text-lg font-semibold text-gray-800 mb-1">Với tất cả các sản phẩm</div>
                     <div className="text-sm text-gray-600">Bảo hành toàn diện</div>
-                  </div>
-                  <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
-                    <div className="text-4xl font-bold text-green-600 mb-2">24 tháng</div>
-                    <div className="text-lg font-semibold text-gray-800 mb-1">Laptop Văn Phòng</div>
-                    <div className="text-sm text-gray-600">Bảo hành chính hãng</div>
-                  </div>
-                  <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
-                    <div className="text-4xl font-bold text-purple-600 mb-2">12 tháng</div>
-                    <div className="text-lg font-semibold text-gray-800 mb-1">Phụ Kiện</div>
-                    <div className="text-sm text-gray-600">Bảo hành cơ bản</div>
                   </div>
                 </div>
               </div>
@@ -347,7 +337,7 @@ const WarrantyPage = () => {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Hotline Bảo Hành</p>
-                        <p className="text-lg font-semibold text-gray-800">1900 1234</p>
+                        <p className="text-lg font-semibold text-gray-800">0999999999</p>
                       </div>
                     </div>
                     
@@ -357,7 +347,7 @@ const WarrantyPage = () => {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Email Hỗ Trợ</p>
-                        <p className="text-lg font-semibold text-gray-800">support@techlap.vn</p>
+                        <p className="text-lg font-semibold text-gray-800">bonanhemsieunhan@gmail.com</p>
                       </div>
                     </div>
                     
@@ -367,7 +357,7 @@ const WarrantyPage = () => {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Địa Chỉ</p>
-                        <p className="text-lg font-semibold text-gray-800">123 Nguyễn Văn Cừ, Q.1, TP.HCM</p>
+                        <p className="text-lg font-semibold text-gray-800">179/58/16 Lê Đình Thám, phường Tân Quý, quận Tân Phú, TP. HCM</p>
                       </div>
                     </div>
                     
@@ -377,7 +367,7 @@ const WarrantyPage = () => {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Giờ Làm Việc</p>
-                        <p className="text-lg font-semibold text-gray-800">8:00 - 22:00 (Thứ 2 - Chủ Nhật)</p>
+                        <p className="text-lg font-semibold text-gray-800">8:00 - 17:00 (Thứ 2 - Chủ Nhật)</p>
                       </div>
                     </div>
                   </div>

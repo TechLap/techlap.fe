@@ -10,7 +10,7 @@ L.Icon.Default.mergeOptions({
 
 const ContactPage = () => {
   const position = [10.797308750588888, 106.62578988118244] as [number, number];
-  
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -41,7 +41,7 @@ const ContactPage = () => {
                 </div>
                 <h2 className="text-3xl font-bold text-gray-800">Gửi tin nhắn</h2>
               </div>
-              
+
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
@@ -69,7 +69,7 @@ const ContactPage = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
                     <label htmlFor="phone" className="text-sm font-semibold text-gray-700">
@@ -94,7 +94,7 @@ const ContactPage = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex flex-col gap-2">
                   <label htmlFor="message" className="text-sm font-semibold text-gray-700">
                     Nội dung *
@@ -107,8 +107,8 @@ const ContactPage = () => {
                     required
                   />
                 </div>
-                
-                <button 
+
+                <button
                   type="submit"
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
@@ -133,7 +133,7 @@ const ContactPage = () => {
                   </div>
                   <h2 className="text-3xl font-bold text-gray-800">Thông tin liên hệ</h2>
                 </div>
-                
+
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -151,7 +151,7 @@ const ContactPage = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,13 +161,12 @@ const ContactPage = () => {
                     <div>
                       <h3 className="text-lg font-semibold text-gray-800 mb-1">Hotline</h3>
                       <p className="text-gray-600">
-                        1900 1234 (Miễn phí)
+                        0999999999 (Miễn phí)
                         <br />
-                        0901 234 567
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -177,13 +176,12 @@ const ContactPage = () => {
                     <div>
                       <h3 className="text-lg font-semibold text-gray-800 mb-1">Email</h3>
                       <p className="text-gray-600">
-                        info@techlap.vn
+                        bonanhemsieunhan@gmail.com
                         <br />
-                        support@techlap.vn
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -193,7 +191,7 @@ const ContactPage = () => {
                     <div>
                       <h3 className="text-lg font-semibold text-gray-800 mb-1">Giờ làm việc</h3>
                       <p className="text-gray-600">
-                        Thứ 2 - Chủ nhật: 8:00 - 22:00
+                        Thứ 2 - Chủ nhật: 8:00 - 17:00
                         <br />
                         Hỗ trợ online 24/7
                       </p>
@@ -232,7 +230,7 @@ const ContactPage = () => {
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Bản Đồ</h2>
             <p className="text-gray-600">Tìm đường đến TechLap</p>
           </div>
-          
+
           <div className="bg-white border border-blue-200 p-8 rounded-2xl shadow-lg">
             <div className="w-full h-96 rounded-lg overflow-hidden">
               <MapContainer
@@ -267,7 +265,7 @@ const ContactPage = () => {
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Câu Hỏi Thường Gặp</h2>
             <p className="text-gray-600">Những thắc mắc phổ biến từ khách hàng</p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             <div className="bg-white border border-blue-200 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
               <h3 className="font-semibold text-gray-800 mb-3">Thời gian bảo hành laptop?</h3>
@@ -275,21 +273,21 @@ const ContactPage = () => {
                 Tất cả laptop tại TechLap đều được bảo hành chính hãng từ 12-36 tháng tùy theo từng dòng sản phẩm.
               </p>
             </div>
-            
+
             <div className="bg-white border border-blue-200 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
               <h3 className="font-semibold text-gray-800 mb-3">Có hỗ trợ trả góp không?</h3>
               <p className="text-gray-600 text-sm">
                 Có, chúng tôi hỗ trợ trả góp 0% lãi suất qua thẻ tín dụng và các công ty tài chính uy tín.
               </p>
             </div>
-            
+
             <div className="bg-white border border-blue-200 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
               <h3 className="font-semibold text-gray-800 mb-3">Có giao hàng toàn quốc?</h3>
               <p className="text-gray-600 text-sm">
                 Có, chúng tôi giao hàng miễn phí toàn quốc cho đơn hàng từ 10 triệu đồng trở lên.
               </p>
             </div>
-            
+
             <div className="bg-white border border-blue-200 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
               <h3 className="font-semibold text-gray-800 mb-3">Có thể đổi trả sản phẩm?</h3>
               <p className="text-gray-600 text-sm">
