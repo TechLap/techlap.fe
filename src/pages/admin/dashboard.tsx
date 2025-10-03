@@ -128,7 +128,7 @@ const HomePage = () => {
 
   // Chuyển đổi dữ liệu trạng thái đơn hàng để hiển thị trên chart
   const orderStatusChartData = convertOrderStatusToChartData(orderStatusData);
-
+  console.log("Revenue Data:", revenueData?.data?.data);
   return (
     <div className="w-full">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
@@ -448,32 +448,31 @@ const HomePage = () => {
                         />
                       </p>
                       <span
-                        className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                          order.status === "PAID"
+                        className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${order.status === "PAID"
                             ? "bg-green-100 text-green-800"
                             : order.status === "PROCESSING"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : order.status === "PENDING"
-                            ? "bg-blue-100 text-blue-800"
-                            : order.status === "CANCELLED"
-                            ? "bg-red-100 text-red-800"
-                            : order.status === "SHIPPING"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : order.status === "DELIVERED"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
+                              ? "bg-yellow-100 text-yellow-800"
+                              : order.status === "PENDING"
+                                ? "bg-blue-100 text-blue-800"
+                                : order.status === "CANCELLED"
+                                  ? "bg-red-100 text-red-800"
+                                  : order.status === "SHIPPING"
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : order.status === "DELIVERED"
+                                      ? "bg-green-100 text-green-800"
+                                      : "bg-red-100 text-red-800"
+                          }`}
                       >
                         {order.status}
                       </span>
                     </div>
                   </div>
                 )) || (
-                <div className="text-center py-8 text-gray-500">
-                  <Clock className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-                  <p>Không có đơn hàng gần đây</p>
-                </div>
-              )}
+                  <div className="text-center py-8 text-gray-500">
+                    <Clock className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                    <p>Không có đơn hàng gần đây</p>
+                  </div>
+                )}
             </div>
           </div>
 
@@ -531,11 +530,11 @@ const HomePage = () => {
                   </div>
                 </div>
               )) || (
-                <div className="text-center py-8 text-gray-500">
-                  <Package className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-                  <p>Không có sản phẩm bán chạy</p>
-                </div>
-              )}
+                  <div className="text-center py-8 text-gray-500">
+                    <Package className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                    <p>Không có sản phẩm bán chạy</p>
+                  </div>
+                )}
             </div>
           </div>
         </div>
