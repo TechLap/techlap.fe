@@ -6,11 +6,11 @@ import { useEffect } from "react";
 
 
 
-const imageMap: Record<number, string> = {
-  1: "/images/CategoriesShowcase/laptop-mong-nhe.jpg",
-  2: "/images/CategoriesShowcase/laptop-gaming.jpg",
-  3: "/images/CategoriesShowcase/laptop-do-hoa.jpg",
-  4: "/images/CategoriesShowcase/laptop-van-phong.jpg",
+const imageMap: Record<string, string> = {
+  "Mỏng nhẹ": "/images/CategoriesShowcase/laptop-mong-nhe.jpg",
+  "Gaming": "/images/CategoriesShowcase/laptop-gaming.jpg",
+  "Đồ họa": "/images/CategoriesShowcase/laptop-do-hoa.jpg",
+  "Văn phòng": "/images/CategoriesShowcase/laptop-van-phong.jpg",
 };
 
 const CategoryShowcase = () => {
@@ -21,7 +21,7 @@ const CategoryShowcase = () => {
 
   const categoriesWithImage = categories?.data.data?.result.map((c: any) => ({
     ...c,
-    image: imageMap[c.id] || "/images/default.jpg", // fallback nếu không có
+    image: imageMap[c.name] || "/images/default.jpg", // fallback nếu không có
   }));
 
   const navigate = useNavigate()

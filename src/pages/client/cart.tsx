@@ -376,7 +376,7 @@ function CartPage() {
                                                         />
                                                         <Truck className="w-5 h-5 text-gray-400" />
                                                         <span className="font-medium text-sm sm:text-base">
-                                                            Thanh toán khi nhận tiền (COD)
+                                                            Thanh toán khi nhận hàng (COD)
                                                         </span>
                                                     </div>
                                                 </div>
