@@ -11,7 +11,6 @@ export const forbiddenWords: string[] = [
   "union",
   "select",
   "root",
-  "admin",
 ];
 
 // Hàm sanitize input (loại bỏ ký tự nguy hiểm và khoảng trắng thừa)
